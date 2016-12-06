@@ -24,7 +24,7 @@
 **************************************************************************/
 
 #include "ODNavObjectChanges.h"
-#include "ocpn_draw_pi.h"
+#include "windvane_pi.h"
 #include "ODSelect.h"
 #include "ODConfig.h"
 #include "PointMan.h"

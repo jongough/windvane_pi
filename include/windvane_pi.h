@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: ocpn_draw_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
+ * $Id: windvane_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
  *
  * Project:  OpenCPN
  * Purpose:  OpenCPN Windvane Autopilot Plugin
@@ -111,6 +111,7 @@ std::cout << x  << std::endl ; } while (0)
 #include "wxWTranslateCatalog.h"
 
 #include "ocpn_plugin.h"
+#include "nmea0183/nmea0183.h"
 #include <wx/aui/aui.h>
 #include <wx/string.h>
 #include <wx/settings.h>
@@ -121,14 +122,26 @@ std::cout << x  << std::endl ; } while (0)
 #include <wx/splitter.h>
 #include <wx/fileconf.h>
 #include <wx/dynarray.h>
+#include <iterator>
+#include <list>
+
+#define WINDVANE_POSITION -1
 
 //----------------------------------------------------------------------------------------------------------
 //    The PlugIn Class Definition
 //----------------------------------------------------------------------------------------------------------
 class WVicons;
+class WVEventHandler;
 
 const int StyleValues[] = { wxPENSTYLE_SOLID, wxPENSTYLE_DOT, wxPENSTYLE_LONG_DASH, wxPENSTYLE_SHORT_DASH, wxPENSTYLE_DOT_DASH };
 const int WidthValues[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+struct WINDHISTORY {
+    long        lTime;
+    double      dAngle;
+};
+ 
+using namespace std;
 
 class  ODPlugIn_Position_Fix_Ex : public PlugIn_Position_Fix_Ex
 {
@@ -173,10 +186,8 @@ public:
     void LateInit(void);
 
     //    The optional method overrides
-    void OnContextMenuItemCallback(int id);
     void latlong_to_chartpix(double lat, double lon, double &pixx, double &pixy);
     void SetColorScheme(PI_ColorScheme cs);
-    void SendVectorChartObjectInfo(wxString &chart, wxString &feature, wxString &objname, double lat, double lon, double scale, int nativescale) ;
 
     //    The required override PlugIn Methods
     //     bool RenderOverlay(wxMemoryDC *pmdc, PlugIn_ViewPort *vp);
@@ -201,9 +212,11 @@ public:
     void SetPositionFixEx( PlugIn_Position_Fix_Ex &pfix );
     void SetNMEASentence(wxString &sentence);
     // WV Methods
-    void    ProcessTimerEvent(wxTimerEvent& ev);
-    void    PopupMenuHandler(wxCommandEvent& ev);
-
+    std::list<WINDHISTORY> *GetWindHistory( void );
+    time_t  GetHistoryTime( void );
+    int     GetSendFrequency(void);
+    void    SendAutopilotSentences(int Angle);
+    
     void    SaveConfig();
 
     void    SetToolbarTool( void );
@@ -246,7 +259,7 @@ public:
 
     WVicons     *m_pWVicons;
     PI_ColorScheme               global_color_scheme;
-
+    
 
 private:
     void    OnTimer(wxTimerEvent& ev);
@@ -254,11 +267,20 @@ private:
     void    LoadConfig();
     wxFileConfig *m_pWVConfig;
     
-    int     m_windvane_button_id;
-    bool    m_bWVAutopilot;
+    int         m_windvane_button_id;
+    bool        m_bWVAutopilot;
     wxDateTime  m_LastFixTime;
-    double  m_dAngle;
+    double      m_dAngle;
+    NMEA0183    m_NMEA0183_in;                 // Used to parse NMEA Sentences
+    NMEA0183    m_NMEA0183_out;                 // Used to parse NMEA Sentences
+    time_t      m_iHistoryTime;
+    int         m_iFrequency;
+    wxTimer     m_ProcessTimer;
+    bool        m_bMagBearing;
     
+    WVEventHandler     *m_pWVEventHandler;
+
+    std::list<WINDHISTORY> m_WindHistory;
     
 };
 

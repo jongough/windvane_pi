@@ -7,7 +7,7 @@
 # define minimum cmake version
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2)
 
-PROJECT(ocpn_draw_pi)
+PROJECT(windvane_pi)
 
 SET(PACKAGE_NAME windvane_pi)
 SET(VERBOSE_NAME windvane)
@@ -39,15 +39,26 @@ ADD_DEFINITIONS(-DUSE_S57)
 
 SET(SRCS
         src/windvane_pi.cpp
+        src/WVEventHandler.cpp
+        src/WVicons.cpp
+        src/WVJSON.cpp
+        src/WVUtils.cpp
      )
 
 SET(HDRS
         include/windvane_pi.h
+        include/WVEventHandler.h
+        include/WVicons.h
+        include/WVJSON.h
+        include/WVUtils.h
 )
 
 SET(OCPNSRC
+        ocpnsrc/dial.cpp
+        ocpnsrc/instrument.cpp
         src/nmea0183/apb.cpp
-        src/nmea0183/rmc.cpp
+        src/nmea0183/mwv.cpp
+        src/nmea0183/rmb.cpp
         src/nmea0183/xte.cpp
         src/nmea0183/lat.cpp
         src/nmea0183/latlong.cpp
@@ -56,22 +67,29 @@ SET(OCPNSRC
         src/nmea0183/response.cpp
         src/nmea0183/sentence.cpp
         src/nmea0183/talkerid.cpp
+        src/nmea0183/vwr.cpp
 )
 SET(OCPNHDRS
+        ocpninclude/dial.h
+        ocpninclude/instrument.h
         ocpninclude/ocpn_plugin.h
+        ocpninclude/TexFont.h
+        ocpninclude/wx28compat.h
         src/nmea0183/apb.hpp
-        src/nmea0183/RMC.HPP
+        src/nmea0183/mwv.hpp
+        src/nmea0183/RMB.HPP
         src/nmea0183/xte.hpp
         src/nmea0183/LatLong.hpp
         src/nmea0183/nmea0183.h
         src/nmea0183/nmea0183.hpp
         src/nmea0183/Response.hpp
         src/nmea0183/Sentence.hpp
+        src/nmea0183/vwr.hpp
 )
 
-OPTION(OD_USE_SVG "Use SVG graphics" ON)
+OPTION(WINDVANE_USE_SVG "Use SVG graphics" ON)
 
-IF(OD_USE_SVG)
+IF(WINDVANE_USE_SVG)
   MESSAGE(STATUS "SVG support enabled...")
   IF(NOT QT_ANDROID)
 
@@ -139,7 +157,7 @@ IF(OD_USE_SVG)
 
     ADD_DEFINITIONS(-DUSE_RENDER_CAIRO)
 
-    ADD_DEFINITIONS(-DODraw_USE_SVG)
+    ADD_DEFINITIONS(-DWINDVANE_USE_SVG)
     IF(WIN32)
       SET(SVG_LIBS
         ${CMAKE_SOURCE_DIR}/buildwin/gtk/cairo.lib
@@ -155,7 +173,7 @@ IF(OD_USE_SVG)
         SET(EXTRA_LIBS ${EXTRA_LIBS} ${SVG_LIBS} ${CMAKE_BINARY_DIR}/wxSVG.lib)
     ENDIF(WIN32)
   ENDIF(NOT QT_ANDROID)
-ENDIF(OD_USE_SVG)
+ENDIF(WINDVANE_USE_SVG)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/mygdal  )
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude)
@@ -163,6 +181,7 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/nmea0183)
 
 
 IF(UNIX)

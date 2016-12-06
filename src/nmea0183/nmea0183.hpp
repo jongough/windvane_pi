@@ -92,10 +92,10 @@
 #include "hdm.hpp"
 #include "hdg.hpp"
 #include "hdt.hpp"
-#include "RMB.hpp"
 */
-#include "RMC.HPP"
+#include "RMB.hpp"
 /*
+#include "RMC.HPP"
 #include "rsa.hpp"
 #include "wpl.hpp"
 #include "rte.hpp"
@@ -120,9 +120,7 @@
 #include "zda.hpp"
 #include "vlw.hpp"
 #include "xdr.hpp" //transducer data
-*/
 #include "xte.hpp"
-/*
 #include "ROT.hpp"
 #include "RPM.hpp"
 #include "RSD.hpp"
@@ -139,7 +137,9 @@
 #include "WCV.hpp"
 #include "WNC.hpp"
 #include "XDR.hpp"
+*/
 #include "XTE.hpp"
+/*
 #include "XTR.hpp"
 #include "ZDA.hpp"
 #include "ZFO.hpp"
@@ -204,16 +204,16 @@ class NMEA0183
       MWD Mwd;
 */      
       MWV Mwv;
-/*
+/*      
       MDA Mda; //Metrological comopsite	
       OLN Oln;
       OSD Osd;
       P   Proprietary;
       RMA Rma;
+      */      
       RMB Rmb;
-*/
+/*      
       RMC Rmc;
-/*
       ROT Rot;
       RPM Rpm;
       RSA Rsa;

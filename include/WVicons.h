@@ -50,8 +50,10 @@ public:
     void    ChangeScheme(void);
     
     wxBitmap    *m_p_bm_windvane_pi;
+    wxBitmap    *m_p_bm_windvane_toggled_pi;
     wxBitmap    *m_p_bm_windvane_grey_pi;
     wxString    m_s_windvane_pi;
+    wxString    m_s_windvane_toggled_pi;
     wxString    m_s_windvane_grey_pi;
 
     bool        m_bUpdateIcons;
@@ -61,24 +63,29 @@ private:
     void        CreateSchemeIcons(void);
     wxBitmap    *BuildDimmedToolBitmap(wxBitmap *pbmp_normal, unsigned char dim_ratio);
     
-#ifdef ODraw_USE_SVG
+#ifdef WINDVANE_USE_SVG
     wxBitmap    *LoadSVG( const wxString filename, wxSVGDocument **svgDco, wxImage **Image, unsigned int width = -1, unsigned int height = -1 );
     wxBitmap    *ScaleIcon( wxSVGDocument *p_svgDoc, wxImage *p_wxImage, double sf );
     
     wxSVGDocument   *m_p_svgd_windvane_pi;
-    wxSVGDocument   *m_p_svgd_windvand_grey_pi;
+    wxSVGDocument   *m_p_svgd_windvane_toggled_pi;
+    wxSVGDocument   *m_p_svgd_windvane_grey_pi;
 #endif
     
     wxImage         *m_p_img_windvane_pi;
+    wxImage         *m_p_img_windvane_toggled_pi;
     wxImage         *m_p_img_windvane_grey_pi;
 
     wxBitmap    *m_p_bm_day_windvane_pi;
+    wxBitmap    *m_p_bm_day_windvane_toggled_pi;
     wxBitmap    *m_p_bm_day_windvane_grey_pi;
 
     wxBitmap    *m_p_bm_dusk_windvane_pi;
+    wxBitmap    *m_p_bm_dusk_windvane_toggled_pi;
     wxBitmap    *m_p_bm_dusk_windvane_grey_pi;
 
     wxBitmap    *m_p_bm_night_windvane_pi;
+    wxBitmap    *m_p_bm_night_windvane_toggled_pi;
     wxBitmap    *m_p_bm_night_windvane_grey_pi;
 
     double          m_dScaleFactor;

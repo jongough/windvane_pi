@@ -62,19 +62,11 @@ WVicons::~WVicons()
 void WVicons::initialize_images(void)
 {
     wxFileName fn;
-//#ifdef __WXOSX__
-// Not in this case - the icons are part of the plugin package, not it's configuration data, so they have nothing to do in the user's preferences directory
-//    wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-//    fn.SetPath(std_path.GetUserConfigDir());  // should be ~/Library/Preferences
-//    fn.AppendDir(_T("opencpn"));
-//    fn.AppendDir( wxT("plugins") );
-//    fn.AppendDir(wxT("ocpn_draw_pi"));
-//#else
     fn.SetPath(*GetpSharedDataLocation());
     fn.AppendDir( wxT("plugins") );
     fn.AppendDir(wxT("windvane_pi"));
     fn.AppendDir(wxT("data"));
-//#endif
+
     wxString s = _("windvane_pi data location");
     wxLogMessage( wxT("%s: %s"), s.c_str(), fn.GetFullPath().c_str());
     
@@ -86,11 +78,16 @@ void WVicons::initialize_images(void)
     fn.SetFullName(wxT("windvanegrey.svg"));
     m_s_windvane_grey_pi = fn.GetFullPath();
     m_p_bm_windvane_grey_pi = LoadSVG( fn.GetFullPath(), &m_p_svgd_windvane_grey_pi, &m_p_img_windvane_grey_pi );
-#else
+    fn.SetFullName(wxT("windvane-toggled.svg"));
+    m_s_windvane_toggled_pi = fn.GetFullPath();
+    m_p_bm_windvane_toggled_pi = LoadSVG( fn.GetFullPath(), &m_p_svgd_windvane_toggled_pi, &m_p_img_windvane_toggled_pi );
+    #else
     fn.SetFullName(wxT("windvane.png"));
     m_p_bm_windvane_pi = new wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
     fn.SetFullName(wxT("windvanegrey.png"));
     m_p_bm_windvane_grey_pi = new wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    fn.SetFullName(wxT("windvane-toggled.png"));
+    m_p_bm_windvane__toggled_pi = new wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
 #endif
     
     CreateSchemeIcons();
@@ -184,12 +181,14 @@ void WVicons::ChangeScheme(void)
 void WVicons::CreateSchemeIcons()
 {
     m_p_bm_day_windvane_grey_pi = m_p_bm_windvane_grey_pi;
+    m_p_bm_day_windvane_toggled_pi = m_p_bm_windvane_toggled_pi;
     m_p_bm_day_windvane_pi = m_p_bm_windvane_pi;
     m_p_bm_dusk_windvane_grey_pi = BuildDimmedToolBitmap(m_p_bm_windvane_grey_pi, 128);
     m_p_bm_dusk_windvane_pi = BuildDimmedToolBitmap(m_p_bm_windvane_pi, 128);
+    m_p_bm_dusk_windvane_toggled_pi = BuildDimmedToolBitmap(m_p_bm_windvane_toggled_pi, 128);
     m_p_bm_night_windvane_grey_pi = BuildDimmedToolBitmap(m_p_bm_windvane_grey_pi, 32);
     m_p_bm_night_windvane_pi = BuildDimmedToolBitmap(m_p_bm_windvane_pi, 32);
-    
+    m_p_bm_night_windvane_toggled_pi = BuildDimmedToolBitmap(m_p_bm_windvane_toggled_pi, 32);
 }
 
 wxBitmap *WVicons::BuildDimmedToolBitmap(wxBitmap *pbmp_normal, unsigned char dim_ratio)

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: ocpn_draw_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
+ * $Id: windvane_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
  *
  * Project:  OpenCPN
  * Purpose:  OpenCPN Windvane Plugin

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: ocpn_draw_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
+ * $Id: windvane_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
  *
  * Project:  OpenCPN
  * Purpose:  OpenCPN Windvane Autopilot Plugin
@@ -34,21 +34,22 @@
 #endif //precompiled headers
 
 #include "windvane_pi.h"
-#include "WVConfig.h"
 #include "WVdc.h"
 #include "WVEventHandler.h"
-#include "WVPropertiesDialogImpl.h"
+//#include "WVPropertiesDialogImpl.h"
 #include "WVicons.h"
 #include "WVJSON.h"
 #include "WVUtils.h"
 #include "version.h"
 
-#include "chcanv.h"
-#include "Layer.h"
-#include "OCPNPlatform.h"
+#include "nmea0183.h"
+
+//#include "chcanv.h"
+//#include "Layer.h"
+//#include "OCPNPlatform.h"
 #include "pluginmanager.h"
-#include "geodesic.h"
-#include "IDX_entry.h"
+//#include "geodesic.h"
+//#include "IDX_entry.h"
 #include <wx/stdpaths.h>
 #include <wx/timer.h>
 #include <wx/event.h>
@@ -59,6 +60,7 @@
 #include <wx/msgdlg.h>
 #include <wx/listbook.h>
 #include <memory>
+#include <time.h>
 
 #include <wx/jsonreader.h>
 
@@ -86,8 +88,6 @@ wxString    *g_pHome_Locn;
 wxString    *g_pData;
 wxString    *g_pLayerDir;
 
-WVEventHandler   *g_WVEventHandler;
-
 PlugIn_ViewPort *g_pVP;
 PlugIn_ViewPort g_VP;
 WVDC            *g_pDC;
@@ -96,6 +96,9 @@ void                    *g_ppimgr;
 ODPlugIn_Position_Fix_Ex  g_pfFix;
 
 WVJSON          *g_pWVJSON;
+double          g_dVar;
+int             g_iLocaleDepth;
+wxString        *g_WVLocale;
 
 // the class factories, used to create and destroy instances of the PlugIn
 
@@ -128,7 +131,7 @@ windvane_pi::windvane_pi(void *ppimgr)
     appendOSDirSlash( l_pDir );
     if ( !wxDir::Exists(*l_pDir))
         wxMkdir( *l_pDir );
-    l_pDir->Append(_T("ocpn_draw_pi"));
+    l_pDir->Append(_T("windvane_pi"));
     appendOSDirSlash( l_pDir );
     if ( !wxDir::Exists(*l_pDir))
         wxMkdir( *l_pDir );
@@ -166,14 +169,15 @@ int windvane_pi::Init(void)
     m_parent_window = GetOCPNCanvasWindow();
     
     m_pWVConfig = GetOCPNConfigObject();
+    LoadConfig();
 
     g_pWVJSON = new WVJSON;
     
-#ifdef ODraw_USE_SVG
-    m_windvane_button_id  = InsertPlugInToolSVG(_("Windvane Autopilot"), m_pWVicons->m_s_windvane_grey_pi, m_pWVicons->m_s_windvane_pi, wxEmptyString, wxITEM_NORMAL,
+#ifdef WINDVANE_USE_SVG
+    m_windvane_button_id  = InsertPlugInToolSVG(_("Windvane Autopilot"), m_pWVicons->m_s_windvane_grey_pi, m_pWVicons->m_s_windvane_pi, m_pWVicons->m_s_windvane_toggled_pi, wxITEM_CHECK,
                                                _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);
 #else
-    m_windvane_button_id  = InsertPlugInTool(_("Windvane Autopilot"), m_pWVicons->m_p_bm_windvane_grey_pi, m_pWVicons->m_p_bm_windvane_pi, wxITEM_NORMAL,
+    m_windvane_button_id  = InsertPlugInTool(_("Windvane Autopilot"), m_pWVicons->m_p_bm_windvane_grey_pi, m_pWVicons->m_p_bm_windvane_pi, wxITEM_CHECK,
                                                _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);
 #endif
     
@@ -183,7 +187,7 @@ int windvane_pi::Init(void)
     wxMenu dummy_menu;
     
     // Create an OCPN Draw event handler
-    g_WVEventHandler = new WVEventHandler( g_windvane_pi );
+    //g_WVEventHandler = new WVEventHandler( g_windvane_pi );
     
     // Get item into font list in options/user interface
     AddPersistentFontKey( wxT("WV_Label") );
@@ -192,6 +196,13 @@ int windvane_pi::Init(void)
     wxColour l_fontcolout = GetFontColour_PlugIn( wxS("WV_Label") );
     l_pfont = GetOCPNScaledFont_PlugIn( wxS("WV_Datar") );
     l_fontcolout = GetFontColour_PlugIn( wxS("WV_Data") );
+    
+    m_WindHistory.clear();
+    
+    m_pWVEventHandler = new WVEventHandler( g_windvane_pi );
+    m_pWVEventHandler->StartSendTimer(m_iFrequency);
+//    m_ProcessTimer.SetOwner(m_parent_window);
+//    m_parent_window->Connect(m_ProcessTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( WVEventHandler::OnTimerEvent ));
     
     return (
     WANTS_TOOLBAR_CALLBACK    |
@@ -218,6 +229,15 @@ bool windvane_pi::DeInit(void)
 {
     if( m_windvane_button_id ) RemovePlugInTool(m_windvane_button_id);
     m_windvane_button_id = 0;
+    
+    delete m_pWVEventHandler;
+    m_pWVEventHandler = NULL;
+
+    while(g_iLocaleDepth) {
+        ResetGlobalLocale();
+    }
+    
+    SaveConfig();
     
     shutdown(false);
     return true;
@@ -255,6 +275,21 @@ void windvane_pi::SetColorScheme(PI_ColorScheme cs)
     m_pWVicons->SetColourScheme( cs );
 }
 
+void windvane_pi::SetCursorLatLon(double lat, double lon)
+{
+    
+    m_cursor_lat = lat;
+    m_cursor_lon = lon;
+    //if( g_ODEventHandler ) g_ODEventHandler->SetLatLon( lat, lon );
+}
+
+void windvane_pi::SetCurrentViewPort(PlugIn_ViewPort &vp)
+{
+    m_pVP = &vp;
+    g_pVP = &vp;
+    g_VP = vp;
+}
+
 void windvane_pi::UpdateAuiStatus(void)
 {
 }
@@ -280,7 +315,7 @@ int windvane_pi::GetAPIVersionMinor()
 }
 wxString windvane_pi::GetCommonName()
 {
-    return wxS("OCPN Draw");
+    return wxS("Windvane");
 }
 wxString windvane_pi::GetShortDescription()
 {
@@ -398,6 +433,9 @@ void windvane_pi::SaveConfig()
     {
         pConf->SetPath( wxS( "/Settings/windvane_pi" ) );
         pConf->Write( wxS( "DefaultAngle" ), m_dAngle );
+        pConf->Write( wxS( "DefaultHistoryTime" ), m_iHistoryTime );
+        pConf->Write( wxS( "DefaultWriteFrequency" ), m_iFrequency );
+        pConf->Write( wxS( "MagneticBearings" ), m_bMagBearing );
     }
     
 #ifndef __WXMSW__
@@ -429,6 +467,9 @@ void windvane_pi::LoadConfig()
         pConf->SetPath( wxS( "/Settings/windvane_pi" ) );
         wxString  l_wxsColour;
         pConf->Read( wxS( "DefaultAngle" ), &m_dAngle, 90. );
+        pConf->Read( wxS( "DefaultHistoryTime" ), &m_iHistoryTime, 60 );
+        pConf->Read( wxS( "DefaultWriteFrequency" ), &m_iFrequency, 1 );
+        pConf->Read( wxS( "MagneticBearings" ), &m_bMagBearing, true );
     }
 
 #ifndef __WXMSW__
@@ -473,17 +514,6 @@ bool windvane_pi::KeyboardEventHook( wxKeyEvent &event )
     return bret;
 }
 
-void windvane_pi::OnTimer(wxTimerEvent& ev)
-{
-    ProcessTimerEvent( ev );
-}
-
-void windvane_pi::ProcessTimerEvent(wxTimerEvent& ev)
-{
-    //if(popUp())
-    //    plogbook_pi->m_plogbook_window->logbook->appendRow(true, true);
-}
-
 void windvane_pi::appendOSDirSlash(wxString* pString)
 {
     wxChar sep = wxFileName::GetPathSeparator();
@@ -492,7 +522,204 @@ void windvane_pi::appendOSDirSlash(wxString* pString)
         pString->Append(sep);
 }
 
+std::list<WINDHISTORY> *windvane_pi::GetWindHistory(void)
+{
+    return &m_WindHistory;
+}
+
+time_t windvane_pi::GetHistoryTime(void)
+{
+    return m_iHistoryTime;
+}
+
+int windvane_pi::GetSendFrequency(void)
+{
+    return m_iFrequency;
+}
+
 void windvane_pi::SetNMEASentence(wxString &sentence)
 {
+    m_NMEA0183_in << sentence;
+    NMEA0183 l_nOCPNAutopilot;
+    SENTENCE snt;
+    WINDHISTORY l_WindHistory;
     
+    if( m_NMEA0183_in.PreParse() ) {
+        if( m_NMEA0183_in.LastSentenceIDReceived == _T("APB") ) {
+            if( m_NMEA0183_in.Parse() ) {
+                if(m_NMEA0183_in.TalkerID == _T("WV"))
+                    return;
+                if(!m_bWVAutopilot) {
+                    l_nOCPNAutopilot.TalkerID = wxT("WV");
+                    l_nOCPNAutopilot.Apb = m_NMEA0183_in.Apb;
+                    l_nOCPNAutopilot.Apb.Write(snt);
+                    PushNMEABuffer( snt.Sentence );
+                }
+            }
+        } else if( m_NMEA0183_in.LastSentenceIDReceived == _T("RMB") ) {
+            if( m_NMEA0183_in.Parse() ) {
+                if(m_NMEA0183_in.TalkerID == _T("WV")) return;
+                if(!m_bWVAutopilot) {
+                    l_nOCPNAutopilot.Rmb = m_NMEA0183_in.Rmb;
+                    l_nOCPNAutopilot.TalkerID = wxT("WV");
+                    wxString l_sOCPNAutopilot;
+                    m_NMEA0183_in.Rmb.Write(snt);
+                    l_nOCPNAutopilot.Rmb.Write(snt);
+                    PushNMEABuffer( snt.Sentence );
+                } else {
+                    
+                }
+            }
+        } else if( m_NMEA0183_in.LastSentenceIDReceived == _T("MWV") ) {
+            if( m_NMEA0183_in.Parse() ) {
+                if(m_NMEA0183_in.TalkerID == _T("WV")) return;
+                l_WindHistory.lTime = time(NULL);
+                if(m_NMEA0183_in.Mwv.Reference == _T("R")) {
+                    if(m_NMEA0183_in.Mwv.WindAngle > 180) l_WindHistory.dAngle = -(360. - m_NMEA0183_in.Mwv.WindAngle);
+                    else l_WindHistory.dAngle = m_NMEA0183_in.Mwv.WindAngle;
+                } else {
+                    if(g_pfFix.Hdt) {
+                        double l_Angle = g_pfFix.Hdt - m_NMEA0183_in.Mwv.WindAngle;
+                        if(l_Angle < -180.) l_Angle += 360.;
+                        if(l_Angle > 180.) l_Angle -= 360.;
+                        l_WindHistory.dAngle = l_Angle;
+                    }
+                }
+                m_WindHistory.push_front(l_WindHistory);
+            }
+        } else if( m_NMEA0183_in.LastSentenceIDReceived == _T("VWR") ) {
+            if( m_NMEA0183_in.Parse() ) {
+                if(m_NMEA0183_in.TalkerID == _T("WV")) return;
+                l_WindHistory.lTime = time(NULL);
+                if(m_NMEA0183_in.Vwr.DirectionOfWind == Left) l_WindHistory.dAngle = -m_NMEA0183_in.Vwr.WindDirectionMagnitude;
+                else l_WindHistory.dAngle = m_NMEA0183_in.Vwr.WindDirectionMagnitude;
+                m_WindHistory.push_front(l_WindHistory);
+            }
+        }
+    }
 }
+
+void windvane_pi::SendAutopilotSentences(int CurrentAngle)
+{
+    if(!m_bWVAutopilot) return;
+    
+    //RMB
+    {
+        SENTENCE snt;
+        m_NMEA0183_out.TalkerID = _T("WV");
+        
+        m_NMEA0183_out.Rmb.IsDataValid = NTrue;
+        m_NMEA0183_out.Rmb.CrossTrackError = 0.;
+        
+        double l_Angle;
+        l_Angle = CurrentAngle - m_dAngle;
+        if(l_Angle < 0.) l_Angle += 360.;
+        else if(l_Angle > 360.) l_Angle -= 360.;
+        
+        if( l_Angle < 0 ) m_NMEA0183_out.Rmb.DirectionToSteer = Left;
+        else
+            m_NMEA0183_out.Rmb.DirectionToSteer = Right;
+        
+        
+        m_NMEA0183_out.Rmb.To = _T("WVANE");
+        m_NMEA0183_out.Rmb.From = _T("BOAT");
+        
+        double l_dLat, l_dLon;
+        PositionBearingDistanceMercator_Plugin( g_pfFix.Lat, g_pfFix.Lon, l_Angle + g_pfFix.Hdt, 1.0 , &l_dLat, &l_dLon);
+        
+        if( l_dLat < 0. ) m_NMEA0183_out.Rmb.DestinationPosition.Latitude.Set(
+            -l_dLat, _T("S") );
+        else
+            m_NMEA0183_out.Rmb.DestinationPosition.Latitude.Set( l_dLat, _T("N") );
+        
+        if( l_dLon < 0. ) m_NMEA0183_out.Rmb.DestinationPosition.Longitude.Set(
+            -l_dLon, _T("W") );
+        else
+            m_NMEA0183_out.Rmb.DestinationPosition.Longitude.Set( l_dLon, _T("E") );
+        
+        m_NMEA0183_out.Rmb.RangeToDestinationNauticalMiles = 1.0;
+        m_NMEA0183_out.Rmb.BearingToDestinationDegreesTrue = l_Angle + g_pfFix.Hdt;
+        m_NMEA0183_out.Rmb.DestinationClosingVelocityKnots = 1.0;
+        
+        m_NMEA0183_out.Rmb.IsArrivalCircleEntered = NFalse;
+        
+        m_NMEA0183_out.Rmb.Write( snt );
+        PushNMEABuffer( snt.Sentence );
+    }
+
+    // APB
+    {
+        SENTENCE snt;
+        m_NMEA0183_out.TalkerID = _T("WV");
+
+        double l_Angle;
+        l_Angle = CurrentAngle - m_dAngle;
+        if(l_Angle < 0.) l_Angle += 360.;
+        else if(l_Angle > 360.) l_Angle -= 360.;
+        
+        m_NMEA0183_out.Apb.IsLoranBlinkOK = NTrue;
+        m_NMEA0183_out.Apb.IsLoranCCycleLockOK = NTrue;
+        
+        m_NMEA0183_out.Apb.CrossTrackErrorMagnitude = 0;
+        
+        if( l_Angle < 0 ) m_NMEA0183_out.Apb.DirectionToSteer = Left;
+        else
+            m_NMEA0183_out.Apb.DirectionToSteer = Right;
+        
+        m_NMEA0183_out.Apb.CrossTrackUnits = _T("N");
+        
+        m_NMEA0183_out.Apb.IsArrivalCircleEntered = NFalse;
+        
+        //  We never pass the perpendicular, since we declare arrival before reaching this point
+        m_NMEA0183_out.Apb.IsPerpendicular = NFalse;
+        
+        m_NMEA0183_out.Apb.To = wxT("WVANE");
+        
+        if(g_pfFix.Hdm) {
+            l_Angle += g_pfFix.Hdm;
+            if(l_Angle > 360.) l_Angle -= 360.;
+            if(l_Angle < 0.) l_Angle += 360.;
+            
+            m_NMEA0183_out.Apb.BearingOriginToDestinationUnits = _T("M");
+            m_NMEA0183_out.Apb.BearingPresentPositionToDestinationUnits = _T("M");
+            m_NMEA0183_out.Apb.HeadingToSteerUnits = _T("M");
+        } else {
+            l_Angle += g_pfFix.Hdt;
+            if(l_Angle > 360.) l_Angle -= 360.;
+            if(l_Angle < 0.) l_Angle += 360.;
+            m_NMEA0183_out.Apb.BearingOriginToDestinationUnits = _T("T");
+            m_NMEA0183_out.Apb.BearingPresentPositionToDestinationUnits = _T("T");
+            m_NMEA0183_out.Apb.HeadingToSteerUnits = _T("T");
+        }
+        m_NMEA0183_out.Apb.BearingOriginToDestination = l_Angle;
+        m_NMEA0183_out.Apb.BearingPresentPositionToDestination = l_Angle;
+        m_NMEA0183_out.Apb.HeadingToSteer = l_Angle;
+        
+        
+        m_NMEA0183_out.Apb.Write( snt );
+        PushNMEABuffer( snt.Sentence );
+    }
+/*
+    // XTE
+    {
+        m_NMEA0183.TalkerID = _T("EC");
+        
+        SENTENCE snt;
+        
+        m_NMEA0183.Xte.IsLoranBlinkOK = NTrue;
+        m_NMEA0183.Xte.IsLoranCCycleLockOK = NTrue;
+        
+        m_NMEA0183.Xte.CrossTrackErrorDistance = CurrentXTEToActivePoint;
+        
+        if( XTEDir < 0 ) m_NMEA0183.Xte.DirectionToSteer = Left;
+        else
+            m_NMEA0183.Xte.DirectionToSteer = Right;
+        
+        m_NMEA0183.Xte.CrossTrackUnits = _T("N");
+        
+        m_NMEA0183.Xte.Write( snt );
+        g_pMUX->SendNMEAMessage( snt.Sentence );
+    }
+*/
+}
+

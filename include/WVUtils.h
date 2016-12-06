@@ -1,7 +1,7 @@
 /***************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  OCPN Draw Utility functions support
+ * Purpose:  Windvane Utility functions support
  * Author:   Jon Gough
  *
  ***************************************************************************
@@ -23,8 +23,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
  **************************************************************************/
  
-#ifndef ODUTILS_H
-#define ODUTILS_H
+#ifndef WVUTILS_H
+#define WVUTILS_H
+
+#ifndef PI
+#define PI        3.1415926535897931160E0      /* pi */
+#endif
+
  
  const wxChar   *ParseGPXDateTime( wxDateTime &dt, const wxChar *datetime );
  wxString       GetUUID(void);

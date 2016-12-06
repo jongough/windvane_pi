@@ -76,14 +76,9 @@ bool RESPONSE::Write( SENTENCE& sentence )
     sentence  = _T("$");
 
     if(NULL == container_p)
-          sentence.Sentence.Append(_T("--"));
+        sentence.Sentence.Append(_T("--"));
     else {
-        if ( g_TalkerIdText.length() == 0) {
-          sentence.Sentence.Append(container_p->TalkerID);
-        }
-        else {
-            sentence.Sentence.Append( g_TalkerIdText );
-        }
+        sentence.Sentence.Append(container_p->TalkerID);
     }
     
     sentence.Sentence.Append(Mnemonic);

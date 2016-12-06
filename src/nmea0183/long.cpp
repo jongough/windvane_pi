@@ -78,7 +78,13 @@ void LONGITUDE::Set( double position, const wxString& east_or_west )
 {
 //   assert( east_or_west != NULL );
 
-   Longitude = position;
+    // fix apparent error when copying one sentence to another. 
+    //The incomning format is dddmm.mmmm (degree then minutes and decimal minutes), need to convert to dd.ddddddddd (degrees and decimal degrees)
+    double lld = (int)(position / 100);
+    double llm = (int)(position - (lld * 100));
+    double lls = position - (int)position;
+    Longitude = lld + (llm / 60) + (lls / 60);
+    //Longitude = position;
    wxString ts = east_or_west;
 
    if ( ts.Trim(false)[ 0 ] == 'E' )

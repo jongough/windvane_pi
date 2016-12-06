@@ -78,7 +78,13 @@ void LATITUDE::Set( double position, const wxString& north_or_south )
 {
 //   assert( north_or_south != NULL );
 
-   Latitude = position;
+    // fix apparent error when copying one sentence to another. 
+    //The incomning format is dddmm.mmmm (degree then minutes and decimal minutes), need to convert to dd.ddddddddd (degrees and decimal degrees)
+   double lld = (int)(position / 100);
+   double llm = (int)(position - (lld * 100));
+   double lls = position - (int)position;
+   Latitude = lld + (llm / 60) + (lls / 60);
+   //Latitude = position;
    wxString ts = north_or_south;
 
    if ( ts.Trim(false)[ 0 ] == _T('N') )
