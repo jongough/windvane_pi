@@ -1,8 +1,6 @@
 /***************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  OCPN Draw Event Handler Support
- * Author:   Jon Gough
  *
  ***************************************************************************
  *   Copyright (C) 2010 by David S. Register                               *
@@ -21,37 +19,21 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
- **************************************************************************/
+ ***************************************************************************
+ */
 
-#ifndef WINDVANEEVENTHANDLER_H
-#define WINDVANEEVENTHANDLER_H
+#ifndef __S57LIGHT_H__
+#define __S57LIGHT_H__
 
-#include <wx/event.h>
-#include <wx/timer.h>
-#include "windvane_pi.h"
+#include <wx/string.h>
 
-// Forward declarations
-
-#define TIMER_WV_1 999
-
-class WVEventHandler : public wxEvtHandler
+class S57Light
 {
-    public:
-        WVEventHandler(windvane_pi *parent);
-        ~WVEventHandler();
-        
-        void StartSendTimer(int interval);
-        void OnWVTimer1(wxTimerEvent& event);
-        void OnWVTimer2(wxTimerEvent& event);
-        
-    protected:
-    private:
-        windvane_pi    *m_parent;
-        wxTimer         WVTimer1;
-        wxTimer         WVTimer2;
-        bool            m_bWVTimer2Started;
-        
-        DECLARE_EVENT_TABLE();
+public:
+      wxArrayString attributeNames;
+      wxArrayString attributeValues;
+      wxString position;
+      bool hasSectors;
 };
 
-#endif // WINDVANEEVENTHANDLER_H
+#endif

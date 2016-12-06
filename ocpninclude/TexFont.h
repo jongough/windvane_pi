@@ -1,11 +1,11 @@
 /***************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  OCPN Draw Nav Objects support
- * Author:   Jon Gough
+ * Purpose:  OpenGL text rendering
+ * Author:   Sean D'Epagnier
  *
  ***************************************************************************
- *   Copyright (C) 2010 by David S. Register                               *
+ *   Copyright (C) 2014 Sean D'Epagnier                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,41 +22,60 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
  **************************************************************************/
- 
-#ifndef WVNAVOBJECTCHANGES_H
-#define WVNAVOBJECTCHANGES_H
 
-//#include <NavObjectCollection.h>
-#include "pugixml.hpp"
+#ifndef __TEXFONT_H__
+#define __TEXFONT_H__
 
-class WVNavObjectChanges : public pugi::xml_document
-{
-    public:
-        WVNavObjectChanges();
-        WVNavObjectChanges( wxString file_name );
-        virtual ~WVNavObjectChanges();
+/* support ascii plus degree symbol for now pack font in a single texture 16x8 */
+#define DEGREE_GLYPH 127
+#define MIN_GLYPH 32
+#define MAX_GLYPH 128
 
-        bool LoadAllGPXObjects( bool b_full_viz = false);
-        int  LoadAllGPXObjectsAsLayer(int layer_id, bool b_layerviz);
-        //ODPoint * GPXLoadODPoint1( pugi::xml_node &odpt_node, wxString def_symbol_name, wxString GUID, bool b_fullviz, bool b_layer, bool b_layerviz, int layer_id );
+#define NUM_GLYPHS (MAX_GLYPH - MIN_GLYPH)
 
-        bool CreateAllGPXObjects();
-        void SetRootGPXNode(void);
-        
-        bool ApplyChanges(void);
-        bool SaveFile( const wxString filename );
-        void RemoveChangesFile( void );
-        
-        FILE        *m_WVchanges_file;
-        
-        pugi::xml_node      m_gpx_root;
-        
-        bool            m_bFirstPath;
+#define COLS_GLYPHS 16
+#define ROWS_GLYPHS ((NUM_GLYPHS / COLS_GLYPHS)+1)
 
-    protected:
-    private:
-        wxString m_WVfilename;
+#ifndef DECL_EXP
+#ifdef __WXMSW__
+#  define DECL_EXP     __declspec(dllexport)
+#else
+#  define DECL_EXP
+#endif
+#endif
 
+struct TexGlyphInfo {
+    int x, y, width, height;
+    float advance;
 };
 
-#endif // WVPNDRAWNAVOBJECTCHANGES_H
+class DECL_EXP TexFont {
+public:
+    TexFont();
+    ~TexFont();
+    
+    void Build( wxFont &font, bool blur = false );
+    void Delete();
+
+    void GetTextExtent( const wxString &string, int *width, int *height);
+    void RenderString( const char *string, int x=0, int y=0 );
+    void RenderString( const wxString &string, int x=0, int y=0 );
+    bool IsBuilt(){ return m_built; }
+
+private:
+    void GetTextExtent( const char *string, int *width, int *height);
+    void RenderGlyph( int c );
+
+    wxFont m_font;
+    bool m_blur;
+
+    TexGlyphInfo tgi[MAX_GLYPH];
+
+    unsigned  int texobj;
+    int tex_w, tex_h;
+    int m_maxglyphw;
+    int m_maxglyphh;
+    bool m_built;
+    
+};
+#endif  //guard

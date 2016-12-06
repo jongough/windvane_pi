@@ -1,8 +1,6 @@
 /***************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  Windvane Config support
- * Author:   Jon Gough
  *
  ***************************************************************************
  *   Copyright (C) 2010 by David S. Register                               *
@@ -21,43 +19,48 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
- **************************************************************************/
- 
-#ifndef WVCONFIG_H
-#define WVCONFIG_H
+ ***************************************************************************
+ */
 
-//#include <navutil.h>
-#include "WVNavObjectChanges.h"
+#ifndef __S57REGISTRARMGR_H__
+#define __S57REGISTRARMGR_H__
 
-class NavObjectCollection;
-//class NavObjectChanges;
+#include <wx/string.h>
 
-class WVConfig
+WX_DECLARE_STRING_HASH_MAP( int, CSVHash1 );
+
+WX_DECLARE_HASH_MAP( int,
+                     std::string,
+                     wxIntegerHash,
+                     wxIntegerEqual,
+                     CSVHash2 );
+
+
+/**
+ * s57RegistrarMgr Definition
+ * This is a class holding the ctor and dtor for the global registrar
+ */
+class s57RegistrarMgr
 {
-    public:
-//        ODConfig(const wxString &appName, const wxString &vendorName, const wxString &LocalFileName) : MyConfig( appName, vendorName, LocalFileName) {}
-        WVConfig(const wxString &appName, const wxString &vendorName, const wxString &LocalFileName);
-        virtual ~WVConfig();
+public:
+    s57RegistrarMgr(const wxString& csv_dir, FILE *flog);
+    ~s57RegistrarMgr();
+   
+    int getAttributeID(const char *pAttrName);
+    std::string getAttributeAcronym(int nID);
+    std::string getFeatureAcronym(int nID);
+    
+private:
+    
+    bool s57_attr_init( const wxString& csv_dir );
+    bool s57_feature_init( const wxString& csv_dir );
+    
+    CSVHash1       m_attrHash1;
+    CSVHash2       m_attrHash2;
 
-        virtual void UpdateNavObj(void);
-        virtual void LoadNavObjects();
-        virtual bool LoadLayers(wxString &path);
-        void CreateRotatingNavObjBackup();
-
-        WVNavObjectChanges  *m_pWVNavObjectChangesSet;  
-        wxString                m_sWVNavObjSetFile;
-        wxString                m_sWVNavObjSetChangesFile;
-          
-        WVNavObjectChanges    *m_pWVNavObjectInputSet;
-
-        bool                    m_bSkipChangeSetUpdate;
-        
-        wxString                m_gpx_path;
-
-      
-      
-    protected:
-    private:
+    CSVHash1       m_featureHash1;
+    CSVHash2       m_featureHash2;
+    
 };
 
-#endif // WVPNDRAWCONFIG_H
+#endif

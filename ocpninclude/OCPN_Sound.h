@@ -1,11 +1,9 @@
-/***************************************************************************
+/******************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  OCPN Draw Event Handler Support
- * Author:   Jon Gough
  *
  ***************************************************************************
- *   Copyright (C) 2010 by David S. Register                               *
+ *   Copyright (C) 2013 by David S. Register                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,37 +19,46 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
- **************************************************************************/
+ ***************************************************************************
+ */
 
-#ifndef WINDVANEEVENTHANDLER_H
-#define WINDVANEEVENTHANDLER_H
+#ifndef __OCPN_SOUND_H__
+#define __OCPN_SOUND_H__
 
-#include <wx/event.h>
-#include <wx/timer.h>
-#include "windvane_pi.h"
+#include <wx/sound.h>
 
-// Forward declarations
+#ifdef OCPN_USE_PORTAUDIO
+    #include "OCPNSoundData.h"
+    #include "portaudio.h"
+#endif
 
-#define TIMER_WV_1 999
-
-class WVEventHandler : public wxEvtHandler
+class OCPN_Sound: public wxSound
 {
-    public:
-        WVEventHandler(windvane_pi *parent);
-        ~WVEventHandler();
-        
-        void StartSendTimer(int interval);
-        void OnWVTimer1(wxTimerEvent& event);
-        void OnWVTimer2(wxTimerEvent& event);
-        
-    protected:
-    private:
-        windvane_pi    *m_parent;
-        wxTimer         WVTimer1;
-        wxTimer         WVTimer2;
-        bool            m_bWVTimer2Started;
-        
-        DECLARE_EVENT_TABLE();
+public:
+    OCPN_Sound();
+    ~OCPN_Sound();
+
+    static int DeviceCount();
+
+    bool IsOk() const;
+    bool Create(const wxString& fileName, int deviceIndex=-1, bool isResource = false);
+    bool Play(unsigned flags = wxSOUND_ASYNC) const;
+    bool IsPlaying() const;
+    void Stop();
+    void UnLoad(void);
+
+private:
+    bool m_OK;
+    wxString m_soundfile;
+
+#ifdef OCPN_USE_PORTAUDIO
+    bool LoadWAV(const wxUint8 *data, size_t length, bool copyData);
+    void FreeMem(void);
+
+    OCPNSoundData *m_osdata;
+    PaStream *m_stream;
+#endif
+
 };
 
-#endif // WINDVANEEVENTHANDLER_H
+#endif

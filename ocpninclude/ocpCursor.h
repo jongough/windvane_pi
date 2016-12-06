@@ -1,11 +1,9 @@
-/***************************************************************************
+/******************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  OCPN Draw Event Handler Support
- * Author:   Jon Gough
  *
  ***************************************************************************
- *   Copyright (C) 2010 by David S. Register                               *
+ *   Copyright (C) 2013 by David S. Register                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,37 +19,28 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
- **************************************************************************/
+ ***************************************************************************
+ */
 
-#ifndef WINDVANEEVENTHANDLER_H
-#define WINDVANEEVENTHANDLER_H
+#ifndef __OCPCURSOR_H__
+#define __OCPCURSOR_H__
 
-#include <wx/event.h>
-#include <wx/timer.h>
-#include "windvane_pi.h"
+#include "wx/wxprec.h"
+#ifndef  WX_PRECOMP
+#include "wx/wx.h"
+#endif //precompiled headers
 
-// Forward declarations
+#include <wx/cursor.h>
 
-#define TIMER_WV_1 999
+class wxCursorRefData;
+class wxString;
 
-class WVEventHandler : public wxEvtHandler
+class ocpCursor : public wxCursor
 {
-    public:
-        WVEventHandler(windvane_pi *parent);
-        ~WVEventHandler();
-        
-        void StartSendTimer(int interval);
-        void OnWVTimer1(wxTimerEvent& event);
-        void OnWVTimer2(wxTimerEvent& event);
-        
-    protected:
-    private:
-        windvane_pi    *m_parent;
-        wxTimer         WVTimer1;
-        wxTimer         WVTimer2;
-        bool            m_bWVTimer2Started;
-        
-        DECLARE_EVENT_TABLE();
+      public:
+
+            ocpCursor(const wxString& cursorName, long type, int hotSpotX=0, int hotSpotY=0);
+            ocpCursor(const char **xpm_data, long type, int hotSpotX=0, int hotSpotY=0);
 };
 
-#endif // WINDVANEEVENTHANDLER_H
+#endif

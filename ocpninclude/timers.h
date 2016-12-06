@@ -1,11 +1,9 @@
-/***************************************************************************
+/******************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  OCPN Draw Event Handler Support
- * Author:   Jon Gough
  *
  ***************************************************************************
- *   Copyright (C) 2010 by David S. Register                               *
+ *   Copyright (C) 2013 by David S. Register                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,37 +19,23 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,  USA.         *
- **************************************************************************/
+ ***************************************************************************
+ */
 
-#ifndef WINDVANEEVENTHANDLER_H
-#define WINDVANEEVENTHANDLER_H
+#ifndef __TIMERS_H__
+#define __TIMERS_H__
 
-#include <wx/event.h>
-#include <wx/timer.h>
-#include "windvane_pi.h"
+#define RESCALE_TIMER     1
+#define PAN_TIMER         2
+#define CURTRACK_TIMER    3
+#define ROT_TIMER         4
+#define ROPOPUP_TIMER     5
+#define TCWININF_TIMER    6
+#define ROLLOVER_TIMER    7
+#define MOVEMENT_TIMER    8
+#define MOVEMENT_STOP_TIMER      9
+#define DBLCLICK_TIMER   10
+#define POPUP_TIMER      11
+#define MOUSEWHEEL_TIMER 12
 
-// Forward declarations
-
-#define TIMER_WV_1 999
-
-class WVEventHandler : public wxEvtHandler
-{
-    public:
-        WVEventHandler(windvane_pi *parent);
-        ~WVEventHandler();
-        
-        void StartSendTimer(int interval);
-        void OnWVTimer1(wxTimerEvent& event);
-        void OnWVTimer2(wxTimerEvent& event);
-        
-    protected:
-    private:
-        windvane_pi    *m_parent;
-        wxTimer         WVTimer1;
-        wxTimer         WVTimer2;
-        bool            m_bWVTimer2Started;
-        
-        DECLARE_EVENT_TABLE();
-};
-
-#endif // WINDVANEEVENTHANDLER_H
+#endif
