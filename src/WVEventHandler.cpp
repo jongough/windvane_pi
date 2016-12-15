@@ -37,7 +37,7 @@
 
 extern PlugIn_ViewPort              *g_pVP;
 extern PlugIn_ViewPort              g_VP;
-extern windvane_pi                  *g_pWV;
+extern windvane_pi                  *g_windvane_pi;
 
 enum {
     TIMER_1 = 1,
@@ -79,12 +79,14 @@ void WVEventHandler::StartSendTimer(int interval)
 void WVEventHandler::OnWVTimer1( wxTimerEvent& event )
 {
     std::list<WINDHISTORY> *l_WindHistory = m_parent->GetWindHistory();
+    if(l_WindHistory->size() == 0) return;
     std::list<WINDHISTORY>::iterator it = l_WindHistory->end();
     time_t l_CutoffTime = time(NULL) - m_parent->GetHistoryTime();
     it--;
-    while(it != l_WindHistory->begin()) {
+    while(l_WindHistory->size() > 0 && it != l_WindHistory->begin()) {
         if(it->lTime > l_CutoffTime) break;
         l_WindHistory->pop_back();
+		it = l_WindHistory->end();
         it--;
     }
 }
@@ -92,20 +94,30 @@ void WVEventHandler::OnWVTimer1( wxTimerEvent& event )
 void WVEventHandler::OnWVTimer2( wxTimerEvent& event )
 {
     std::list<WINDHISTORY> *l_WindHistory = m_parent->GetWindHistory();
+    if(l_WindHistory->size() == 0) return;
     std::list<WINDHISTORY>::iterator it = l_WindHistory->begin();
     int l_count = 0;
     int l_sum = 0;
+    int l_dAngle;
+    // convert angle to 0-360 for calc then back to -180 to 180 for display
     while(it != l_WindHistory->end()) {
         l_count++;
-        l_sum += it->dAngle;
+        if(it->dAngle < 0) l_dAngle = 360. + it->dAngle;
+        else l_dAngle = it->dAngle;
+        l_sum += l_dAngle;
         it++;
     }
     
-    double l_Angle;
     if(l_count > 0 && l_sum != 0) {
-        l_Angle = l_sum / l_count;
-        m_parent->SendAutopilotSentences( l_Angle );
+        l_dAngle = l_sum / l_count;
+        if(l_dAngle > 180) l_dAngle -= 360.;
+        m_parent->UpdateWindvaneDisplay( l_dAngle );
+        m_parent->SendAutopilotSentences( l_dAngle );
     }
-    
+}
+
+void WVEventHandler::OnEventScrollThumbrelease(wxScrollEvent& event)
+{
+    g_windvane_pi->SetHistoryTime(event.GetPosition());
 }
 

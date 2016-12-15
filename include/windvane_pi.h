@@ -132,6 +132,9 @@ std::cout << x  << std::endl ; } while (0)
 //----------------------------------------------------------------------------------------------------------
 class WVicons;
 class WVEventHandler;
+class WindvaneInstrument;
+class WVDialFrame;
+class WVDialPanel;
 
 const int StyleValues[] = { wxPENSTYLE_SOLID, wxPENSTYLE_DOT, wxPENSTYLE_LONG_DASH, wxPENSTYLE_SHORT_DASH, wxPENSTYLE_DOT_DASH };
 const int WidthValues[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -199,6 +202,7 @@ public:
     void ShowPreferencesDialog( wxWindow* parent );
     void OnToolbarToolDownCallback(int id);
     void OnToolbarToolUpCallback(int id);
+    void OnToolbarToolCallback(int id);
     void SetPluginMessage(wxString &message_id, wxString &message_body);
 
     void loadLayouts(wxWindow * parent);
@@ -207,6 +211,10 @@ public:
     bool KeyboardEventHook( wxKeyEvent &event );
     void SetCursorLatLon(double lat, double lon);
     void SetCurrentViewPort(PlugIn_ViewPort &vp);
+//    bool RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
+//    bool RenderOverlay(wxMemoryDC *pmdc, PlugIn_ViewPort *vp);
+//    bool RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp);
+    
     void CanvasPopupMenu( int x, int y, int seltype );
     double  GetTrueOrMag(double a);
     void SetPositionFixEx( PlugIn_Position_Fix_Ex &pfix );
@@ -214,11 +222,11 @@ public:
     // WV Methods
     std::list<WINDHISTORY> *GetWindHistory( void );
     time_t  GetHistoryTime( void );
+    void    SetHistoryTime(time_t t);
     int     GetSendFrequency(void);
     void    SendAutopilotSentences(int Angle);
+    void    UpdateWindvaneDisplay(double Angle);
     
-    void    SaveConfig();
-
     void    SetToolbarTool( void );
 
     wxCursor    *pCursorLeft;
@@ -264,13 +272,16 @@ public:
 private:
     void    OnTimer(wxTimerEvent& ev);
 
-    void    LoadConfig();
+    void    SaveConfig( void );
+    void    LoadConfig( void );
+    
     wxFileConfig *m_pWVConfig;
     
     int         m_windvane_button_id;
     bool        m_bWVAutopilot;
     wxDateTime  m_LastFixTime;
-    double      m_dAngle;
+    double      m_dAngle;           // desired wind angle
+    double      m_dCurrentAngle;    // current wind angle
     NMEA0183    m_NMEA0183_in;                 // Used to parse NMEA Sentences
     NMEA0183    m_NMEA0183_out;                 // Used to parse NMEA Sentences
     time_t      m_iHistoryTime;
@@ -281,7 +292,14 @@ private:
     WVEventHandler     *m_pWVEventHandler;
 
     std::list<WINDHISTORY> m_WindHistory;
+    WindvaneInstrument *m_WVDial;
+    wxSlider           *m_slSensitivity;
+    int         m_iCaptionId;
+    wxAuiManager     *m_pauimgr;
+    wxPanel          *m_panel1;
     
+    WVDialFrame    *m_WVDialFrame;
+    WVDialPanel     *m_WVDialPanel;
 };
 
 #endif

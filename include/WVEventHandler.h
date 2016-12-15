@@ -43,6 +43,7 @@ class WVEventHandler : public wxEvtHandler
         void StartSendTimer(int interval);
         void OnWVTimer1(wxTimerEvent& event);
         void OnWVTimer2(wxTimerEvent& event);
+        void OnEventScrollThumbrelease(wxScrollEvent& event);
         
     protected:
     private:

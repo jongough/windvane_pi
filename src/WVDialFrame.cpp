@@ -76,11 +76,6 @@ WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("WV AP"), wxD
 
 WVDialFrame::~WVDialFrame()
 {
-    m_mgr.DetachPane(m_WVDial);
-    delete m_WVDial;
-    m_mgr.DetachPane(m_slSensitivity);
-    delete m_slSensitivity;
-    m_mgr.UnInit();
 ////        m_slSensitivity->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler(WVEventHandler::OnEventScrollThumbrelease), NULL, this );
 //    m_slSensitivity->Disconnect(wxEVT_SIZE, wxSizeEventHandler( WVDialFrame::OnSizeSensitivity ), m_slSensitivity, this );
 //    m_WVDial->Disconnect(wxEVT_SIZE, wxSizeEventHandler( WVDialFrame::OnSizeDial ), m_WVDial, this );
@@ -94,6 +89,12 @@ WVDialFrame::~WVDialFrame()
     m_WVDial->Unbind(wxEVT_LEFT_UP, &WVDialFrame::OnMouseEvent, this);
     m_WVDial->Unbind(wxEVT_MOTION, &WVDialFrame::OnMouseEvent, this);
     Unbind(wxEVT_SIZE, &WVDialFrame::OnSizeFrame1, this);
+
+	m_mgr.DetachPane(m_WVDial);
+	delete m_WVDial;
+	m_mgr.DetachPane(m_slSensitivity);
+	delete m_slSensitivity;
+	m_mgr.UnInit();
 }
 
 void WVDialFrame::OnSizeFrame1(wxSizeEvent& event)

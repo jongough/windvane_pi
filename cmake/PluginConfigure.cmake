@@ -60,7 +60,7 @@ IF(MSVC)
     ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_DEPRECATE)
 ENDIF(MSVC)
 
-SET(wxWidgets_USE_LIBS base core net xml html adv)
+SET(wxWidgets_USE_LIBS base core net xml html adv aui)
 SET(BUILD_SHARED_LIBS TRUE)
 
 FIND_PACKAGE(wxWidgets REQUIRED)
@@ -71,6 +71,21 @@ IF(MSYS)
 ENDIF(MSYS)
 
 INCLUDE(${wxWidgets_USE_FILE})
+    MESSAGE (STATUS "Found wxWidgets..." )
+    MESSAGE (STATUS " wxWidgets Libraries: ${wxWidgets_LIBRARIES}")
+
+    # We need to remove GLU from the wxWidgets_LIBRARIES list
+    # It only appears to get on the list for MSW...
+    FOREACH (_currentLibFile ${wxWidgets_LIBRARIES})
+        SET(UCNAME ${_currentLibFile})
+        string(TOUPPER ${UCNAME} UCNAME)
+        IF(NOT ${UCNAME} MATCHES   "(.*)GLU(.*)")
+            SET( REVISED_wxWidgets_LIBRARIES  ${REVISED_wxWidgets_LIBRARIES} ${_currentLibFile}) 
+        ENDIF()
+    ENDFOREACH (_currentLibFile )
+    SET( wxWidgets_LIBRARIES ${REVISED_wxWidgets_LIBRARIES}) 
+
+    MESSAGE (STATUS " Revised wxWidgets Libraries: ${wxWidgets_LIBRARIES}")
 
 FIND_PACKAGE(OpenGL)
 IF(OPENGL_GLU_FOUND)

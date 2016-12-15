@@ -16,8 +16,8 @@ SET(CPACK_PACKAGE_CONTACT "Jon Gough")
 
 SET(VERSION_MAJOR "0")
 SET(VERSION_MINOR "0")
-SET(VERSION_PATCH "1")
-SET(VERSION_DATE "03/12/2016")
+SET(VERSION_PATCH "2")
+SET(VERSION_DATE "15/12/2016")
 
 SET(BUNDLE_DATA FALSE)
 IF( NOT CMAKE_BUILD_TYPE )
@@ -39,23 +39,30 @@ ADD_DEFINITIONS(-DUSE_S57)
 
 SET(SRCS
         src/windvane_pi.cpp
+        src/WVDialFrame.cpp
         src/WVEventHandler.cpp
         src/WVicons.cpp
         src/WVJSON.cpp
         src/WVUtils.cpp
+        src/dial.cpp
+        src/instrument.cpp
+        src/wind.cpp
      )
 
 SET(HDRS
         include/windvane_pi.h
+        include/WVDialFrame.h
         include/WVEventHandler.h
         include/WVicons.h
         include/WVJSON.h
         include/WVUtils.h
+        include/dial.h
+        include/instrument.h
+        include/wind.h
+
 )
 
 SET(OCPNSRC
-        ocpnsrc/dial.cpp
-        ocpnsrc/instrument.cpp
         src/nmea0183/apb.cpp
         src/nmea0183/mwv.cpp
         src/nmea0183/rmb.cpp
@@ -64,14 +71,18 @@ SET(OCPNSRC
         src/nmea0183/latlong.cpp
         src/nmea0183/long.cpp
         src/nmea0183/nmea0183.cpp
+        src/nmea0183/expid.cpp
+        src/nmea0183/hexvalue.cpp
         src/nmea0183/response.cpp
         src/nmea0183/sentence.cpp
         src/nmea0183/talkerid.cpp
         src/nmea0183/vwr.cpp
+        ocpnsrc/wxJSON/jsonreader.cpp
+        ocpnsrc/wxJSON/jsonval.cpp
+        ocpnsrc/wxJSON/jsonwriter.cpp
+
 )
 SET(OCPNHDRS
-        ocpninclude/dial.h
-        ocpninclude/instrument.h
         ocpninclude/ocpn_plugin.h
         ocpninclude/TexFont.h
         ocpninclude/wx28compat.h
@@ -85,6 +96,11 @@ SET(OCPNHDRS
         src/nmea0183/Response.hpp
         src/nmea0183/Sentence.hpp
         src/nmea0183/vwr.hpp
+        ocpninclude/wx/json_defs.h
+        ocpninclude/wx/jsonreader.h
+        ocpninclude/wx/jsonval.h
+        ocpninclude/wx/jsonwriter.h
+        
 )
 
 OPTION(WINDVANE_USE_SVG "Use SVG graphics" ON)
