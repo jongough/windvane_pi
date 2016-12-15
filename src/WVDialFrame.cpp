@@ -38,14 +38,15 @@
 #include "WVEventHandler.h"
 #include "wind.h"
 
+extern windvane_pi  *g_windvane_pi;
 
-WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("WV AP"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxFRAME_FLOAT_ON_PARENT|wxRESIZE_BORDER|wxTAB_TRAVERSAL) 
+WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("Windvane Auto Pilot"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxFRAME_FLOAT_ON_PARENT|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL) 
 {
     m_mgr.SetManagedWindow(this);
     m_MyFrameInst = this;
     m_MyFrameInst->SetSize(80, 100);
     
-    m_slSensitivity = new wxSlider( this, wxID_ANY, 60, 1, 120, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_LABELS );
+    m_slSensitivity = new wxSlider( this, wxID_ANY, 60, 1, 120, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
     m_slSensitivity->SetPageSize(1);
     SetMinSize( GetClientSize() );
     
@@ -146,6 +147,7 @@ void WVDialFrame::OnMouseEvent(wxMouseEvent& event)
         if(event.LeftIsDown()) {
             wxPoint l_CursorPoint = event.GetPosition();
             m_MyFrameInst->m_WVDial->MoveBug(l_CursorPoint);
+            g_windvane_pi->SetAngle(m_MyFrameInst->m_WVDial->m_dAngle);
         }
     }
 }

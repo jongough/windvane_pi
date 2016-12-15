@@ -783,9 +783,6 @@ void windvane_pi::SendAutopilotSentences(int CurrentAngle)
 
         double l_Angle;
         l_Angle = CurrentAngle - m_dAngle;
-        if(l_Angle < 0.) l_Angle += 360.;
-        else if(l_Angle > 360.) l_Angle -= 360.;
-        
         m_NMEA0183_out.Apb.IsLoranBlinkOK = NTrue;
         m_NMEA0183_out.Apb.IsLoranCCycleLockOK = NTrue;
         
@@ -867,3 +864,7 @@ void windvane_pi::UpdateWindvaneDisplay(double Angle)
     //m_WVDialFrame->m_WVDial->SetBugAngle(m_dAngle);
 }
 
+void windvane_pi::SetAngle(double Angle)
+{
+    m_dAngle = Angle;
+}

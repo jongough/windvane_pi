@@ -226,6 +226,7 @@ public:
     int     GetSendFrequency(void);
     void    SendAutopilotSentences(int Angle);
     void    UpdateWindvaneDisplay(double Angle);
+    void    SetAngle(double Angle);
     
     void    SetToolbarTool( void );
 

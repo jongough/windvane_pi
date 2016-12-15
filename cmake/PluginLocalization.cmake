@@ -25,9 +25,10 @@ EXECUTE_PROCESS(
 FIND_PROGRAM(GETTEXT_XGETTEXT_EXECUTABLE xgettext)
 string(REPLACE "_pi" "" I18N_NAME ${PACKAGE_NAME})
 IF (GETTEXT_XGETTEXT_EXECUTABLE)
+  MESSAGE(STATUS "Doing XGETTEXT")
   ADD_CUSTOM_COMMAND(
     OUTPUT po/${PACKAGE_NAME}.pot.dummy
-    COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} --force-po -F --package-name=${PACKAGE_NAME} --package-version="${PACKAGE_VERSION}" --output=po/${PACKAGE_NAME}.pot  --keyword=_ --width=80 --files-from=${CMAKE_CURRENT_SOURCE_DIR}/po/POTFILES.in
+    COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} --force-po -F --from-code=UTF-8 --package-name=${PACKAGE_NAME} --package-version="${PACKAGE_VERSION}" --output=po/${PACKAGE_NAME}.pot  --keyword=_ --width=80 --files-from=${CMAKE_CURRENT_SOURCE_DIR}/po/POTFILES.in
     DEPENDS po/POTFILES.in po/${PACKAGE_NAME}.pot
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "${I18N_NAME}-pot-update [${PACKAGE_NAME}]: Generated pot file."

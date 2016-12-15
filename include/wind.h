@@ -65,13 +65,13 @@ public:
 	void SetData(int, double, wxString);
     void SetBugAngle(double dAngle);
     void MoveBug(wxPoint mousePoint);
-
+    double m_dAngle;
+    
 private:
 
 protected:
 	double m_MainValueApp, m_MainValueSmooth;
 	double m_ExtraValueApp, m_ExtraValueSmooth;
-    double m_dAngle;
 
 	wxString m_ExtraValueAppUnit, m_ExtraValueSmoothUnit, m_MainValueAppUnit, m_MainValueSmoothUnit;
 	DialPositionOption m_MainValueOption1, m_MainValueOption2, m_ExtraValueOption1, m_ExtraValueOption2;

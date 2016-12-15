@@ -98,7 +98,7 @@ void WVEventHandler::OnWVTimer2( wxTimerEvent& event )
     std::list<WINDHISTORY>::iterator it = l_WindHistory->begin();
     int l_count = 0;
     int l_sum = 0;
-    int l_dAngle;
+    double l_dAngle;
     // convert angle to 0-360 for calc then back to -180 to 180 for display
     while(it != l_WindHistory->end()) {
         l_count++;
