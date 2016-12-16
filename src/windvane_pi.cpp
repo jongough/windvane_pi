@@ -677,22 +677,24 @@ void windvane_pi::SetNMEASentence(wxString &sentence)
         } else if( m_NMEA0183_in.LastSentenceIDReceived == _T("RMB") ) {
             if( m_NMEA0183_in.Parse() ) {
                 if(m_NMEA0183_in.TalkerID == _T("WV")) return;
-                if(!m_bWVAutopilot) {
+                double l_rLat, l_rLon;
+                double lld, llm, lls;
+                double l_Lat = m_NMEA0183_in.Rmb.DestinationPosition.Latitude.Latitude;
+                double l_Lon = m_NMEA0183_in.Rmb.DestinationPosition.Longitude.Longitude;
+                if(!m_bWVAutopilot && !wxIsNaN(l_Lat) && !wxIsNaN(l_Lon)) {
                     l_nOCPNAutopilot.Rmb = m_NMEA0183_in.Rmb;
-                    double l_Lat = m_NMEA0183_in.Rmb.DestinationPosition.Latitude.Latitude;
-                    double lld = (int)(l_Lat / 100);
-                    double llm = (int)(l_Lat - (lld * 100));
-                    double lls = l_Lat - (int)l_Lat;
-                    double l_rLat = lld + (llm / 60) + (lls / 60);
+                    lld = (int)(l_Lat / 100);
+                    llm = (int)(l_Lat - (lld * 100));
+                    lls = l_Lat - (int)l_Lat;
+                    l_rLat = lld + (llm / 60) + (lls / 60);
                     if(m_NMEA0183_in.Rmb.DestinationPosition.Latitude.Northing == North) 
                         l_nOCPNAutopilot.Rmb.DestinationPosition.Latitude.Set( l_rLat, _T("N"));
                     else
                         l_nOCPNAutopilot.Rmb.DestinationPosition.Latitude.Set(l_rLat, _T("S"));
-                    double l_Lon = m_NMEA0183_in.Rmb.DestinationPosition.Longitude.Longitude;
                     lld = (int)(l_Lon / 100);
                     llm = (int)(l_Lon - (lld * 100));
                     lls = l_Lon - (int)l_Lon;
-                    double l_rLon = lld + (llm / 60) + (lls / 60);
+                    l_rLon = lld + (llm / 60) + (lls / 60);
                     if(m_NMEA0183_in.Rmb.DestinationPosition.Longitude.Easting == East)
                         l_nOCPNAutopilot.Rmb.DestinationPosition.Longitude.Set(l_rLon, _T("E"));
                     else
