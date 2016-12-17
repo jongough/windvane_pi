@@ -479,7 +479,7 @@ void windvane_pi::SaveConfig()
         m_WVDialFrame->GetPosition(&x, &y);
         pConf->Write( wxS( "DefaultWindowPositionX" ), x );
         pConf->Write( wxS( "DefaultWindowPositionY" ), y );
-        m_WVDialFrame->GetSize(&x, &y);
+        m_WVDialFrame->GetClientSize(&x, &y);
         pConf->Write( wxS( "DefaultWindowSizeX" ), x );
         pConf->Write( wxS( "DefaultWindowSizeY" ), y );
     }
