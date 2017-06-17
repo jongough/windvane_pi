@@ -1,6 +1,8 @@
 src/windvane_pi.cpp
 src/WVDialFrame.cpp
 src/WVEventHandler.cpp
+src/WVPropertiesDialogDef.cpp
+src/WVPropertiesDialogImpl.cpp
 src/WVicons.cpp
 src/WVJSON.cpp
 src/WVUtils.cpp
@@ -10,6 +12,8 @@ src/wind.cpp
 include/windvane_pi.h
 include/WVDialFrame.h
 include/WVEventHandler.h
+include/WVPropertiesDialogDef.h
+include/WVPropertiesDialogImpl.h
 include/WVicons.h
 include/WVJSON.h
 include/WVUtils.h

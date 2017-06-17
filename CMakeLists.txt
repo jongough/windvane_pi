@@ -16,8 +16,8 @@ SET(CPACK_PACKAGE_CONTACT "Jon Gough")
 
 SET(VERSION_MAJOR "0")
 SET(VERSION_MINOR "0")
-SET(VERSION_PATCH "4")
-SET(VERSION_DATE "17/12/2016")
+SET(VERSION_PATCH "5")
+SET(VERSION_DATE "16/06/2017")
 
 SET(BUNDLE_DATA FALSE)
 IF( NOT CMAKE_BUILD_TYPE )
@@ -41,6 +41,8 @@ SET(SRCS
         src/windvane_pi.cpp
         src/WVDialFrame.cpp
         src/WVEventHandler.cpp
+        src/WVPropertiesDialogDef.cpp
+        src/WVPropertiesDialogImpl.cpp
         src/WVicons.cpp
         src/WVJSON.cpp
         src/WVUtils.cpp
@@ -53,6 +55,8 @@ SET(HDRS
         include/windvane_pi.h
         include/WVDialFrame.h
         include/WVEventHandler.h
+        include/WVPropertiesDialogDef.h
+        include/WVPropertiesDialogImpl.h
         include/WVicons.h
         include/WVJSON.h
         include/WVUtils.h
