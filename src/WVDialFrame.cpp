@@ -49,9 +49,9 @@ WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("Windvane Aut
     m_slSensitivity = new wxSlider( this, wxID_ANY, 60, 1, 120, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
     m_slSensitivity->SetPageSize(1);
     m_slSensitivity->SetValue(g_windvane_pi->GetHistoryTime());
-    m_slMaxAngle = new wxSlider( this, wxID_ANY, 10, 1, 60, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
-    m_slMaxAngle->SetPageSize(1);
-    m_slMaxAngle->SetValue(g_windvane_pi->GetMaxAngle());
+    m_slAngleXTERatio = new wxSlider( this, wxID_ANY, 1, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
+    m_slAngleXTERatio->SetPageSize(1);
+    m_slAngleXTERatio->SetValue(g_windvane_pi->GetAngleXTERatio());
     
     SetMinSize( GetClientSize() );
     
@@ -61,11 +61,11 @@ WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("Windvane Aut
     
     m_mgr.AddPane(m_WVDial, wxAuiPaneInfo() .Top() .CaptionVisible( false ).CloseButton( false ).PaneBorder(false).Movable(false).Fixed().PinButton( false ).Dock().Resizable(false).MinSize( 150, 150 ).BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).Floatable( false ).Gripper(false).Position(0).Layer(0));
     m_mgr.AddPane(m_slSensitivity, wxAuiPaneInfo() .Caption( _("Sensitivity (secs)") ).Top().CaptionVisible( true ).CloseButton( false ).PinButton( false ).PaneBorder(false).Movable(false).Dock().Resizable(false).MinSize(150, 66).BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).Floatable( false ).Gripper(false).Position(0).Layer(1));
-    m_mgr.AddPane(m_slMaxAngle, wxAuiPaneInfo() .Caption( _("Max Correction Angle") ).Top().CaptionVisible( true ).CloseButton( false ).PinButton( false ).PaneBorder(false).Movable(false).Dock().Resizable(false).MinSize(150, 66).BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).Floatable( false ).Gripper(false).Position(0).Layer(2));
+    m_mgr.AddPane(m_slAngleXTERatio, wxAuiPaneInfo() .Caption( _("Angle/XTE ratio") ).Top().CaptionVisible( true ).CloseButton( false ).PinButton( false ).PaneBorder(false).Movable(false).Dock().Resizable(false).MinSize(150, 66).BottomDockable( false ).TopDockable( false ).LeftDockable( false ).RightDockable( false ).Floatable( false ).Gripper(false).Position(0).Layer(2));
     m_mgr.Update();
     
     m_slSensitivity->Bind(wxEVT_SCROLL_THUMBRELEASE, &WVDialFrame::OnEventScrollThumbreleaseSensitivity, this);
-    m_slMaxAngle->Bind(wxEVT_SCROLL_THUMBRELEASE, &WVDialFrame::OnEventScrollThumbreleaseMaxAngle, this);
+    m_slAngleXTERatio->Bind(wxEVT_SCROLL_THUMBRELEASE, &WVDialFrame::OnEventScrollThumbreleaseAngleXTERatio, this);
     m_WVDial->Bind(wxEVT_SIZE, &WVDialFrame::OnSizeDial, this);
     m_WVDial->Bind(wxEVT_LEFT_DOWN, &WVDialFrame::OnMouseEvent, this);
     m_WVDial->Bind(wxEVT_LEFT_UP, &WVDialFrame::OnMouseEvent, this);
@@ -77,19 +77,19 @@ WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("Windvane Aut
 WVDialFrame::~WVDialFrame()
 {
     m_slSensitivity->Unbind(wxEVT_SCROLL_THUMBRELEASE, &WVDialFrame::OnEventScrollThumbreleaseSensitivity, this);
-    m_slMaxAngle->Unbind(wxEVT_SCROLL_THUMBRELEASE, &WVDialFrame::OnEventScrollThumbreleaseMaxAngle, this);
+    m_slAngleXTERatio->Unbind(wxEVT_SCROLL_THUMBRELEASE, &WVDialFrame::OnEventScrollThumbreleaseAngleXTERatio, this);
     m_WVDial->Unbind(wxEVT_SIZE, &WVDialFrame::OnSizeDial, this);
     m_WVDial->Unbind(wxEVT_LEFT_DOWN, &WVDialFrame::OnMouseEvent, this);
     m_WVDial->Unbind(wxEVT_LEFT_UP, &WVDialFrame::OnMouseEvent, this);
     m_WVDial->Unbind(wxEVT_MOTION, &WVDialFrame::OnMouseEvent, this);
     Unbind(wxEVT_SIZE, &WVDialFrame::OnSizeFrame1, this);
 
-	m_mgr.DetachPane(m_WVDial);
-	delete m_WVDial;
-	m_mgr.DetachPane(m_slSensitivity);
-	delete m_slSensitivity;
-    m_mgr.DetachPane(m_slMaxAngle);
-    delete m_slMaxAngle;
+    m_mgr.DetachPane(m_WVDial);
+    delete m_WVDial;
+    m_mgr.DetachPane(m_slSensitivity);
+    delete m_slSensitivity;
+    m_mgr.DetachPane(m_slAngleXTERatio);
+    delete m_slAngleXTERatio;
     m_mgr.UnInit();
 }
 
@@ -136,7 +136,19 @@ void WVDialFrame::OnSizeSensitivity( wxSizeEvent& event )
     }
 }
 
-void WVDialFrame::OnSizeMaxAngle( wxSizeEvent& event )
+//void WVDialFrame::OnSizeMaxAngle( wxSizeEvent& event )
+//{
+//    event.Skip();
+//    return;
+//    if(m_MyFrameInst->IsShown()) {
+//        int w, h;
+//        m_MyFrameInst->GetClientSize(&w, &h);
+//        wxSize l_nWVDialSize = m_MyFrameInst->m_WVDial->GetSize(wxVERTICAL, wxSize(wxMin(w, h), wxMin(w, h) ));
+//        m_MyFrameInst->m_slMaxAngle->SetSize( l_nWVDialSize.x, 60);
+//    }
+//}
+
+void WVDialFrame::OnSizeAngleXTERatio( wxSizeEvent& event )
 {
     event.Skip();
     return;
@@ -144,7 +156,7 @@ void WVDialFrame::OnSizeMaxAngle( wxSizeEvent& event )
         int w, h;
         m_MyFrameInst->GetClientSize(&w, &h);
         wxSize l_nWVDialSize = m_MyFrameInst->m_WVDial->GetSize(wxVERTICAL, wxSize(wxMin(w, h), wxMin(w, h) ));
-        m_MyFrameInst->m_slMaxAngle->SetSize( l_nWVDialSize.x, 60);
+        m_MyFrameInst->m_slAngleXTERatio->SetSize( l_nWVDialSize.x, 60);
     }
 }
 
@@ -164,9 +176,14 @@ void WVDialFrame::OnEventScrollThumbreleaseSensitivity(wxScrollEvent& event)
     g_windvane_pi->SetHistoryTime(event.GetPosition());
 }
 
-void WVDialFrame::OnEventScrollThumbreleaseMaxAngle(wxScrollEvent& event)
+//void WVDialFrame::OnEventScrollThumbreleaseMaxAngle(wxScrollEvent& event)
+//{
+//    g_windvane_pi->SetMaxAngle(event.GetPosition());
+//}
+
+void WVDialFrame::OnEventScrollThumbreleaseAngleXTERatio(wxScrollEvent& event)
 {
-    g_windvane_pi->SetMaxAngle(event.GetPosition());
+    g_windvane_pi->SetAngleXTERatio(event.GetPosition());
 }
 
 void WVDialFrame::SetHistoryTime(int historytime) 
@@ -174,7 +191,12 @@ void WVDialFrame::SetHistoryTime(int historytime)
     m_slSensitivity->SetValue(historytime);
 }
 
-void WVDialFrame::SetMaxAngle(int angle)
+//void WVDialFrame::SetMaxAngle(int angle)
+//{
+//    m_slMaxAngle->SetValue(angle);
+//}
+
+void WVDialFrame::SetAngleXTERatio(double ratio)
 {
-    m_slMaxAngle->SetValue(angle);
+    m_slAngleXTERatio->SetValue(ratio);
 }

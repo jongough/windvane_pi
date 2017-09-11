@@ -40,10 +40,12 @@ public:
     WVDialFrame(wxWindow *parent);
     ~WVDialFrame();
     void SetHistoryTime(int historytime);
-    void SetMaxAngle(int angle);
+//    void SetMaxAngle(int angle);
+    void SetAngleXTERatio(double ratio);
 
     wxSlider *m_slSensitivity;
-    wxSlider *m_slMaxAngle;
+//    wxSlider *m_slMaxAngle;
+    wxSlider *m_slAngleXTERatio;
     WindvaneInstrument_AppSmoothedWindAngle * m_WVDial;
     WVDialFrame *m_MyFrameInst;
     wxFlexGridSizer *m_fgSizer;
@@ -53,9 +55,11 @@ private:
     void OnSizeFrame1(wxSizeEvent& event);
     void OnSizeDial( wxSizeEvent& event );
     void OnSizeSensitivity( wxSizeEvent& event );
-    void OnSizeMaxAngle( wxSizeEvent& event );
+//    void OnSizeMaxAngle( wxSizeEvent& event );
+    void OnSizeAngleXTERatio( wxSizeEvent& event );
     void OnEventScrollThumbreleaseSensitivity(wxScrollEvent& event);
     void OnEventScrollThumbreleaseMaxAngle(wxScrollEvent& event);
+    void OnEventScrollThumbreleaseAngleXTERatio(wxScrollEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
     
     wxAuiManager m_mgr;

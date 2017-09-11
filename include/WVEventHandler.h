@@ -39,8 +39,8 @@ class WVEventHandler : public wxEvtHandler
     public:
         WVEventHandler(windvane_pi *parent);
         ~WVEventHandler();
-        
         void StartSendTimer(int interval);
+        void RestartSendtimer(int interval);
         void OnWVTimer1(wxTimerEvent& event);
         void OnWVTimer2(wxTimerEvent& event);
         void OnEventScrollThumbrelease(wxScrollEvent& event);

@@ -76,6 +76,15 @@ void WVEventHandler::StartSendTimer(int interval)
     WVTimer2.Start( interval * 1000, wxTIMER_CONTINUOUS );
 }
 
+void WVEventHandler::RestartSendtimer( int interval )
+{
+    if(m_bWVTimer2Started)
+        WVTimer2.Stop();
+    m_bWVTimer2Started = true;
+    WVTimer2.Start( interval * 1000, wxTIMER_CONTINUOUS );
+    
+}
+
 void WVEventHandler::OnWVTimer1( wxTimerEvent& event )
 {
     std::list<WINDHISTORY> *l_WindHistory = m_parent->GetWindHistory();

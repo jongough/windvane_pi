@@ -473,7 +473,8 @@ void windvane_pi::SaveConfig()
     if(pConf)
     {
         pConf->SetPath( wxS( "/Settings/windvane_pi" ) );
-        pConf->Write( wxS( "DefaultMaxAngle" ), m_iMaxAngle );
+//        pConf->Write( wxS( "DefaultMaxAngle" ), m_iMaxAngle );
+        pConf->Write( wxS( "DefaultAngleXTERatio" ), m_dAngleXTERatio );
         pConf->Write( wxS( "DefaultAngle" ), m_dAngle );
         pConf->Write( wxS( "DefaultHistoryTime" ), (int)m_iHistoryTime );
         pConf->Write( wxS( "DefaultWriteFrequency" ), m_iFrequency );
@@ -515,8 +516,10 @@ void windvane_pi::LoadConfig()
         wxString val;
         pConf->SetPath( wxS( "/Settings/windvane_pi" ) );
         wxString  l_wxsColour;
-        pConf->Read( wxS( "DefaultMaxAngle"), &m_iMaxAngle, 10 );
-        m_WVDialFrame->SetMaxAngle(m_iMaxAngle);
+//        pConf->Read( wxS( "DefaultMaxAngle"), &m_iMaxAngle, 10 );
+//        m_WVDialFrame->SetMaxAngle(m_iMaxAngle);
+        pConf->Read( wxS( "DefaultAngleXTERatio"), &m_dAngleXTERatio, 0.001 );
+        m_WVDialFrame->SetAngleXTERatio(m_dAngleXTERatio);
         pConf->Read( wxS( "DefaultAngle" ), &m_dAngle, 90. );
 		int l_iHistoryTime;
         pConf->Read( wxS( "DefaultHistoryTime" ), &l_iHistoryTime, 60 );
@@ -656,14 +659,24 @@ void windvane_pi::SetHistoryTime(time_t t)
     m_iHistoryTime = t;
 }
 
-void windvane_pi::SetMaxAngle(int angle)
+//void windvane_pi::SetMaxAngle(int angle)
+//{
+//    m_iMaxAngle = angle;
+//}
+
+//int windvane_pi::GetMaxAngle(void)
+//{
+//    return m_iMaxAngle;
+//}
+
+double windvane_pi::GetAngleXTERatio(void)
 {
-    m_iMaxAngle = angle;
+    return m_dAngleXTERatio;
 }
 
-int windvane_pi::GetMaxAngle(void)
+void windvane_pi::SetAngleXTERatio(double ratio)
 {
-    return m_iMaxAngle;
+    m_dAngleXTERatio = ratio;
 }
 
 int windvane_pi::GetSendFrequency(void)
@@ -674,6 +687,7 @@ int windvane_pi::GetSendFrequency(void)
 void windvane_pi::SetSendFrequency(int frequency)
 {
     m_iFrequency = frequency;
+    m_pWVEventHandler->RestartSendtimer( frequency );
 }
 
 void windvane_pi::SetNMEASentence(wxString &sentence)
@@ -765,18 +779,18 @@ void windvane_pi::SendAutopilotSentences(int CurrentAngle)
         
         double l_Angle;
         l_Angle = m_dAngle - CurrentAngle;
-        if(l_Angle >= 0) {
-            if(l_Angle > m_iMaxAngle)
-                l_Angle = m_iMaxAngle;
-        }
-        else {
-            if(l_Angle < -m_iMaxAngle )
-                l_Angle = -m_iMaxAngle;
-        }
+//        if(l_Angle >= 0) {
+//            if(l_Angle > m_iMaxAngle)
+//                l_Angle = m_iMaxAngle;
+//        }
+//        else {
+//            if(l_Angle < -m_iMaxAngle )
+//                l_Angle = -m_iMaxAngle;
+//        }
         
-        if( l_Angle < 0 ) m_NMEA0183_out.Rmb.DirectionToSteer = Left;
+        if( l_Angle < 0 ) m_NMEA0183_out.Rmb.DirectionToSteer = Right;
         else
-            m_NMEA0183_out.Rmb.DirectionToSteer = Right;
+            m_NMEA0183_out.Rmb.DirectionToSteer = Left;
         
         
         m_NMEA0183_out.Rmb.To = _T("WVANE");
@@ -811,24 +825,31 @@ void windvane_pi::SendAutopilotSentences(int CurrentAngle)
         m_NMEA0183_out.TalkerID = _T("WV");
 
         double l_Angle;
+        double l_XTE = 0.0;
         l_Angle =  m_dAngle - CurrentAngle;
         if(l_Angle >= 0) {
-            if(l_Angle > m_iMaxAngle)
-                l_Angle = m_iMaxAngle;
+//            l_XTE = 0.001 * l_Angle;
+            if (m_dAngleXTERatio > 0)
+               l_XTE = (m_dAngleXTERatio / 1000) * l_Angle;
+//            if(l_Angle > m_iMaxAngle)
+//                l_Angle = m_iMaxAngle;
         }
         else {
-            if(l_Angle < -m_iMaxAngle )
-                l_Angle = -m_iMaxAngle;
+//            l_XTE = 0.001 * -l_Angle;
+            if (m_dAngleXTERatio > 0)
+               l_XTE = (m_dAngleXTERatio / 1000) * -l_Angle;
+//            if(l_Angle < -m_iMaxAngle)
+//                l_Angle = -m_iMaxAngle;
         }
         
         m_NMEA0183_out.Apb.IsLoranBlinkOK = NTrue;
         m_NMEA0183_out.Apb.IsLoranCCycleLockOK = NTrue;
         
-        m_NMEA0183_out.Apb.CrossTrackErrorMagnitude = 0;
+        m_NMEA0183_out.Apb.CrossTrackErrorMagnitude = l_XTE;
         
-        if( l_Angle < 0 ) m_NMEA0183_out.Apb.DirectionToSteer = Left;
+        if( l_Angle < 0 ) m_NMEA0183_out.Apb.DirectionToSteer = Right;
         else
-            m_NMEA0183_out.Apb.DirectionToSteer = Right;
+            m_NMEA0183_out.Apb.DirectionToSteer = Left;
         
         m_NMEA0183_out.Apb.CrossTrackUnits = _T("N");
         
@@ -840,7 +861,7 @@ void windvane_pi::SendAutopilotSentences(int CurrentAngle)
         m_NMEA0183_out.Apb.To = wxT("WVANE");
         
         if(g_pfFix.Hdm) {
-            l_Angle += g_pfFix.Hdm;
+            l_Angle = g_pfFix.Hdm -l_Angle;
             if(l_Angle > 360.) l_Angle -= 360.;
             if(l_Angle < 0.) l_Angle += 360.;
             
@@ -848,7 +869,7 @@ void windvane_pi::SendAutopilotSentences(int CurrentAngle)
             m_NMEA0183_out.Apb.BearingPresentPositionToDestinationUnits = _T("M");
             m_NMEA0183_out.Apb.HeadingToSteerUnits = _T("M");
         } else {
-            l_Angle += g_pfFix.Hdt;
+            l_Angle = g_pfFix.Hdt - l_Angle;
             if(l_Angle > 360.) l_Angle -= 360.;
             if(l_Angle < 0.) l_Angle += 360.;
             m_NMEA0183_out.Apb.BearingOriginToDestinationUnits = _T("T");

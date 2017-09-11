@@ -223,8 +223,10 @@ public:
     std::list<WINDHISTORY> *GetWindHistory( void );
     time_t  GetHistoryTime( void );
     void    SetHistoryTime(time_t t);
-    int     GetMaxAngle( void );
-    void    SetMaxAngle(int angle);
+//    int     GetMaxAngle( void );
+//    void    SetMaxAngle(int angle);
+    double  GetAngleXTERatio( void );
+    void    SetAngleXTERatio(double m_dAngleXTERatio);
     int     GetSendFrequency(void);
     void    SetSendFrequency( int frequency );
     void    SendAutopilotSentences(int Angle);
@@ -289,7 +291,8 @@ private:
     NMEA0183    m_NMEA0183_in;                 // Used to parse NMEA Sentences
     NMEA0183    m_NMEA0183_out;                 // Used to parse NMEA Sentences
     time_t      m_iHistoryTime;
-    int         m_iMaxAngle;
+//    int         m_iMaxAngle;
+    double      m_dAngleXTERatio;
     int         m_iFrequency;
     wxTimer     m_ProcessTimer;
     bool        m_bMagBearing;
