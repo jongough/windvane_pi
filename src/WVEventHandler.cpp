@@ -106,20 +106,20 @@ void WVEventHandler::OnWVTimer2( wxTimerEvent& event )
     if(l_WindHistory->size() == 0) return;
     std::list<WINDHISTORY>::iterator it = l_WindHistory->begin();
     int l_count = 0;
-    int l_sum = 0;
+    double l_dSum = 0.;
     double l_dAngle;
     // convert angle to 0-360 for calc then back to -180 to 180 for display
     while(it != l_WindHistory->end()) {
         l_count++;
-        if(it->dAngle < 0) l_dAngle = 360. + it->dAngle;
+        if(it->dAngle < 0.) l_dAngle = 360. + it->dAngle;
         else l_dAngle = it->dAngle;
-        l_sum += l_dAngle;
+        l_dSum += l_dAngle;
         it++;
     }
     
-    if(l_count > 0 && l_sum != 0) {
-        l_dAngle = l_sum / l_count;
-        if(l_dAngle > 180) l_dAngle -= 360.;
+    if(l_count > 0 && l_dSum != 0.) {
+        l_dAngle = l_dSum / l_count;
+        if(l_dAngle > 180.) l_dAngle = 360. - l_dAngle;
         m_parent->UpdateWindvaneDisplay( l_dAngle );
         m_parent->SendAutopilotSentences( l_dAngle );
     }
