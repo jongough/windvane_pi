@@ -46,10 +46,10 @@ WVDialFrame::WVDialFrame(wxWindow *parent) : wxFrame(parent, -1, _("Windvane Aut
     m_MyFrameInst = this;
     m_MyFrameInst->SetSize(80, 100);
     
-    m_slSensitivity = new wxSlider( this, wxID_ANY, 60, 1, 120, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
+    m_slSensitivity = new wxSlider( this, wxID_ANY, 60, 1, g_windvane_pi->GetSensitivityLimit(), wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
     m_slSensitivity->SetPageSize(1);
     m_slSensitivity->SetValue(g_windvane_pi->GetHistoryTime());
-    m_slAngleXTERatio = new wxSlider( this, wxID_ANY, 1, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
+    m_slAngleXTERatio = new wxSlider( this, wxID_ANY, 1, 0, g_windvane_pi->GetAngleXTERatioLimit(), wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxFULL_REPAINT_ON_RESIZE|wxSL_LABELS );
     m_slAngleXTERatio->SetPageSize(1);
     m_slAngleXTERatio->SetValue(g_windvane_pi->GetAngleXTERatio());
     

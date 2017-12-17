@@ -24,24 +24,58 @@ WVPropertiesDialogDef::WVPropertiesDialogDef( wxWindow* parent, wxWindowID id, c
 	fgSizerGeneral = new wxFlexGridSizer( 0, 2, 0, 0 );
 	fgSizerGeneral->AddGrowableCol( 0 );
 	fgSizerGeneral->AddGrowableCol( 1 );
-	fgSizerGeneral->SetFlexibleDirection( wxBOTH );
+	fgSizerGeneral->SetFlexibleDirection( wxVERTICAL );
 	fgSizerGeneral->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticTextUpdateFrequency = new wxStaticText( m_panelGeneral, wxID_ANY, _("AutoPilot Update\nFrequency (secs)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUpdateFrequency->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticTextUpdateFrequency, 0, wxALL, 5 );
+	fgSizerGeneral->Add( m_staticTextUpdateFrequency, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_sliderUpdateFrequency = new wxSlider( m_panelGeneral, wxID_ANY, 1, 1, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	fgSizerGeneral->Add( m_sliderUpdateFrequency, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerGeneral->Add( fgSizerGeneral, 1, wxEXPAND, 5 );
+	bSizerGeneral->Add( fgSizerGeneral, 0, wxEXPAND, 5 );
+	
+	wxFlexGridSizer* fgSizer5;
+	fgSizer5 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer5->AddGrowableCol( 0 );
+	fgSizer5->AddGrowableCol( 1 );
+	fgSizer5->SetFlexibleDirection( wxVERTICAL );
+	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticTextAngleXTERatio = new wxStaticText( m_panelGeneral, wxID_ANY, _("Angle/XTE ratio upper limit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAngleXTERatio->Wrap( -1 );
+	fgSizer5->Add( m_staticTextAngleXTERatio, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_sliderAngleXTERatioLimit = new wxSlider( m_panelGeneral, wxID_ANY, 5, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer5->Add( m_sliderAngleXTERatioLimit, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizerGeneral->Add( fgSizer5, 0, wxEXPAND, 5 );
+	
+	wxFlexGridSizer* fgSizer6;
+	fgSizer6 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer6->AddGrowableCol( 0 );
+	fgSizer6->AddGrowableCol( 1 );
+	fgSizer6->SetFlexibleDirection( wxVERTICAL );
+	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticTextSensitivity = new wxStaticText( m_panelGeneral, wxID_ANY, _("Wind change sensitivity"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSensitivity->Wrap( -1 );
+	fgSizer6->Add( m_staticTextSensitivity, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_sliderSensitivityLimit = new wxSlider( m_panelGeneral, wxID_ANY, 1, 0, 60, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
+	fgSizer6->Add( m_sliderSensitivityLimit, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizerGeneral->Add( fgSizer6, 0, wxEXPAND, 5 );
 	
 	
 	m_panelGeneral->SetSizer( bSizerGeneral );
 	m_panelGeneral->Layout();
 	bSizerGeneral->Fit( m_panelGeneral );
-	m_notebookWVProperties->AddPage( m_panelGeneral, _("General"), false );
+	m_notebookWVProperties->AddPage( m_panelGeneral, _("General"), true );
 	m_panelHelp = new wxPanel( m_notebookWVProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizerHelp;
 	fgSizerHelp = new wxFlexGridSizer( 0, 1, 0, 0 );
@@ -133,7 +167,23 @@ WVPropertiesDialogDef::WVPropertiesDialogDef( wxWindow* parent, wxWindowID id, c
 	m_panelAbout->SetSizer( bSizerAbout );
 	m_panelAbout->Layout();
 	bSizerAbout->Fit( m_panelAbout );
-	m_notebookWVProperties->AddPage( m_panelAbout, _("About"), true );
+	m_notebookWVProperties->AddPage( m_panelAbout, _("About"), false );
+	m_panelLicense = new wxPanel( m_notebookWVProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxFlexGridSizer* fgSizer7;
+	fgSizer7 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer7->AddGrowableCol( 0 );
+	fgSizer7->AddGrowableRow( 0 );
+	fgSizer7->SetFlexibleDirection( wxBOTH );
+	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+	
+	m_textCtrlLicense = new wxTextCtrl( m_panelLicense, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
+	fgSizer7->Add( m_textCtrlLicense, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	m_panelLicense->SetSizer( fgSizer7 );
+	m_panelLicense->Layout();
+	fgSizer7->Fit( m_panelLicense );
+	m_notebookWVProperties->AddPage( m_panelLicense, _("License"), false );
 	
 	m_SizerWVProperties->Add( m_notebookWVProperties, 1, wxEXPAND | wxALL, 5 );
 	

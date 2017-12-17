@@ -23,6 +23,7 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/textctrl.h>
 #include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -45,6 +46,10 @@ class WVPropertiesDialogDef : public wxDialog
 		wxPanel* m_panelGeneral;
 		wxStaticText* m_staticTextUpdateFrequency;
 		wxSlider* m_sliderUpdateFrequency;
+		wxStaticText* m_staticTextAngleXTERatio;
+		wxSlider* m_sliderAngleXTERatioLimit;
+		wxStaticText* m_staticTextSensitivity;
+		wxSlider* m_sliderSensitivityLimit;
 		wxPanel* m_panelHelp;
 		wxStaticText* m_staticTextHelp;
 		wxPanel* m_panelAbout;
@@ -61,6 +66,8 @@ class WVPropertiesDialogDef : public wxDialog
 		wxStaticText* m_staticTextDateVal;
 		wxStaticText* m_staticTextOther;
 		wxStaticText* m_staticTextOtherVal;
+		wxPanel* m_panelLicense;
+		wxTextCtrl* m_textCtrlLicense;
 		wxButton* m_buttonOK;
 		wxButton* m_buttonCancel;
 		

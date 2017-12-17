@@ -89,6 +89,7 @@ wxString    *g_PrivateDataDir;
 
 wxString    *g_pHome_Locn;
 wxString    *g_pData;
+wxString    *g_SData_Locn;
 wxString    *g_pLayerDir;
 
 PlugIn_ViewPort *g_pVP;
@@ -157,11 +158,42 @@ windvane_pi::windvane_pi(void *ppimgr)
     g_pLayerDir->Append( wxT("Layers") );
     appendOSDirSlash( g_pLayerDir );
     
+    wxFileName fn;
+    //#ifdef __WXOSX__
+    // Not in this case - the icons are part of the plugin package, not it's configuration data, so they have nothing to do in the user's preferences directory
+    //    wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
+    //    fn.SetPath(std_path.GetUserConfigDir());  // should be ~/Library/Preferences
+    //    fn.AppendDir(_T("opencpn"));
+    //    fn.AppendDir( wxT("plugins") );
+    //    fn.AppendDir(wxT("ocpn_draw_pi"));
+    //#else
+    fn.SetPath(*GetpSharedDataLocation());
+    fn.AppendDir( wxT("plugins") );
+    fn.AppendDir(wxT("windvane_pi"));
+    fn.AppendDir(wxT("data"));
+    g_SData_Locn = new wxString(fn.GetFullPath().c_str());
+    //#endif
+    wxString s = _("windvane_pi data location");
+    wxLogMessage( wxT("%s: %s"), s.c_str(), fn.GetFullPath().c_str());
+    
     m_pWVicons = new WVicons();
+    
+    delete l_pDir;
 }
 
 windvane_pi::~windvane_pi()
 {
+    delete g_SData_Locn;
+    g_SData_Locn = NULL;
+    
+    delete g_PrivateDataDir;
+    g_PrivateDataDir = NULL;
+    
+    delete g_pData;
+    g_pData = NULL;
+    
+    delete g_pLayerDir;
+    g_pLayerDir = NULL;
     
 }
 
@@ -433,6 +465,8 @@ void windvane_pi::OnToolbarToolCallback(int id)
             m_bWVAutopilot = true;
             SetToolbarItemState( m_windvane_button_id, true  );
             m_dAngle = m_dCurrentAngle;
+            m_WVDialFrame->m_slSensitivity->SetMax(m_iSensitivityLimit);
+            m_WVDialFrame->m_slAngleXTERatio->SetMax(m_iAngleXTERatioLimit);
             m_WVDialFrame->m_WVDial->SetBugAngle(m_dAngle);
             m_WVDialFrame->Show();
 //            m_WVDialPanel->m_WVDial->SetBugAngle(m_dAngle);
@@ -486,6 +520,8 @@ void windvane_pi::SaveConfig()
         m_WVDialFrame->GetClientSize(&x, &y);
         pConf->Write( wxS( "DefaultWindowSizeX" ), x );
         pConf->Write( wxS( "DefaultWindowSizeY" ), y );
+        pConf->Write( wxS( "DefaultAngleXTERatioLimit"), m_iAngleXTERatioLimit );
+        pConf->Write( wxS( "DefaultSensitivityLimit"), m_iSensitivityLimit );
     }
     
 #ifndef __WXMSW__
@@ -539,6 +575,8 @@ void windvane_pi::LoadConfig()
         pConf->Read( wxS( "DefaultWindowSizeY"), &l_DefaultSize.y, -1 );
         if(l_DefaultSize.x != -1 && l_DefaultSize.y != -1)
             m_WVDialFrame->SetClientSize(l_DefaultSize);
+        pConf->Read( wxS( "DefaultAngleXTERatioLimit"), &m_iAngleXTERatioLimit, 20 );
+        pConf->Read( wxS( "DefaultSensitivityLimit"), &m_iSensitivityLimit, 30 );
         
     }
 
@@ -674,6 +712,16 @@ double windvane_pi::GetAngleXTERatio(void)
     return m_dAngleXTERatio;
 }
 
+int windvane_pi::GetAngleXTERatioLimit()
+{
+    return m_iAngleXTERatioLimit;
+}
+
+int windvane_pi::GetSensitivityLimit()
+{
+    return m_iSensitivityLimit;
+}
+
 void windvane_pi::SetAngleXTERatio(double ratio)
 {
     m_dAngleXTERatio = ratio;
@@ -688,6 +736,24 @@ void windvane_pi::SetSendFrequency(int frequency)
 {
     m_iFrequency = frequency;
     m_pWVEventHandler->RestartSendtimer( frequency );
+}
+
+void windvane_pi::SetAngleXTERatioLimit( int AngleXTERatioLimit )
+{
+    m_iAngleXTERatioLimit = AngleXTERatioLimit;
+    if(m_WVDialFrame->IsShown()) {
+        m_WVDialFrame->m_slAngleXTERatio->SetMax(AngleXTERatioLimit);
+        if(m_WVDialFrame->m_slAngleXTERatio->GetValue() > AngleXTERatioLimit) m_WVDialFrame->m_slAngleXTERatio->SetValue(AngleXTERatioLimit);
+    }
+}
+
+void windvane_pi::SetSensitivityLimit( int SensitivityLimit )
+{
+    m_iSensitivityLimit = SensitivityLimit;
+    if(m_WVDialFrame->IsShown()) {
+        m_WVDialFrame->m_slSensitivity->SetMax(SensitivityLimit);
+        if(m_WVDialFrame->m_slSensitivity->GetValue() > SensitivityLimit) m_WVDialFrame->m_slSensitivity->SetValue(SensitivityLimit);
+    }
 }
 
 void windvane_pi::SetNMEASentence(wxString &sentence)

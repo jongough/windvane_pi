@@ -228,7 +228,11 @@ public:
     double  GetAngleXTERatio( void );
     void    SetAngleXTERatio(double m_dAngleXTERatio);
     int     GetSendFrequency(void);
+    int     GetAngleXTERatioLimit(void);
+    int     GetSensitivityLimit(void);
     void    SetSendFrequency( int frequency );
+    void    SetAngleXTERatioLimit( int AngleXTERatioLimit );
+    void    SetSensitivityLimit( int SensitivityLimit );
     void    SendAutopilotSentences(int Angle);
     void    UpdateWindvaneDisplay(double Angle);
     void    SetAngle(double Angle);
@@ -274,7 +278,8 @@ public:
     WVicons     *m_pWVicons;
     PI_ColorScheme               global_color_scheme;
     
-
+    WVDialFrame    *m_WVDialFrame;
+    
 private:
     void    OnTimer(wxTimerEvent& ev);
 
@@ -283,6 +288,8 @@ private:
     
     wxFileConfig *m_pWVConfig;
     
+    int         m_iAngleXTERatioLimit;
+    int         m_iSensitivityLimit;
     int         m_windvane_button_id;
     bool        m_bWVAutopilot;
     wxDateTime  m_LastFixTime;
@@ -306,7 +313,6 @@ private:
     wxAuiManager     *m_pauimgr;
     wxPanel          *m_panel1;
     
-    WVDialFrame    *m_WVDialFrame;
     WVDialPanel     *m_WVDialPanel;
 };
 

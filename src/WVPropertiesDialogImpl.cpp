@@ -31,6 +31,7 @@
 
 #include "WVPropertiesDialogImpl.h"
 #include "windvane_pi.h"
+#include "WVDialFrame.h"
 #include "version.h"
 
 #if wxCHECK_VERSION(3,0,0) 
@@ -38,6 +39,8 @@
 #endif
 
 extern windvane_pi *g_windvane_pi;
+extern wxString    *g_SData_Locn;
+
 
 WVPropertiesDialogImpl::WVPropertiesDialogImpl( wxWindow* parent )
 :
@@ -53,16 +56,37 @@ WVPropertiesDialogDef( parent )
     m_staticTextPatchVal->SetLabel( wxT(TOSTRING(PLUGIN_VERSION_PATCH)) );
     m_staticTextDateVal->SetLabel( wxT(TOSTRING(PLUGIN_VERSION_DATE)) );
     
+    wxTextFile license_filea( g_SData_Locn->c_str() + _T("license.txt") );
+    wxString l_LicenseText = wxEmptyString;
+    if ( license_filea.Open() ) {
+        for ( wxString str = license_filea.GetFirstLine(); !license_filea.Eof() ; str = license_filea.GetNextLine() )
+            l_LicenseText.Append( str + _T("\n") );
+        license_filea.Close();
+        m_textCtrlLicense->SetDefaultStyle(wxTextAttr(*wxBLACK));
+        m_textCtrlLicense->Clear();
+        m_textCtrlLicense->SetValue(l_LicenseText);
+    } else {
+        wxLogMessage( _T("Could not open License file: ") + g_SData_Locn->c_str() );
+    }
+    
 }
 
 void WVPropertiesDialogImpl::SaveChanges()
 {
     g_windvane_pi->SetSendFrequency( m_sliderUpdateFrequency->GetValue() );
+    g_windvane_pi->SetAngleXTERatioLimit( m_sliderAngleXTERatioLimit->GetValue() );
+    g_windvane_pi->SetSensitivityLimit( m_sliderSensitivityLimit->GetValue() );
+    if(g_windvane_pi->m_WVDialFrame->IsShown()) {
+        g_windvane_pi->m_WVDialFrame->m_slSensitivity->SetMax(m_sliderSensitivityLimit->GetValue());
+        g_windvane_pi->m_WVDialFrame->m_slAngleXTERatio->SetMax(m_sliderAngleXTERatioLimit->GetValue());
+    }    
 }
 
 void WVPropertiesDialogImpl::UpdateProperties( void )
 {
     m_sliderUpdateFrequency->SetValue(g_windvane_pi->GetSendFrequency());
+    m_sliderAngleXTERatioLimit->SetValue(g_windvane_pi->GetAngleXTERatioLimit());
+    m_sliderSensitivityLimit->SetValue(g_windvane_pi->GetSensitivityLimit());
 }
 void WVPropertiesDialogImpl::OnWVPropertiesOKClick( wxCommandEvent& event )
 {
