@@ -158,24 +158,6 @@ windvane_pi::windvane_pi(void *ppimgr)
     g_pLayerDir->Append( wxT("Layers") );
     appendOSDirSlash( g_pLayerDir );
     
-    wxFileName fn;
-    //#ifdef __WXOSX__
-    // Not in this case - the icons are part of the plugin package, not it's configuration data, so they have nothing to do in the user's preferences directory
-    //    wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-    //    fn.SetPath(std_path.GetUserConfigDir());  // should be ~/Library/Preferences
-    //    fn.AppendDir(_T("opencpn"));
-    //    fn.AppendDir( wxT("plugins") );
-    //    fn.AppendDir(wxT("ocpn_draw_pi"));
-    //#else
-    fn.SetPath(*GetpSharedDataLocation());
-    fn.AppendDir( wxT("plugins") );
-    fn.AppendDir(wxT("windvane_pi"));
-    fn.AppendDir(wxT("data"));
-    g_SData_Locn = new wxString(fn.GetFullPath().c_str());
-    //#endif
-    wxString s = _("windvane_pi data location");
-    wxLogMessage( wxT("%s: %s"), s.c_str(), fn.GetFullPath().c_str());
-    
     m_pWVicons = new WVicons();
     
     delete l_pDir;
@@ -227,7 +209,7 @@ int windvane_pi::Init(void)
     m_windvane_button_id  = InsertPlugInToolSVG(_("Windvane Autopilot"), m_pWVicons->m_s_windvane_grey_pi, m_pWVicons->m_s_windvane_pi, m_pWVicons->m_s_windvane_toggled_pi, wxITEM_CHECK,
                                                _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);
 #else
-    m_windvane_button_id  = InsertPlugInTool(_("Windvane Autopilot"), m_pWVicons->m_p_bm_windvane_grey_pi, m_pWVicons->m_p_bm_windvane_pi, wxITEM_CHECK,
+    m_windvane_button_id  = InsertPlugInTool(_("Windvane Autopilot"), &m_pWVicons->m_bm_windvane_grey_pi, &m_pWVicons->m_bm_windvane_pi, wxITEM_CHECK,
                                                _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);
 #endif
     
@@ -385,7 +367,7 @@ void windvane_pi::SetDefaults(void)
 }
 wxBitmap *windvane_pi::GetPlugInBitmap()
 {
-    return m_pWVicons->m_p_bm_windvane_pi;
+    return &m_pWVicons->m_bm_windvane_pi;
 }
 int windvane_pi::GetToolbarToolCount(void)
 {

@@ -49,9 +49,9 @@ public:
     void    SetColourScheme( PI_ColorScheme cs );
     void    ChangeScheme(void);
     
-    wxBitmap    *m_p_bm_windvane_pi;
-    wxBitmap    *m_p_bm_windvane_toggled_pi;
-    wxBitmap    *m_p_bm_windvane_grey_pi;
+    wxBitmap    m_bm_windvane_pi;
+    wxBitmap    m_bm_windvane_toggled_pi;
+    wxBitmap    m_bm_windvane_grey_pi;
     wxString    m_s_windvane_pi;
     wxString    m_s_windvane_toggled_pi;
     wxString    m_s_windvane_grey_pi;
@@ -59,34 +59,27 @@ public:
     bool        m_bUpdateIcons;
 
 private:
-    wxBitmap    *ScaleIcon( wxBitmap *p_wxBitmap, double sf );
+    wxBitmap    *ScaleIcon( wxBitmap bitmap, double sf );
     void        CreateSchemeIcons(void);
-    wxBitmap    *BuildDimmedToolBitmap(wxBitmap *pbmp_normal, unsigned char dim_ratio);
+    wxBitmap    BuildDimmedToolBitmap(wxBitmap bmp_normal, unsigned char dim_ratio);
     
 #ifdef WINDVANE_USE_SVG
-    wxBitmap    *LoadSVG( const wxString filename, wxSVGDocument **svgDco, wxImage **Image, unsigned int width = -1, unsigned int height = -1 );
-    wxBitmap    *ScaleIcon( wxSVGDocument *p_svgDoc, wxImage *p_wxImage, double sf );
+    wxBitmap    LoadSVG( const wxString filename, unsigned int width = -1, unsigned int height = -1 );
+    wxBitmap    ScaleIcon( wxBitmap bitmap, const wxString filename, double sf );
     
-    wxSVGDocument   *m_p_svgd_windvane_pi;
-    wxSVGDocument   *m_p_svgd_windvane_toggled_pi;
-    wxSVGDocument   *m_p_svgd_windvane_grey_pi;
 #endif
     
-    wxImage         *m_p_img_windvane_pi;
-    wxImage         *m_p_img_windvane_toggled_pi;
-    wxImage         *m_p_img_windvane_grey_pi;
+    wxBitmap    m_bm_day_windvane_pi;
+    wxBitmap    m_bm_day_windvane_toggled_pi;
+    wxBitmap    m_bm_day_windvane_grey_pi;
 
-    wxBitmap    *m_p_bm_day_windvane_pi;
-    wxBitmap    *m_p_bm_day_windvane_toggled_pi;
-    wxBitmap    *m_p_bm_day_windvane_grey_pi;
+    wxBitmap    m_bm_dusk_windvane_pi;
+    wxBitmap    m_bm_dusk_windvane_toggled_pi;
+    wxBitmap    m_bm_dusk_windvane_grey_pi;
 
-    wxBitmap    *m_p_bm_dusk_windvane_pi;
-    wxBitmap    *m_p_bm_dusk_windvane_toggled_pi;
-    wxBitmap    *m_p_bm_dusk_windvane_grey_pi;
-
-    wxBitmap    *m_p_bm_night_windvane_pi;
-    wxBitmap    *m_p_bm_night_windvane_toggled_pi;
-    wxBitmap    *m_p_bm_night_windvane_grey_pi;
+    wxBitmap    m_bm_night_windvane_pi;
+    wxBitmap    m_bm_night_windvane_toggled_pi;
+    wxBitmap    m_bm_night_windvane_grey_pi;
 
     double          m_dScaleFactor;
     PI_ColorScheme  m_ColourScheme;

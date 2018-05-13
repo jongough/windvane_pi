@@ -35,10 +35,6 @@
 #include <wx/mstream.h>
 #include <wx/filename.h>
 
-#ifdef WINDVANE_USE_SVG
-#include "svg.h"
-#endif // WINDVANE_USE_SVG
-
 #include <wx/stdpaths.h>
 
 
@@ -74,20 +70,20 @@ void WVicons::initialize_images(void)
 #ifdef WINDVANE_USE_SVG
     fn.SetFullName(wxT("windvane.svg"));
     m_s_windvane_pi = fn.GetFullPath();
-    m_p_bm_windvane_pi = LoadSVG( fn.GetFullPath(), &m_p_svgd_windvane_pi, &m_p_img_windvane_pi );
+    m_bm_windvane_pi = LoadSVG( fn.GetFullPath() );
     fn.SetFullName(wxT("windvanegrey.svg"));
     m_s_windvane_grey_pi = fn.GetFullPath();
-    m_p_bm_windvane_grey_pi = LoadSVG( fn.GetFullPath(), &m_p_svgd_windvane_grey_pi, &m_p_img_windvane_grey_pi );
+    m_bm_windvane_grey_pi = LoadSVG( fn.GetFullPath() );
     fn.SetFullName(wxT("windvane-toggled.svg"));
     m_s_windvane_toggled_pi = fn.GetFullPath();
-    m_p_bm_windvane_toggled_pi = LoadSVG( fn.GetFullPath(), &m_p_svgd_windvane_toggled_pi, &m_p_img_windvane_toggled_pi );
-    #else
+    m_bm_windvane_toggled_pi = LoadSVG( fn.GetFullPath() );
+#else
     fn.SetFullName(wxT("windvane.png"));
-    m_p_bm_windvane_pi = new wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    m_bm_windvane_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
     fn.SetFullName(wxT("windvanegrey.png"));
-    m_p_bm_windvane_grey_pi = new wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    m_bm_windvane_grey_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
     fn.SetFullName(wxT("windvane-toggled.png"));
-    m_p_bm_windvane__toggled_pi = new wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    m_bm_windvane_toggled_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
 #endif
     
     CreateSchemeIcons();
@@ -95,34 +91,33 @@ void WVicons::initialize_images(void)
 }
 
 #ifdef WINDVANE_USE_SVG
-wxBitmap *WVicons::LoadSVG( const wxString filename, wxSVGDocument **svgDoc, wxImage **Image, unsigned int width, unsigned int height )
+wxBitmap WVicons::LoadSVG( const wxString filename, unsigned int width, unsigned int height )
 {
-    wxSVGDocument *newDoc = new wxSVGDocument;
-    *svgDoc = newDoc;
-    if( newDoc->Load(filename) ) {
-        wxImage *newImage = new wxImage(newDoc->Render( width, height, NULL, true, true));
-        *Image = newImage;
-        return new wxBitmap( *newImage );
+    wxBitmap l__Bitmap = GetBitmapFromSVGFile(filename , width, height);
+    if(!l__Bitmap.IsOk()) {
+        m_failedBitmapLoad = true;
     }
-    else
-        *Image = new wxImage(width, height);
-    return new wxBitmap(width, height);
+    
+    return l__Bitmap;
 }
 
-wxBitmap *WVicons::ScaleIcon( wxSVGDocument *p_svgDoc, wxImage *p_wxImage, double sf )
+wxBitmap WVicons::ScaleIcon( wxBitmap bitmap, const wxString filename, double sf )
 {
-    if( p_svgDoc && p_wxImage ) {
-        wxImage *p_Image = new wxImage(p_svgDoc->Render( p_wxImage->GetWidth() * sf, p_wxImage->GetHeight() * sf, NULL, true, true));
-        return new wxBitmap( *p_Image );
-    }
-    else
-        return new wxBitmap(32 * sf, 32 * sf); //scalled default blank bitmap
+    int w = bitmap.GetWidth();
+    int h = bitmap.GetHeight();
+    w *= sf;
+    h *= sf;
+    
+    wxBitmap svgbm = GetBitmapFromSVGFile(filename, w, h);
+    if(svgbm.GetWidth() > 0 && svgbm.GetHeight() > 0)
+        return svgbm;
+    return wxBitmap(32 * sf, 32 * sf); //scalled default blank bitmap
 }
 #endif // WINDVANE_USE_SVG
 
-wxBitmap *WVicons::ScaleIcon( wxBitmap *p_wxBitmap, double sf )
+wxBitmap *WVicons::ScaleIcon( wxBitmap bitmap, double sf )
 {
-    wxImage scaled_image = p_wxBitmap->ConvertToImage();
+    wxImage scaled_image = bitmap.ConvertToImage();
     return new wxBitmap(scaled_image.Scale(scaled_image.GetWidth() * sf, scaled_image.GetHeight() * sf, wxIMAGE_QUALITY_HIGH));
 }
 bool WVicons::ScaleIcons()
@@ -165,13 +160,13 @@ void WVicons::ChangeScheme(void)
     switch(m_ColourScheme) {
         case PI_GLOBAL_COLOR_SCHEME_RGB:
         case PI_GLOBAL_COLOR_SCHEME_DAY:
-            m_p_bm_windvane_grey_pi = m_p_bm_day_windvane_grey_pi;
+            m_bm_windvane_grey_pi = m_bm_day_windvane_grey_pi;
             break;
         case PI_GLOBAL_COLOR_SCHEME_DUSK:
-            m_p_bm_windvane_grey_pi = m_p_bm_dusk_windvane_grey_pi;
+            m_bm_windvane_grey_pi = m_bm_dusk_windvane_grey_pi;
             break;
         case PI_GLOBAL_COLOR_SCHEME_NIGHT:
-            m_p_bm_windvane_grey_pi = m_p_bm_night_windvane_grey_pi;
+            m_bm_windvane_grey_pi = m_bm_night_windvane_grey_pi;
             break;
         default:
             break;
@@ -180,22 +175,22 @@ void WVicons::ChangeScheme(void)
 
 void WVicons::CreateSchemeIcons()
 {
-    m_p_bm_day_windvane_grey_pi = m_p_bm_windvane_grey_pi;
-    m_p_bm_day_windvane_toggled_pi = m_p_bm_windvane_toggled_pi;
-    m_p_bm_day_windvane_pi = m_p_bm_windvane_pi;
-    m_p_bm_dusk_windvane_grey_pi = BuildDimmedToolBitmap(m_p_bm_windvane_grey_pi, 128);
-    m_p_bm_dusk_windvane_pi = BuildDimmedToolBitmap(m_p_bm_windvane_pi, 128);
-    m_p_bm_dusk_windvane_toggled_pi = BuildDimmedToolBitmap(m_p_bm_windvane_toggled_pi, 128);
-    m_p_bm_night_windvane_grey_pi = BuildDimmedToolBitmap(m_p_bm_windvane_grey_pi, 32);
-    m_p_bm_night_windvane_pi = BuildDimmedToolBitmap(m_p_bm_windvane_pi, 32);
-    m_p_bm_night_windvane_toggled_pi = BuildDimmedToolBitmap(m_p_bm_windvane_toggled_pi, 32);
+    m_bm_day_windvane_grey_pi = m_bm_windvane_grey_pi;
+    m_bm_day_windvane_toggled_pi = m_bm_windvane_toggled_pi;
+    m_bm_day_windvane_pi = m_bm_windvane_pi;
+    m_bm_dusk_windvane_grey_pi = BuildDimmedToolBitmap(m_bm_windvane_grey_pi, 128);
+    m_bm_dusk_windvane_pi = BuildDimmedToolBitmap(m_bm_windvane_pi, 128);
+    m_bm_dusk_windvane_toggled_pi = BuildDimmedToolBitmap(m_bm_windvane_toggled_pi, 128);
+    m_bm_night_windvane_grey_pi = BuildDimmedToolBitmap(m_bm_windvane_grey_pi, 32);
+    m_bm_night_windvane_pi = BuildDimmedToolBitmap(m_bm_windvane_pi, 32);
+    m_bm_night_windvane_toggled_pi = BuildDimmedToolBitmap(m_bm_windvane_toggled_pi, 32);
 }
 
-wxBitmap *WVicons::BuildDimmedToolBitmap(wxBitmap *pbmp_normal, unsigned char dim_ratio)
+wxBitmap WVicons::BuildDimmedToolBitmap(wxBitmap bmp_normal, unsigned char dim_ratio)
 {
-    wxImage img_dup = pbmp_normal->ConvertToImage();
+    wxImage img_dup = bmp_normal.ConvertToImage();
     
-    if( !img_dup.IsOk() ) return NULL;
+    if( !img_dup.IsOk() ) return bmp_normal;
     
     if(dim_ratio < 200)
     {
@@ -222,18 +217,18 @@ wxBitmap *WVicons::BuildDimmedToolBitmap(wxBitmap *pbmp_normal, unsigned char di
     }
     
     //  Make a bitmap
-    wxBitmap *ptoolBarBitmap;
+    wxBitmap toolBarBitmap;
     
 #ifdef __WXMSW__
     wxBitmap tbmp(img_dup.GetWidth(),img_dup.GetHeight(),-1);
     wxMemoryDC dwxdc;
     dwxdc.SelectObject(tbmp);
     
-    ptoolBarBitmap = new wxBitmap(img_dup, (wxDC &)dwxdc);
+    toolBarBitmap = wxBitmap(img_dup, (wxDC &)dwxdc);
 #else
-    ptoolBarBitmap = new wxBitmap(img_dup);
+    toolBarBitmap = wxBitmap(img_dup);
 #endif
     
     // store it
-    return ptoolBarBitmap;
+    return toolBarBitmap;
 }
