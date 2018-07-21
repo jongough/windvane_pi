@@ -38,7 +38,7 @@
 #include <wx/stdpaths.h>
 
 
-extern wxString g_SData_Locn;
+extern wxString *g_SData_Locn;
 extern wxString *g_pHome_locn;
 extern wxString *g_pData;
 extern wxString *g_pImage;
@@ -62,7 +62,8 @@ void WVicons::initialize_images(void)
     fn.AppendDir( wxT("plugins") );
     fn.AppendDir(wxT("windvane_pi"));
     fn.AppendDir(wxT("data"));
-
+    g_SData_Locn = new wxString(fn.GetFullPath().c_str());
+    
     wxString s = _("windvane_pi data location");
     wxLogMessage( wxT("%s: %s"), s.c_str(), fn.GetFullPath().c_str());
     
