@@ -23,6 +23,7 @@ IF(WIN32)
 
   # override install directory to put package files in the opencpn directory
   SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenCPN")
+  SET(CPACK_PACKAGE_VERSION "${PACKAGE_VERSION}-${OCPN_MIN_VERSION}")
 
 # CPACK_NSIS_DIR ??
 # CPACK_BUILDWIN_DIR ??

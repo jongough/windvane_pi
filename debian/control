@@ -1,0 +1,14 @@
+Source: opencpn-plugin-windvane
+Section: misc
+Priority: optional
+Maintainer: Jon Gough <jon.gough@eclipsesystems.com.au>
+Build-Depends: debhelper (>= 9), cmake, gettext, git-core, gpsd, gpsd-clients, libgps-dev, wx-common, libwxgtk3.0-dev, libglu1-mesa-dev, libgtk2.0-dev, wx3.0-headers, libbz2-dev, libtinyxml-dev, libportaudio2, portaudio19-dev, libcurl4-openssl-dev, libexpat1-dev, libcairo2-dev, libarchive-dev, liblzma-dev, libexif-dev, libelf-dev, libsqlite3-dev
+Standards-Version: 4.1.2
+Homepage: https://github.com/jongough/windvane_pi
+
+Package: opencpn-plugin-windvane
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, opencpn (>= 4.99.0)
+Description: Windvane plugin for OpenCPN
+ Adds a windvane autopilot capability to OpenCPN. It can be used where there are wind instruments and the autopilot does not have the ability to sail to the wind direction.
+
