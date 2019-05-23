@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the windvane_pi package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: windvane_pi 0.0.2\n"
+"Project-Id-Version: windvane_pi 0.0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-16 07:17+1100\n"
+"POT-Creation-Date: 2019-05-10 14:19+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,118 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/WVDialFrame.cpp:42
-msgid "WV AP"
+#: include/WVPropertiesDialogDef.h:81
+msgid "Windvane Properties"
 msgstr ""
 
-#: src/WVDialFrame.cpp:57
+#: src/WVDialFrame.cpp:43
+msgid "Windvane Auto Pilot"
+msgstr ""
+
+#: src/WVDialFrame.cpp:63
 msgid "Sensitivity (secs)"
 msgstr ""
 
-#: src/WVicons.cpp:70
+#: src/WVDialFrame.cpp:64
+msgid "Angle/XTE ratio"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:30
+msgid ""
+"AutoPilot Update\n"
+"Frequency (secs)"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:47
+msgid "Angle/XTE ratio upper limit"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:64
+msgid "Wind change sensitivity"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:78
+msgid "General"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:85
+msgid ""
+"The windvane adds new output sentences to the standard set. These have the "
+"prefix \"WV\". If you have the windvane_pi installed the RMB and APB "
+"sentences will be replicated with the \"WV\" prefix.\n"
+"You should filter the normal (normally, ECRMB and ECAPB) sententces out.\n"
+"\n"
+"When the windvane is in use the RMB and APB  sentences are modified to allow "
+"the autopilot to follow the wind. This means that you will no  longer be "
+"following any route, even it it is active. If you dissable the windvane "
+"(toolbar icon is not blue) then normal route following will continue."
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:93
+msgid "Help"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:103
+msgid "Name:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:111
+msgid "Version"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:120
+msgid "Major:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:128
+msgid "Minor:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:136
+msgid "Patch:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:147
+msgid "Date:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:155
+msgid "Other:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:159
+msgid ""
+"Please report problems using FlySpray at:\n"
+"https://www.opencpn.org/flyspray/index.php?project=60&do=index&switch=1\n"
+"\n"
+"or\n"
+"\n"
+"at the OpenCPN forum:\n"
+"http://www.cruisersforum.com/forums/f134\n"
+"\n"
+"or\n"
+"\n"
+"Raise an issue in GIT at:\n"
+"https://github.com/jongough/windvane_pi/issues"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:170
+msgid "About"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:186
+msgid "License"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:193
+msgid "OK"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:196
+msgid "Cancel"
+msgstr ""
+
+#: src/WVicons.cpp:67
 msgid "windvane_pi data location"
 msgstr ""
 
@@ -81,28 +184,28 @@ msgstr ""
 msgid "AWA: "
 msgstr ""
 
-#: src/windvane_pi.cpp:193 src/windvane_pi.cpp:194 src/windvane_pi.cpp:196
-#: src/windvane_pi.cpp:197
+#: src/windvane_pi.cpp:209 src/windvane_pi.cpp:210 src/windvane_pi.cpp:212
+#: src/windvane_pi.cpp:213
 msgid "Windvane Autopilot"
 msgstr ""
 
-#: src/windvane_pi.cpp:342
+#: src/windvane_pi.cpp:358
 msgid "Windvane Autopilot for OpenCPN"
 msgstr ""
 
-#: src/windvane_pi.cpp:346
+#: src/windvane_pi.cpp:362
 msgid ""
 "Windvane Autopilot for OpenCPN\n"
 "\n"
 "Allows aparent wind direction to control autopilot."
 msgstr ""
 
-#: src/windvane_pi.cpp:439
+#: src/windvane_pi.cpp:457
 msgid ""
 "There is no wind information available.\n"
 "The Windvane autopilot cannot be started."
 msgstr ""
 
-#: src/windvane_pi.cpp:439
+#: src/windvane_pi.cpp:457
 msgid "Windvand Autopilot"
 msgstr ""
