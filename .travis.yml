@@ -43,7 +43,7 @@ addons:
     - g++-6
 deploy:
   - provider: launchpad
-    slug: "~jonsgough/opencpn-plugin-draw/+git/windvane_pi"
+    slug: "~jonsgough/windvane/+git/windvane_pi"
     oauth_token_secret:
       secure: "T4x4xON2lDkfn+8qjW23hQh7o8l+TyCyeCDqagxrCGBt/eK01AsGiGKk1xU/WZCOjwhf/QNkKLf0+cuy5C+xw+/2BAObUiMsw+ByWmqqtRj+iCrgj4yjB20KSBh6aKjrYv97ZH4rr2xB4/M/qI4z7/b/gh23Fcmucqm07fBubXKDT6sEJT9tWsh7IRfn3rOUBOzVOPVyabAY6zYI5EVKZ90eOm2Voj6oV1/Npn1nao0oWYAO1oG6PS+XTt712Ua/tUdgaXK2Kq5kOZwVufjeVbru7OeqOkqjloGQT6vXPNiiHuv/UcecnlPup2Zo3hGeZzPI0PjsGgXyD5MweOW7+IIvxbUJtjaz/MzzsojdahqCzM4xbsRN6MfrQtsoCTJuwebeqwUEOvY8qB2GrbCu2+0jdLeT4XWkVMQQ9AzljoiHCSJlnxHrmRj7JVo1OcBdgu4+QYvQCoKp+d0NnxXpeVgII7wmYyc3dmXhsCv7eACNg6fJHaxNSgc/95Rk2fbOsZlaYipdlQjXP3jAxR++eeJF3SOlh4hTMsnHTM3VyTF98M8yhUucRdPbGt9aykisRXruYe8h/ZqM19bOvW/DT7T6GMOR29lqetTpxyQ8nEC0NpEzGejPwCEtCyXnhdx2Y9tXofSlzvaz5yJ0oRvKxZsWVNIteep/UhaxkMciOZU="
     oauth_token_secret:
