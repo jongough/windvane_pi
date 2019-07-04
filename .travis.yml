@@ -63,11 +63,10 @@ deploy:
       
   - provider: releases
     api_key:
-      secure: kjtGNBzsvRbV/2ymh88YFp9nGjzk0ujdG3zF//f9c/4yEQbzYclHyXCGZk1RUSQFbVoW6WI/A2yUVcrXr3gMUZRRKgSHK3h2zgr84PIkNFOQoQRI1zfSnw5mgqzRXN17mfS3vz/0b0z/u+wZDw4YVMsnndvCpcPkkEMPI279VLJhGODG0YJh2UM0l5nMLoCEBdrvJgLSqIZ9iiHe2A31tKXgQ+X8SQtuo98brcGTIsjddolIQX5wyxgTbgq1y+YV6ovmnNEjCxCZayB/NhUxkdrpJJJEqInLVjoB3l3yrci8hfShHLRcH4TZx/m12Z5ENRs7SqhLRaEhLNuy8rKUYTZzd9CoywvQ+PwPs//sLKn2tXutX2FzDW/6iO/AikQGvYyCwR0Fcw2YNsMN2F7SPaxIpJqaD97dC05cHM4UGmZ1V+hvJwmUARQPX5/GCcVOAtb7QCPVAjNxdVo0iHIg7hZBw6AnWE1SKQaoUJFvR34RU5yHyzbhmOz41q0kBcN781EbCzLKERakPaeirBA79EJy6Y2MKWN8d1hkb0NeHcE/cpWrMWKD/fXNIw08KAJ/0xr9ebq5CEvWGJ5PZWxQNvNu96uvvep7zv8j2Al5V+43EKK67KF5OU/KAPwzV02KtLF1MEAMV30hGoVthOt9pUX6KUM8+/v92fiYf8zRR/E=
+      secure: "sOyAv1RJZZZ4+b4ATliFRtlTRLkDxlWekvxTqN9eY+HMV6YA9Vx2Gk47urmmYFN5mCxjXqZwOAiVIQNIZSIu6jtUW8A8yYEjVG800GTBq52WFjCmaRyC+IcRnRfoc9qtzlJSjLnn6uRNomQnuH1K8S2M7uMj4lmJTuP4akf2h7U2S735ducb4MdYlu9zvY/qjKx0voYVEPAuRA7eBF7zrbVwG3d8EOQUP2QK+RJTG4DF+SohCt2JH4yf+ACfcbF2qmRd3OIRcQZSaNyCbgG2+5iq2605kPZ3kSMtgx5LChCz0zTpBissPTfVL8q4009XlPlKgNxdnPvgKgk8Tbgx+dDJNKP+yzYabuV0+6UusZYHnzLegUTx5GHap+sRWUDdc2W6cyjzSYdjH3Cm18gPGekz6JRbSlCg9NKqwKfYhUYLeaPoW5lade2Popn0+hLFoTNPdu4uTVScmIcANsOmOQ50x5rlgEaXD9O5mCpkca0ig1/4HSA5fWQY/ATlKctUtY9IG96tRpEOXjz2LxxMELaNoOHIYJAojmy9SuxDBQHY5LVftj3QRIeGKhO3y7RA2XMy5cLCQY3z5I3goEhwNNsq/cWTvH8hyVLkAivyvZ5l/kHGsgyvcwiwwxaSc7fuo3DooypmFii5zOHUyUDZDSTnBrLIlH/UJjlaY33m8XQ="
     file_glob: true
-    file: '"$TRAVIS_BUILD_DIR/build/*.{deb,rpm,dmg,txz,pkg,pkg.tar.xz}"'
+    file: "$TRAVIS_BUILD_DIR/build/*.{deb,rpm,dmg,txz,pkg,pkg.tar.xz}"
     skip_cleanup: true
     on:
       all_branches: true
       tags: true
-      repo: jongough/windvane_pi

@@ -454,7 +454,7 @@ void windvane_pi::OnToolbarToolCallback(int id)
 //            m_WVDialPanel->m_WVDial->SetBugAngle(m_dAngle);
 //            m_WVDialPanel->Show();
         } else {
-            wxMessageDialog mess(m_parent_window, _("There is no wind information available.\nThe Windvane autopilot cannot be started."), _("Windvand Autopilot"), wxOK);
+            wxMessageDialog mess(m_parent_window, _("There is no wind information available.\nThe Windvane autopilot cannot be started."), _("Windvane Autopilot"), wxOK);
             mess.ShowModal();
             SetToolbarItemState( m_windvane_button_id, false );
         }
