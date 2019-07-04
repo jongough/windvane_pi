@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 16 2016)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __WVPROPERTIESDIALOGDEF_H__
-#define __WVPROPERTIESDIALOGDEF_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -36,10 +35,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class WVPropertiesDialogDef
 ///////////////////////////////////////////////////////////////////////////////
-class WVPropertiesDialogDef : public wxDialog 
+class WVPropertiesDialogDef : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxBoxSizer* m_SizerWVProperties;
 		wxNotebook* m_notebookWVProperties;
@@ -70,17 +69,16 @@ class WVPropertiesDialogDef : public wxDialog
 		wxTextCtrl* m_textCtrlLicense;
 		wxButton* m_buttonOK;
 		wxButton* m_buttonCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnWVPropertiesOKClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnWVPropertiesCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		WVPropertiesDialogDef( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Windvane Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 509,409 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+
+		WVPropertiesDialogDef( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Windvane Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 509,409 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~WVPropertiesDialogDef();
-	
+
 };
 
-#endif //__WVPROPERTIESDIALOGDEF_H__
