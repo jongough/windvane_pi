@@ -56,8 +56,7 @@ deploy:
       #branches:
       #   only:
       #     - master
-      #     - master_1.5
-      tags: false
+      tags: true
       all_branches: true
       condition: "$TRAVIS_OS_NAME = linux"
       
