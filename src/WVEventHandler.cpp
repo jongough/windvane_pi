@@ -88,35 +88,35 @@ void WVEventHandler::RestartSendtimer( int interval )
 void WVEventHandler::OnWVTimer1( wxTimerEvent& event )
 {
     std::list<WINDHISTORY> *l_WindHistory = m_parent->GetWindHistory();
-    if(l_WindHistory->size() == 0) return;
+    if(l_WindHistory->empty()) return;
     std::list<WINDHISTORY>::iterator it = l_WindHistory->end();
     time_t l_CutoffTime = time(NULL) - m_parent->GetHistoryTime();
-    it--;
+    --it;
     while(l_WindHistory->size() > 0 && it != l_WindHistory->begin()) {
         if(it->lTime > l_CutoffTime) break;
         l_WindHistory->pop_back();
 		it = l_WindHistory->end();
-        it--;
+        --it;
     }
 }
 
 void WVEventHandler::OnWVTimer2( wxTimerEvent& event )
 {
     std::list<WINDHISTORY> *l_WindHistory = m_parent->GetWindHistory();
-    if(l_WindHistory->size() == 0) return;
+    if(l_WindHistory->empty()) return;
     std::list<WINDHISTORY>::iterator it = l_WindHistory->begin();
     int l_count = 0;
     double l_dSum = 0.;
     double l_dAngle;
     // convert angle to 0-360 for calc then back to -180 to 180 for display
     while(it != l_WindHistory->end()) {
-        l_count++;
+        ++l_count;
 //        if(it->dAngle < 0.) l_dAngle = 360. + it->dAngle;
 //        else l_dAngle = it->dAngle;
                     
         l_dAngle = it->dAngle + 360.;
         l_dSum += l_dAngle;
-        it++;
+        ++it;
     }
     
     if(l_count > 0 && l_dSum != 0.) {

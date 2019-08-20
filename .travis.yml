@@ -42,24 +42,23 @@ addons:
     - gcc-6
     - g++-6
 deploy:
-#  - provider: launchpad
-#    slug: "~jonsgough/windvane/+git/windvane_pi"
-#    oauth_token_secret:
-#        secure: "sXYyMad09GEvdH8MRYx89wvJPwNlCPq1F785imjVKU69+eaKZXHFIDzfD88J8HbG/ZTGOpOF39pQ/zMhJQn34z1KA9/uDQ3H7p1jznSYa3KrDPldpQOk/eqZ9UF1pjOMw5Rf/PdBCHetyJlyMB0c4OMNVTurTaAQo5N9OxouylxhkUqflBQizHsq6aGn8xb0UVFLLDDckXokfvhiUADgcbkCGrLG4JKeMn4CsVqnpLnj6DQNMJb6nXGKqJVP9ujDGtztv0nEhhpousfG5rvd3cC4Ndh7sQCoShuGVCb3HbhSbOT28Xrrxzxn3xR1re7UJzEnNWUVXQhOV/fgb6BZkQdkOADsSGUHqgT+9Auem6BWPYP+W8VMkSckCbxoq57Hp15RdJCax+FKG0Qiq1EWtsB8/zjEs4iexYD12l2sf59E+rGgR+YjSlTd4MPqzxP1ZB7/aQbiKASv0DalZsytsTkImuWcd1GzeKMU9rAbw7JpD/6KEFLRyJ4yNXlA2Pfj1nXdDTvqRg3bToD3wFhfPBC2DIXaiUtkIB9e3a8EVI/HgCy+XY1oJS//gKaT4OxsNXpi0nHx2o6a/Lpvzv/zWLsxrmKVFcPenl/E699hlIRiCd3fuhv/IwN9mfHSULzicsSHi9bPzicTkRrXeGzEhUM3cbZaeCANw/NuiU9W4xk="
-#    oauth_token_secret:
-#        secure: "i/p/vUWXCb6WrxTT5DIRXzPrHRSoQ3GeENMuCFrD7yGZyaq236LxAsAj0ggny4JZRqli57zDWINkwGJtC5tY7fXl3yO8R5Id/MeS8Tp21Ibn9yDIKuN1+ozq6YmwuqqoQ+y3jJIFs53OIe+d8n2/ItB5hFJu7muBGWLFAq0sKJoGsOculZzSajDLb1JAyHyX49gAWrVFe//JnAR+Hd+yFDKgVcJyKi5G7L1laQHGHrpdV2/7qhWxkqYljqV9gitoF0X5m4QWzgUWoappfV5aAHoowj9G29DEN9X6Z38CM1mpVGzAl3tuSvExGp00t3QQVXJNZUeZx+3Abw7TCU+ZG8FRKt1rjwcRzrzUZ67QoKuoFMVYg8LrstnFiuOpPydHkXlYtLJwgPVlmegASWAdYPvc4K2OWXRsJwzgyN+O0DWcUXlAyjCxpN/29hUV8WeaPjAnXkvce5ikVAw/wLSw+qx1PUEUWwNjwr4tpNcu9HC8FXws+FQKikvqu+QdJ3qork3u6oLOtZNrCjIsPo7WB0+qp0iJSnvU0UbJoBXohr4MLIYLDD9cGPDhOH6h6geJA9tnm2XXp94Pk6ri7jx/bhyFWS0IMAWhxRYbwladPiukvmlNJpPYi7KfC52Z8GVCCP3btMZ2n+T8Xt8GEbeoaZ82JOuVE9fgWeGGB2pLxMA="
-#    skip_cleanup: true
-#    on: # Set Deploy conditions
+  - provider: launchpad
+    slug: "~jonsgough/windvane/+git/windvane_pi"
+    oauth_token:
+      secure: "O+F3qadTm1EojsoGlopwLPirEJ8TkshlyZGOUdOa62YJsI7SrE3ugryeU2wuYHRBxE0dhXDCxHkUf+E45yq4PL8IIHx29eoygsZeVwHCgyT2nN/Pk/O/EOJXeCRo5WgrliyDnHCl4Dmz7vyRiP6svWuzz1xM6ATpKXSUlb02tdzcoydD0bzeUYwUnK2VRc7yv4Afxgr0yXx+7fdscV+ALCZ2JOvroxXWGRJawo96KWEE0On72/wiYZXeMuC7QtxFBQopSRNrmzGMTHv9F8c6cGT/Utcrp86xw42JO0pxOXCdd5i+60hzlA6QWswrNIuNBVnYWydGfJoX56bcalRZ1MEE+NyU/zHYBi8uehh8NIfUAYxdY7w7VW6FtyEdayNGWBm1FRGyyOquYfFQMGMHCBrnt30IKk2glSFWLxUBUTec4c3GGOXO8W0Zq/IhGE2ej77AVzCXgB1zOiruUSJdpkpQH73xC174SQBmiW54k76V4oRy2YyIXeibC04zKVhSpfJ0ORObvbZbz4LAgx0ML4emxFUFsIkzCNK872rEPDiUJjcL6So3bNKTrV0RC44uXN+JzFXrAeHwCZVATXANg4Ah4N94YX4W5sk0iNArhN6/p50kZbffxvZnYlPIh728BvtCFkGi5IELEeFt0Q/wE1BUr6k7ozxhGJtSTohaCa0="
+    oauth_token_secret:
+      secure: "o1wbdPzq0ztX4IfgdouiwRw+mV4RvxbfEfdG/hN/0jZVM1T6kt5jU7M+EcJT+kW66LbcBsXR3eEB0JfQ8evOo4siGkfHpNl64UULPWwpA7Ug2wQ6aO9c5JKq22FpDg2fh5btaCATxvc9knTZ7q+liCnd0Ddq4jFSVJtAc4QW/VRwtBExL2BgxG8BywmEj0vnceXQpeF4WGySL9ZupW8sBcwDX2LeozT/8hh1MF5wjwYEiiJLCaPsgjMbeZ0cUor7xsx3yPYm5z0AjYh0OhQk1+2aW8dm5Sp/y187JEmsOP5rCSw+ptha9o3FUuCyJbSvQQa/m36DKraP8vXSjt4r6U+qd/BmiCUoJNtvbPHzQ8XeLnVZL21L89MY6dHXLANTB1i5uLMfhDoQnSbPvtgKYhW3zglhxMNGGk0C5FMuBs2hV1FgvDcqZ8nr+cFB5lOjaB7G6CRNtBpTq3pXeseJhkKkh/LQ+hsp/mXMVbG/ZVECpeCFsLBC9qnQv/J5fY6eqFwEn9arx/YvzU3R5+8GboQXxBaa8LWweUxvLYnBnasvIgMaHvf7WRzs5OoUUxeAeQF1TTgI6ojIeqYkWZFrCcqcou/MTFupIz5h+Mey9olpVzGHA/UbTwf6oyQiLds1aiZf3sG35yqf+cinMa/i4XKpc6DKZfk1O1zDLrTN7GA="
+    skip_cleanup: true
+    on: # Set Deploy conditions
       # Deploy only when tag is not specified
       # tags: false
       # or this branch
       #branches:
       #   only:
       #     - master
-      #     - master_1.5
-#      tags: true
-#      all_branches: true
-#      condition: "$TRAVIS_OS_NAME = linux"
+      tags: true
+      all_branches: true
+      condition: "$TRAVIS_OS_NAME = linux"
       
   - provider: releases
     api_key:
