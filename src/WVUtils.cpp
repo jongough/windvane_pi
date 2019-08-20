@@ -266,14 +266,14 @@ void SetGlobalLocale( void )
         setlocale(LC_NUMERIC, "");
 #endif
     }
-    g_iLocaleDepth++;
+    ++g_iLocaleDepth;
 #endif
 }
 
 void ResetGlobalLocale( void )
 {
 #ifndef __WXMSW__
-    g_iLocaleDepth--;
+    --g_iLocaleDepth;
     if(g_iLocaleDepth < 0) 
         g_iLocaleDepth = 0;
     if(g_iLocaleDepth == 0 && g_WVLocale) {
