@@ -4,35 +4,215 @@
 ## License:     wxWidgets License
 ##---------------------------------------------------------------------------
 
+##
+## ----- Modify section below to include all the details for your plugin ----- ##
+##
+
 # define minimum cmake version
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2)
+cmake_minimum_required(VERSION 3.1.1)
+if(COMMAND cmake_policy)
+    if(POLICY CMP0043)
+        cmake_policy(SET CMP0043 NEW)
+    endif(POLICY CMP0043)
+    cmake_policy(SET CMP0048 NEW)
+    if(POLICY CMP0077)
+        cmake_policy(SET CMP0077 NEW)
+    endif(POLICY CMP0077)
+endif(COMMAND cmake_policy)
 
-PROJECT(windvane_pi)
+set(VERBOSE_NAME "Windvane Autopilot")
+set(COMMON_NAME "windvane")
+set(TITLE_NAME "windvane")
+set(PACKAGE_CONTACT "Jon Gough")
+set(PACKAGE "windvane")
 
-SET(PACKAGE_NAME windvane_pi)
-SET(VERBOSE_NAME windvane)
-SET(TITLE_NAME WINDVANE)
-SET(CPACK_PACKAGE_CONTACT "Jon Gough")
+set(VERSION_MAJOR "1")
+set(VERSION_MINOR "0")
+set(VERSION_PATCH "4")
+set(VERSION_TWEAK "0")
+set(VERSION_DATE "25/04/2020")
+set(OCPN_MIN_VERSION "ov50")
+set(OCPN_API_VERSION_MAJOR "1")
+set(OCPN_API_VERSION_MINOR "16")
+set(TP_COMMENT "  * Release for O5 using CI")
 
-SET(VERSION_MAJOR "1")
-SET(VERSION_MINOR "0")
-SET(VERSION_PATCH "4")
-SET(VERSION_DATE "04/07/2019")
 
-SET(BUNDLE_DATA FALSE)
-IF( NOT CMAKE_BUILD_TYPE )
-  SET( CMAKE_BUILD_TYPE Release CACHE STRING
-       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-       FORCE )
-ENDIF( NOT CMAKE_BUILD_TYPE )
+set(PARENT "opencpn")
+set(GIT_USER "jongough")
+set(GIT_REPOSITORY_NAME "windvane_pi")
+message(STATUS "CIRCLECI: ${CIRCLECLI}, Env CIRCLECI: $ENV{CIRCLECI}")
+message(STATUS "TRAVIS: ${TRAVIS}, Env TRAVIS: $ENV{TRAVIS}")
+# This if allows for setting up your own local webserver with git on it for testing purposes
+if($ENV{CIRCLECI})
+    set(GIT_REPOSITORY_HOST "github.com")
+    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
+    set(GIT_REPOSITORY_BRANCH "$ENV{CIRCLE_BRANCH}")
+elseif($ENV{TRAVIS})
+    set(GIT_REPOSITORY_HOST "github.com")
+    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
+    set(GIT_REPOSITORY_BRANCH "$ENV{TRAVIS_BRANCH}")
+else()
+    set(GIT_REPOSITORY_HOST "github.com")
+    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
+    set(GIT_REPOSITORY_BRANCH "master")
+    # Get the current working branch
+    execute_process(
+        COMMAND git rev-parse --abbrev-ref HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        RESULT_VARIABLE GIT_REPOSITORY_BRANCH_RESULT
+        OUTPUT_VARIABLE GIT_REPOSITORY_BRANCH
+        ERROR_VARIABLE GIT_REPOSITORY_BRANCH_ERROR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+    message(STATUS "Tried to get git branch: ${GIT_REPOSITORY_BRANCH}")
+    message(STATUS "Tried to get git branch Result: ${GIT_REPOSITORY_BRANCH_ERROR}")
+    #  set(GIT_REPOSITORY_HOST "git.eclipse.com.au")
+    #  set(GIT_REPOSITORY_DIR "")
+    #  set(GIT_REPOSITORY_BRANCH "cmake_flatpak_test")
+endif()
+message(STATUS "Git Branch: ${GIT_REPOSITORY_BRANCH}")
+message(STATUS "Git Branch Error: ${GIT_REPOSITORY_BRANCH_ERROR}")
 
-MESSAGE (STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+# Builds repository sufficies
+set(PROD "prod")    #Standard Repos
+set(BETA "beta")    #Standard Repos
+set(ALPHA "alpha")  #Standard Repos
 
-SET(CMAKE_VERBOSE_MAKEFILE ON)
+set(CLOUDSMITH_USER "jon-gough")
+set(CLOUDSMITH_BASE_REPOSITORY "${GIT_REPOSITORY_NAME}")
+set(XML_INFO_URL "https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:opencpn_user_manual:plugins:sailing:windvane")
+set(XML_SUMMARY "Plugin to provide windvane like autopilot")
+set(XML_DESCRIPTION "Windvane Autopilot is designed to use the wind instruments and autopilot on board the yatch to act like a standard windvane autopilot and allow the yatch to follow the wind.")
 
-#SET_DIRECTORY_PROPERTIES(dummy ADDITIONAL_MAKE_CLEAN_FILES ${PROJECT_SOURCE_DIR}/include/version.h)
+##
+## ----- Modify section above to include all the details for your plugin ----- ##
+##
+##
+## ----- Modify section below if there are special requirements for the plugin ----- ##
+##
 
-INCLUDE("cmake/PluginConfigure.cmake")
+option(PLUGIN_USE_SVG "Use SVG graphics" ON)
+
+set(CMAKE_CXX_STANDARD 11)
+
+if(NOT ${PACKAGE} MATCHES "(.*)_pi")
+    set(PACKAGE_NAME ${PACKAGE}_pi)
+    set(PACKAGE_FILE_NAME "${PACKAGE}_pi")
+else(NOT ${PACKAGE} MATCHES "(.*)_pi")
+    set(PACKAGE_NAME ${PACKAGE})
+    set(PACKAGE_FILE_NAME "${PACKAGE}")
+endif(NOT ${PACKAGE} MATCHES "(.*)_pi")
+string(TOUPPER "${PACKAGE}" TITLE_NAME)
+
+project(${PACKAGE_NAME} VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_TWEAK})
+message(STATUS "PROJECT_VERSION: ${PROJECT_VERSION}")
+
+set(PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+message(STATUS "${VERBOSE_NAME} Version: ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_TWEAK}")
+message(STATUS "OPCN_FLATPAK: ${OCPN_FLATPAK}")
+
+# Prefer libGL.so to libOpenGL.so, see CMP0072
+set(OpenGL_GL_PREFERENCE "LEGACY")
+# Don't use local version of GLU library
+set(USE_LOCAL_GLU FALSE)
+option(USE_GL "Enable OpenGL support" OFF)
+message(STATUS "USE_GL: ${USE_GL}")
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)
+endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+
+# set(PKG_NVR ${PACKAGE_NAME}-${PROJECT_VERSION}-${OCPN_MIN_VERSION}-${OCPN_API_VERSION_MAJOR}.${OCPN_API_VERSION_MINOR})
+set(PKG_NVR ${PACKAGE_NAME}-${PROJECT_VERSION})
+set(PKG_URL "https://dl.cloudsmith.io/public/--pkg_repo--/raw/names/--name--/versions/--version--/--filename--")
+
+include("cmake/PluginSetup.cmake")
+
+if(DEFINED ENV{OCPN_TARGET})
+    set(PACKAGING_NAME "${PKG_NVR}_${PKG_TARGET}-${PKG_TARGET_VERSION}-$ENV{OCPN_TARGET}")
+else(DEFINED ENV{OCPN_TARGET})
+    set(PACKAGING_NAME "${PKG_NVR}_${PKG_TARGET}-${PKG_TARGET_VERSION}")
+endif(DEFINED ENV{OCPN_TARGET})
+message(STATUS "PACKAGING_NAME: ${PACKAGING_NAME}")
+
+set(PLUGIN_NAME ${PACKAGE}-plugin-${PKG_TARGET}-${PKG_TARGET_VERSION})
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+option(Plugin_CXX11 "Use c++11" OFF)
+
+if(Plugin_CXX11)
+    message(STATUS "Attempting to use c++11")
+    include(CheckCXXCompilerFlag)
+    check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+    check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+    if(COMPILER_SUPPORTS_CXX11)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+        set(Plugin_USE_CXX11 ON)
+    elseif(COMPILER_SUPPORTS_CXX0X)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+        set(Plugin_USE_CXX11 ON)
+    else()
+        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+        set(Plugin_USE_CXX11 OFF)
+    endif()
+else()
+    set(Plugin_USE_CXX11 OFF)
+endif()
+
+if(Plugin_USE_CXX11)
+    message(STATUS "Allowing use of c++11")
+endif()
+
+message(STATUS "CMAKE version: ${CMAKE_VERSION}")
+if(CMAKE_VERSION VERSION_GREATER 3.4)
+    set(ENABLE_CLANG_TIDY
+    OFF
+    CACHE BOOL "Add clang-tidy automatically to builds")
+    if(ENABLE_CLANG_TIDY)
+        find_program(
+            CLANG_TIDY_EXE
+            NAMES "clang-tidy"
+            PATHS /usr/local/opt/llvm/bin)
+            if(CLANG_TIDY_EXE)
+                message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+                # For more, see http://clang.llvm.org/extra/clang-tidy/ set(CLANG_TIDY_CHECKS "-*,modernize-*")
+                set(CLANG_TIDY_CHECKS "-*,performance-*")
+                set(CMAKE_CXX_CLANG_TIDY
+                "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
+                CACHE STRING "" FORCE)
+            else()
+                message(AUTHOR_WARNING "clang-tidy not found!")
+                set(CMAKE_CXX_CLANG_TIDY
+                ""
+                CACHE STRING "" FORCE) # delete it
+            endif()
+    endif()
+endif()
+
+if(CMAKE_VERSION VERSION_GREATER 3.9)
+    set(ENABLE_CPPCHECK
+    OFF
+    CACHE BOOL "Add cppcheck automatically to builds")
+    if(ENABLE_CPPCHECK)
+        find_program(CPPCHECK_EXECUTABLE NAMES "cppcheck")
+        set(CMAKE_CXX_CPPCHECK ${CPPCHECK_EXECUTABLE})
+    endif()
+endif()
+
+##
+## ----- Modify section above if there are special requirements for the plugin ----- ##
+##
+
+
+include("cmake/PluginConfigure.cmake")
+
+##
+## ----- Change below to match project requirements ----- ##
+##
 
 ADD_DEFINITIONS(-DUSE_S57)
 
@@ -145,7 +325,14 @@ ELSE(TINYXML_FOUND)
 ENDIF(TINYXML_FOUND)
 ADD_DEFINITIONS(-DTIXML_USE_STL)
 
+##
+## ----- Change above to match project requirements ----- ##
+##
 
-INCLUDE("cmake/PluginInstall.cmake")
-INCLUDE("cmake/PluginLocalization.cmake")
-INCLUDE("cmake/PluginPackage.cmake")
+##
+## ----- do not change - needed to build app ----- ##
+##
+
+include("cmake/PluginInstall.cmake")
+include("cmake/PluginLocalization.cmake")
+include("cmake/PluginPackage.cmake")
