@@ -64,14 +64,11 @@ else()
         ERROR_VARIABLE GIT_REPOSITORY_BRANCH_ERROR
         OUTPUT_STRIP_TRAILING_WHITESPACE
       )
-    message(STATUS "Tried to get git branch: ${GIT_REPOSITORY_BRANCH}")
-    message(STATUS "Tried to get git branch Result: ${GIT_REPOSITORY_BRANCH_ERROR}")
     #  set(GIT_REPOSITORY_HOST "git.eclipse.com.au")
     #  set(GIT_REPOSITORY_DIR "")
     #  set(GIT_REPOSITORY_BRANCH "cmake_flatpak_test")
 endif()
 message(STATUS "Git Branch: ${GIT_REPOSITORY_BRANCH}")
-message(STATUS "Git Branch Error: ${GIT_REPOSITORY_BRANCH_ERROR}")
 
 # Builds repository sufficies
 set(PROD "prod")    #Standard Repos
