@@ -20,7 +20,7 @@ if(COMMAND cmake_policy)
     endif(POLICY CMP0077)
 endif(COMMAND cmake_policy)
 
-set(VERBOSE_NAME "Windvane Autopilot")
+set(VERBOSE_NAME "Windvane_Autopilot")
 set(COMMON_NAME "windvane")
 set(TITLE_NAME "windvane")
 set(PACKAGE_CONTACT "Jon Gough")
