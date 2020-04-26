@@ -390,34 +390,31 @@ void windvane_pi::SetPositionFixEx( PlugIn_Position_Fix_Ex &pfix )
     if(pfix.FixTime && pfix.nSats)
         m_LastFixTime = wxDateTime::Now();
 
-    int l_itest = !wxIsNaN(pfix.Cog);
-    bool l_btest = !wxIsNaN(pfix.Cog);
-    l_btest = std::isnan(pfix.Cog);
-    if(g_pfFix.valid && (g_pfFix.Lat != pfix.Lat || g_pfFix.Lon != pfix.Lon || (g_pfFix.Cog != pfix.Cog && !(bool)wxIsNaN(pfix.Cog))  || (g_pfFix.Hdt != pfix.Hdt && !(bool)wxIsNaN(pfix.Hdt))))
+    if(g_pfFix.valid && (g_pfFix.Lat != pfix.Lat || g_pfFix.Lon != pfix.Lon || (g_pfFix.Cog != pfix.Cog && !std::isnan(pfix.Cog))  || (g_pfFix.Hdt != pfix.Hdt && !std::isnan(pfix.Hdt))))
         l_bBoatChange = true;
     
     g_pfFix.Lat = pfix.Lat;
     g_pfFix.Lon = pfix.Lon;
-    if(wxIsNaN(pfix.Cog)) {
+    if(std::isnan(pfix.Cog)) {
         if(g_pfFix.Cog != 0.)
             l_bBoatChange = true;
         g_pfFix.Cog = 0.;
     }
     else g_pfFix.Cog = pfix.Cog;
-    if(wxIsNaN(pfix.Sog)) {
+    if(std::isnan(pfix.Sog)) {
         if(g_pfFix.Sog != 0.)
             l_bBoatChange = true;
         g_pfFix.Sog = 0.;
     }
     g_pfFix.Sog = pfix.Sog;
     g_pfFix.Var = pfix.Var;
-    if(wxIsNaN(pfix.Hdm)) {
+    if(std::isnan(pfix.Hdm)) {
         if(g_pfFix.Hdm != 0.)
             l_bBoatChange = true;
         g_pfFix.Hdm = 0.;
     }
     else g_pfFix.Hdm = pfix.Hdm;
-    if(wxIsNaN(pfix.Hdt)) {
+    if(std::isnan(pfix.Hdt)) {
         if(g_pfFix.Hdt != 0.)
             l_bBoatChange = true;
         g_pfFix.Hdt = 0.;
@@ -762,7 +759,7 @@ void windvane_pi::SetNMEASentence(wxString &sentence)
                 double lld, llm, lls;
                 double l_Lat = m_NMEA0183_in.Rmb.DestinationPosition.Latitude.Latitude;
                 double l_Lon = m_NMEA0183_in.Rmb.DestinationPosition.Longitude.Longitude;
-                if(!m_bWVAutopilot && !wxIsNaN(l_Lat) && !wxIsNaN(l_Lon)) {
+                if(!m_bWVAutopilot && !std::isnan(l_Lat) && !std::isnan(l_Lon)) {
                     l_nOCPNAutopilot.Rmb = m_NMEA0183_in.Rmb;
                     lld = (int)(l_Lat / 100);
                     llm = (int)(l_Lat - (lld * 100));
