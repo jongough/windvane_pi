@@ -390,6 +390,9 @@ void windvane_pi::SetPositionFixEx( PlugIn_Position_Fix_Ex &pfix )
     if(pfix.FixTime && pfix.nSats)
         m_LastFixTime = wxDateTime::Now();
 
+    int l_itest = !wxIsNaN(pfix.Cog);
+    bool l_btest = !wxIsNaN(pfix.Cog);
+    l_btest = std::isnan(pfix.Cog);
     if(g_pfFix.valid && (g_pfFix.Lat != pfix.Lat || g_pfFix.Lon != pfix.Lon || (g_pfFix.Cog != pfix.Cog && !(bool)wxIsNaN(pfix.Cog))  || (g_pfFix.Hdt != pfix.Hdt && !(bool)wxIsNaN(pfix.Hdt))))
         l_bBoatChange = true;
     
