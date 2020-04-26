@@ -252,7 +252,7 @@ void WindvaneInstrument_AppSmoothedWindAngle::DrawData(wxGCDC* dc, double value,
 	wxSize size = GetClientSize();
 
 	wxString text;
-	if (!wxIsNaN(value))
+    if (!std::isnan(value))
 	{
 		if (unit == _T("\u00B0"))
 			text = wxString::Format(format, value) + DEGREE_SIGN;
