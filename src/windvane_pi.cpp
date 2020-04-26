@@ -72,10 +72,10 @@ using namespace std;
 #endif
 #endif
 
-//#if !defined(NAN)
-//static const long long lNaN = 0xfff8000000000000;
-//#define NAN (*(double*)&lNaN)
-//#endif
+#if !defined(NAN)
+static const long long lNaN = 0xfff8000000000000;
+#define NAN (*(double*)&lNaN)
+#endif
 
 windvane_pi            *g_windvane_pi;
 PlugInManager           *g_WV_pi_manager;
@@ -390,7 +390,7 @@ void windvane_pi::SetPositionFixEx( PlugIn_Position_Fix_Ex &pfix )
     if(pfix.FixTime && pfix.nSats)
         m_LastFixTime = wxDateTime::Now();
 
-    if(g_pfFix.valid && (g_pfFix.Lat != pfix.Lat || g_pfFix.Lon != pfix.Lon || (g_pfFix.Cog != pfix.Cog && !wxIsNaN(pfix.Cog))  || (g_pfFix.Hdt != pfix.Hdt && !wxIsNaN(pfix.Hdt))))
+    if(g_pfFix.valid && (g_pfFix.Lat != pfix.Lat || g_pfFix.Lon != pfix.Lon || (g_pfFix.Cog != pfix.Cog && !(bool)wxIsNaN(pfix.Cog))  || (g_pfFix.Hdt != pfix.Hdt && !(bool)wxIsNaN(pfix.Hdt))))
         l_bBoatChange = true;
     
     g_pfFix.Lat = pfix.Lat;
