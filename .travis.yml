@@ -1,71 +1,31 @@
 language: cpp
+
 matrix:
   include:
-  - dist: trusty
-    compiler: gcc
-  - os: osx
-    compiler: clang
-install:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; sudo apt-get
-  install libwxgtk3.0-dev libwxgtk3.0-0 libgps-dev libglu1-mesa-dev libgtk2.0-dev
-  libbz2-dev libtinyxml-dev; sudo apt-get install libexpat1-dev libcairo2-dev; sudo
-  apt-get install rpm; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cairo libexif xz libarchive;
-  wget http://opencpn.navnux.org/build_deps/wx312_opencpn50_macos109.tar.xz; tar xJf
-  wx312_opencpn50_macos109.tar.xz -C /tmp; export PATH="/usr/local/opt/gettext/bin:$PATH";
-  echo 'export PATH="/usr/local/opt/gettext/bin:$PATH"' >> ~/.bash_profile; wget http://opencpn.navnux.org/build_deps/Packages.dmg;
-  hdiutil attach Packages.dmg; sudo installer -pkg "/Volumes/Packages 1.2.5/Install
-  Packages.pkg" -target "/"; fi
-script:
-- if [[ "${COVERITY_SCAN_BRANCH}" == 1 ]]; then echo "Don't build on coverty_scan
-  branch."; exit 0; fi
-- mkdir build && cd build
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake -DCMAKE_BUILD_TYPE=Release ../
-  && make -sj2 && sudo make package; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake -DwxWidgets_CONFIG_EXECUTABLE=/tmp/wx312_opencpn50_macos109/bin/wx-config
-  -DwxWidgets_CONFIG_OPTIONS="--prefix=/tmp/wx312_opencpn50_macos109" -DCMAKE_INSTALL_PREFIX=/tmp/opencpn
-  -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 .. && make -sj2 && make create-pkg; fi
-- ls -l;
-notifications:
-  email: false
-git:
-  depth: 10
-before_install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
-- if [ "${#OAUTH_ACCESS_TOKEN}" != 0 ]; then (echo OAUTH_ACCESS_TOKEN=${OAUTH_ACCESS_TOKEN}
-  > ~/.dropbox_uploader); fi
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-6
-    - g++-6
+  - env:
+    - OCPN_TARGET=stretch-armhf
+    - DOCKER_IMAGE=raspbian/stretch
+    - BUILD_FLAGS="-j2"
+    services:
+    - docker
+    before_script:
+    - travis_wait 120 sleep infinity & bash ./ci/travis-build-raspbian-armhf-part1.sh
+    script:
+    - travis_wait 120 sleep infinity & bash ./ci/travis-build-raspbian-armhf-part2.sh
+  - env:
+    - OCPN_TARGET=buster-armhf
+    - DOCKER_IMAGE=jongough/raspbian-buster:plugin_build_tooling_current
+    - BUILD_FLAGS=-j2
+    services:
+    - docker
+    before_script:
+    - travis_wait 120 sleep infinity & bash ./ci/travis-build-raspbian-armhf-part1.sh
+    script:
+    - travis_wait 120 sleep infinity & bash ./ci/travis-build-raspbian-armhf-part2.sh
 deploy:
-  - provider: launchpad
-    slug: "~jonsgough/windvane/+git/windvane_pi"
-    oauth_token:
-      secure: "O+F3qadTm1EojsoGlopwLPirEJ8TkshlyZGOUdOa62YJsI7SrE3ugryeU2wuYHRBxE0dhXDCxHkUf+E45yq4PL8IIHx29eoygsZeVwHCgyT2nN/Pk/O/EOJXeCRo5WgrliyDnHCl4Dmz7vyRiP6svWuzz1xM6ATpKXSUlb02tdzcoydD0bzeUYwUnK2VRc7yv4Afxgr0yXx+7fdscV+ALCZ2JOvroxXWGRJawo96KWEE0On72/wiYZXeMuC7QtxFBQopSRNrmzGMTHv9F8c6cGT/Utcrp86xw42JO0pxOXCdd5i+60hzlA6QWswrNIuNBVnYWydGfJoX56bcalRZ1MEE+NyU/zHYBi8uehh8NIfUAYxdY7w7VW6FtyEdayNGWBm1FRGyyOquYfFQMGMHCBrnt30IKk2glSFWLxUBUTec4c3GGOXO8W0Zq/IhGE2ej77AVzCXgB1zOiruUSJdpkpQH73xC174SQBmiW54k76V4oRy2YyIXeibC04zKVhSpfJ0ORObvbZbz4LAgx0ML4emxFUFsIkzCNK872rEPDiUJjcL6So3bNKTrV0RC44uXN+JzFXrAeHwCZVATXANg4Ah4N94YX4W5sk0iNArhN6/p50kZbffxvZnYlPIh728BvtCFkGi5IELEeFt0Q/wE1BUr6k7ozxhGJtSTohaCa0="
-    oauth_token_secret:
-      secure: "o1wbdPzq0ztX4IfgdouiwRw+mV4RvxbfEfdG/hN/0jZVM1T6kt5jU7M+EcJT+kW66LbcBsXR3eEB0JfQ8evOo4siGkfHpNl64UULPWwpA7Ug2wQ6aO9c5JKq22FpDg2fh5btaCATxvc9knTZ7q+liCnd0Ddq4jFSVJtAc4QW/VRwtBExL2BgxG8BywmEj0vnceXQpeF4WGySL9ZupW8sBcwDX2LeozT/8hh1MF5wjwYEiiJLCaPsgjMbeZ0cUor7xsx3yPYm5z0AjYh0OhQk1+2aW8dm5Sp/y187JEmsOP5rCSw+ptha9o3FUuCyJbSvQQa/m36DKraP8vXSjt4r6U+qd/BmiCUoJNtvbPHzQ8XeLnVZL21L89MY6dHXLANTB1i5uLMfhDoQnSbPvtgKYhW3zglhxMNGGk0C5FMuBs2hV1FgvDcqZ8nr+cFB5lOjaB7G6CRNtBpTq3pXeseJhkKkh/LQ+hsp/mXMVbG/ZVECpeCFsLBC9qnQv/J5fY6eqFwEn9arx/YvzU3R5+8GboQXxBaa8LWweUxvLYnBnasvIgMaHvf7WRzs5OoUUxeAeQF1TTgI6ojIeqYkWZFrCcqcou/MTFupIz5h+Mey9olpVzGHA/UbTwf6oyQiLds1aiZf3sG35yqf+cinMa/i4XKpc6DKZfk1O1zDLrTN7GA="
-    skip_cleanup: true
-    on: # Set Deploy conditions
-      # Deploy only when tag is not specified
-      # tags: false
-      # or this branch
-      #branches:
-      #   only:
-      #     - master
-      tags: true
-      all_branches: true
-      condition: "$TRAVIS_OS_NAME = linux"
-      
-  - provider: releases
-    api_key:
-      secure: "sOyAv1RJZZZ4+b4ATliFRtlTRLkDxlWekvxTqN9eY+HMV6YA9Vx2Gk47urmmYFN5mCxjXqZwOAiVIQNIZSIu6jtUW8A8yYEjVG800GTBq52WFjCmaRyC+IcRnRfoc9qtzlJSjLnn6uRNomQnuH1K8S2M7uMj4lmJTuP4akf2h7U2S735ducb4MdYlu9zvY/qjKx0voYVEPAuRA7eBF7zrbVwG3d8EOQUP2QK+RJTG4DF+SohCt2JH4yf+ACfcbF2qmRd3OIRcQZSaNyCbgG2+5iq2605kPZ3kSMtgx5LChCz0zTpBissPTfVL8q4009XlPlKgNxdnPvgKgk8Tbgx+dDJNKP+yzYabuV0+6UusZYHnzLegUTx5GHap+sRWUDdc2W6cyjzSYdjH3Cm18gPGekz6JRbSlCg9NKqwKfYhUYLeaPoW5lade2Popn0+hLFoTNPdu4uTVScmIcANsOmOQ50x5rlgEaXD9O5mCpkca0ig1/4HSA5fWQY/ATlKctUtY9IG96tRpEOXjz2LxxMELaNoOHIYJAojmy9SuxDBQHY5LVftj3QRIeGKhO3y7RA2XMy5cLCQY3z5I3goEhwNNsq/cWTvH8hyVLkAivyvZ5l/kHGsgyvcwiwwxaSc7fuo3DooypmFii5zOHUyUDZDSTnBrLIlH/UJjlaY33m8XQ="
-    file_glob: true
-    file: "$TRAVIS_BUILD_DIR/build/*.{deb,rpm,dmg,txz,pkg,pkg.tar.xz}"
-    skip_cleanup: true
-    on:
-      all_branches: true
-      tags: true
+  provider: script
+  skip_cleanup: true
+  script: bash ./ci/cloudsmith-upload.sh
+  on:
+    tags: false
+    all_branches: true
