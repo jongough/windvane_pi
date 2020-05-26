@@ -90,7 +90,7 @@ WVPropertiesDialogDef::WVPropertiesDialogDef( wxWindow* parent, wxWindowID id, c
 	m_panelHelp->SetSizer( fgSizerHelp );
 	m_panelHelp->Layout();
 	fgSizerHelp->Fit( m_panelHelp );
-	m_notebookWVProperties->AddPage( m_panelHelp, _("Help"), true );
+	m_notebookWVProperties->AddPage( m_panelHelp, _("Help"), false );
 	m_panelAbout = new wxPanel( m_notebookWVProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerAbout;
 	bSizerAbout = new wxBoxSizer( wxVERTICAL );
@@ -113,7 +113,7 @@ WVPropertiesDialogDef::WVPropertiesDialogDef( wxWindow* parent, wxWindowID id, c
 	fgSizerAbout->Add( m_staticTextVerson, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizerVersionInfo;
-	fgSizerVersionInfo = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerVersionInfo = new wxFlexGridSizer( 0, 8, 0, 0 );
 	fgSizerVersionInfo->SetFlexibleDirection( wxBOTH );
 	fgSizerVersionInfo->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -141,6 +141,14 @@ WVPropertiesDialogDef::WVPropertiesDialogDef( wxWindow* parent, wxWindowID id, c
 	m_staticTextPatchVal->Wrap( -1 );
 	fgSizerVersionInfo->Add( m_staticTextPatchVal, 0, wxALL, 5 );
 
+	m_staticTextTweak = new wxStaticText( m_panelAbout, wxID_ANY, _("Tweak:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTweak->Wrap( -1 );
+	fgSizerVersionInfo->Add( m_staticTextTweak, 0, wxALL, 5 );
+
+	m_staticTextTweakVal = new wxStaticText( m_panelAbout, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTweakVal->Wrap( -1 );
+	fgSizerVersionInfo->Add( m_staticTextTweakVal, 0, wxALL, 5 );
+
 
 	fgSizerAbout->Add( fgSizerVersionInfo, 1, wxEXPAND, 5 );
 
@@ -167,7 +175,7 @@ WVPropertiesDialogDef::WVPropertiesDialogDef( wxWindow* parent, wxWindowID id, c
 	m_panelAbout->SetSizer( bSizerAbout );
 	m_panelAbout->Layout();
 	bSizerAbout->Fit( m_panelAbout );
-	m_notebookWVProperties->AddPage( m_panelAbout, _("About"), false );
+	m_notebookWVProperties->AddPage( m_panelAbout, _("About"), true );
 	m_panelLicense = new wxPanel( m_notebookWVProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer7;
 	fgSizer7 = new wxFlexGridSizer( 0, 2, 0, 0 );
