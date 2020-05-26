@@ -61,6 +61,8 @@ class WVPropertiesDialogDef : public wxDialog
 		wxStaticText* m_staticTextMinorVal;
 		wxStaticText* m_staticTextPatch;
 		wxStaticText* m_staticTextPatchVal;
+		wxStaticText* m_staticTextTweak;
+		wxStaticText* m_staticTextTweakVal;
 		wxStaticText* m_staticTextDate;
 		wxStaticText* m_staticTextDateVal;
 		wxStaticText* m_staticTextOther;

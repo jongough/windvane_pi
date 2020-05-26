@@ -54,6 +54,7 @@ WVPropertiesDialogDef( parent )
     m_staticTextMajorVal->SetLabel(wxString::Format(wxT("%i"), PLUGIN_VERSION_MAJOR ));
     m_staticTextMinorVal->SetLabel(wxString::Format(wxT("%i"), PLUGIN_VERSION_MINOR ));
     m_staticTextPatchVal->SetLabel( wxT(TOSTRING(PLUGIN_VERSION_PATCH)) );
+    m_staticTextTweakVal->SetLabel( wxT(TOSTRING(PLUGIN_VERSION_TWEAK)) );
     m_staticTextDateVal->SetLabel( wxT(TOSTRING(PLUGIN_VERSION_DATE)) );
     
     wxTextFile license_filea( g_SData_Locn->c_str() + _T("license.txt") );
