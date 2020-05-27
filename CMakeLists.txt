@@ -28,9 +28,9 @@ set(PACKAGE "windvane")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "10")
+set(VERSION_PATCH "12")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE "26/05/2020")
+set(VERSION_DATE "27/05/2020")
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -38,39 +38,9 @@ set(TP_COMMENT "  * Release for O5 using CI")
 
 
 set(PARENT "opencpn")
-set(GIT_USER "jongough")
-set(GIT_REPOSITORY_NAME "windvane_pi")
-message(STATUS "CIRCLECI: ${CIRCLECLI}, Env CIRCLECI: $ENV{CIRCLECI}")
-message(STATUS "TRAVIS: ${TRAVIS}, Env TRAVIS: $ENV{TRAVIS}")
-# This if allows for setting up your own local webserver with git on it for testing purposes
-if($ENV{CIRCLECI})
-    set(GIT_REPOSITORY_HOST "github.com")
-    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
-    set(GIT_REPOSITORY_BRANCH "$ENV{CIRCLE_BRANCH}")
-elseif($ENV{TRAVIS})
-    set(GIT_REPOSITORY_HOST "github.com")
-    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
-    set(GIT_REPOSITORY_BRANCH "$ENV{TRAVIS_BRANCH}")
-elseif($ENV{APPVEYOR})
-    set(GIT_REPOSITORY_HOST "github.com")
-    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
-    set(GIT_REPOSITORY_BRANCH "$ENV{APPVEYOR_REPO_BRANCH}")
-else()
-    set(GIT_REPOSITORY_HOST "github.com")
-    set(GIT_REPOSITORY_DIR "${GIT_USER}/")
-    # Get the current working branch
-    execute_process(
-        COMMAND git rev-parse --abbrev-ref HEAD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        OUTPUT_VARIABLE GIT_REPOSITORY_BRANCH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
-    if(${GIT_REPOSITORY_BRANCH} EQUAL "")
-        message(STATUS "Setting default GIT repository branch - master")
-        set(GIT_REPOSITORY_BRANCH "master")
-    endif()
-endif()
-message(STATUS "Git Branch: ${GIT_REPOSITORY_BRANCH}")
+
+# The next line allows for setting up your own local webserver with git on it for testing purposes, the default is github.com
+set(GIT_REPOSITORY_SERVER "github.com")
 
 # Builds repository sufficies
 set(PROD "prod")    #Standard Repos
@@ -78,7 +48,8 @@ set(BETA "beta")    #Standard Repos
 set(ALPHA "alpha")  #Standard Repos
 
 set(CLOUDSMITH_USER "jon-gough")
-set(CLOUDSMITH_BASE_REPOSITORY "${GIT_REPOSITORY_NAME}")
+# set this if your cloudsmith repository name does not match your git repository name
+#set(CLOUDSMITH_BASE_REPOSITORY "${GIT_REPOSITORY_NAME}")
 set(XML_INFO_URL "https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:opencpn_user_manual:plugins:sailing:windvane")
 set(XML_SUMMARY "Plugin to provide windvane like autopilot")
 set(XML_DESCRIPTION "Windvane Autopilot is designed to use the wind instruments and autopilot on board the yatch to act like a standard windvane autopilot and allow the yatch to follow the wind.")
@@ -106,7 +77,7 @@ string(TOUPPER "${PACKAGE}" TITLE_NAME)
 project(${PACKAGE_NAME} VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_TWEAK})
 message(STATUS "PROJECT_VERSION: ${PROJECT_VERSION}")
 
-set(PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+set(PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_TWEAK}")
 
 message(STATUS "${VERBOSE_NAME} Version: ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_TWEAK}")
 message(STATUS "OPCN_FLATPAK: ${OCPN_FLATPAK}")
@@ -131,13 +102,13 @@ set(PKG_URL "https://dl.cloudsmith.io/public/--pkg_repo--/raw/names/--name--/ver
 include("cmake/PluginSetup.cmake")
 
 if(DEFINED ENV{OCPN_TARGET})
-    set(PACKAGING_NAME "${PKG_NVR}_${PKG_TARGET}-${PKG_TARGET_VERSION}-$ENV{OCPN_TARGET}")
+    set(PACKAGING_NAME "${PKG_NVR}_${PKG_TARGET}-${ARCH}_${PKG_TARGET_VERSION}-$ENV{OCPN_TARGET}")
 else(DEFINED ENV{OCPN_TARGET})
-    set(PACKAGING_NAME "${PKG_NVR}_${PKG_TARGET}-${PKG_TARGET_VERSION}")
+    set(PACKAGING_NAME "${PKG_NVR}_${PKG_TARGET}-${ARCH}_${PKG_TARGET_VERSION}")
 endif(DEFINED ENV{OCPN_TARGET})
 message(STATUS "PACKAGING_NAME: ${PACKAGING_NAME}")
 
-set(PLUGIN_NAME ${PACKAGE}-plugin-${PKG_TARGET}-${PKG_TARGET_VERSION})
+set(PLUGIN_NAME ${PACKAGE}-plugin-${PKG_TARGET}-${ARCH}_${PKG_TARGET_VERSION})
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
