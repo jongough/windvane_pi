@@ -81,7 +81,6 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 include("cmake/PluginSetup.cmake")
 
-
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 option(Plugin_CXX11 "Use c++11" OFF)
