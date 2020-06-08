@@ -58,7 +58,7 @@ WVicons::~WVicons()
 void WVicons::initialize_images(void)
 {
     wxFileName fn;
-    fn.SetPath(GetPluginDataDir( "ocpn_draw_pi"));
+    fn.SetPath(GetPluginDataDir( "windvane_pi"));
     fn.AppendDir(wxT("data"));
     g_SData_Locn = new wxString(fn.GetFullPath().c_str());
     
