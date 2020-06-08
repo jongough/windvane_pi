@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: windvane_pi 1.0.3\n"
+"Project-Id-Version: windvane_pi 1.0.13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-04 18:02+1000\n"
+"POT-Creation-Date: 2020-06-03 08:14+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: include/WVPropertiesDialogDef.h:81
+#: include/WVPropertiesDialogDef.h:82
 msgid "Windvane Properties"
 msgstr ""
 
@@ -88,15 +88,19 @@ msgstr ""
 msgid "Patch:"
 msgstr ""
 
-#: src/WVPropertiesDialogDef.cpp:147
-msgid "Date:"
+#: src/WVPropertiesDialogDef.cpp:144
+msgid "Tweak:"
 msgstr ""
 
 #: src/WVPropertiesDialogDef.cpp:155
+msgid "Date:"
+msgstr ""
+
+#: src/WVPropertiesDialogDef.cpp:163
 msgid "Other:"
 msgstr ""
 
-#: src/WVPropertiesDialogDef.cpp:159
+#: src/WVPropertiesDialogDef.cpp:167
 msgid ""
 "Please report problems using FlySpray at:\n"
 "https://www.opencpn.org/flyspray/index.php?project=60&do=index&switch=1\n"
@@ -112,19 +116,19 @@ msgid ""
 "https://github.com/jongough/windvane_pi/issues"
 msgstr ""
 
-#: src/WVPropertiesDialogDef.cpp:170
+#: src/WVPropertiesDialogDef.cpp:178
 msgid "About"
 msgstr ""
 
-#: src/WVPropertiesDialogDef.cpp:186
+#: src/WVPropertiesDialogDef.cpp:194
 msgid "License"
 msgstr ""
 
-#: src/WVPropertiesDialogDef.cpp:193
+#: src/WVPropertiesDialogDef.cpp:201
 msgid "OK"
 msgstr ""
 
-#: src/WVPropertiesDialogDef.cpp:196
+#: src/WVPropertiesDialogDef.cpp:204
 msgid "Cancel"
 msgstr ""
 
@@ -184,23 +188,23 @@ msgstr ""
 msgid "AWA: "
 msgstr ""
 
-#: src/windvane_pi.cpp:209 src/windvane_pi.cpp:210 src/windvane_pi.cpp:212
-#: src/windvane_pi.cpp:213 src/windvane_pi.cpp:457
+#: src/windvane_pi.cpp:204 src/windvane_pi.cpp:205 src/windvane_pi.cpp:207
+#: src/windvane_pi.cpp:208 src/windvane_pi.cpp:452
 msgid "Windvane Autopilot"
 msgstr ""
 
-#: src/windvane_pi.cpp:358
+#: src/windvane_pi.cpp:353
 msgid "Windvane Autopilot for OpenCPN"
 msgstr ""
 
-#: src/windvane_pi.cpp:362
+#: src/windvane_pi.cpp:357
 msgid ""
 "Windvane Autopilot for OpenCPN\n"
 "\n"
 "Allows aparent wind direction to control autopilot."
 msgstr ""
 
-#: src/windvane_pi.cpp:457
+#: src/windvane_pi.cpp:452
 msgid ""
 "There is no wind information available.\n"
 "The Windvane autopilot cannot be started."
