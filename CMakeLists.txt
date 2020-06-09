@@ -8,6 +8,8 @@
 ## ----- Modify section below to include all the details for your plugin ----- ##
 ##
 
+set(CMLOC "CMakeLists: ")
+
 # define minimum cmake version
 cmake_minimum_required(VERSION 3.1.1)
 if(COMMAND cmake_policy)
@@ -26,11 +28,13 @@ set(TITLE_NAME "windvane")
 set(PACKAGE_CONTACT "Jon Gough")
 set(PACKAGE "windvane")
 
+project(${PACKAGE})
+
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "13")
+set(VERSION_PATCH "16")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE "30/05/2020")
+set(VERSION_DATE "08/06/2020")
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -70,13 +74,13 @@ set(OpenGL_GL_PREFERENCE "LEGACY")
 # Don't use local version of GLU library
 set(USE_LOCAL_GLU FALSE)
 option(USE_GL "Enable OpenGL support" OFF)
-message(STATUS "USE_GL: ${USE_GL}")
+message(STATUS "${CMLOC}USE_GL: ${USE_GL}")
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "")
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)
 endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
 
 include("cmake/PluginSetup.cmake")
@@ -191,12 +195,12 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(TINYXML_FOUND)
- message (STATUS "Building with system tinyxml")
+    message (STATUS "${CMLOC}Building with system tinyxml")
  INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
  ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
  TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
 ELSE(TINYXML_FOUND)
- message (STATUS "Building with embedded tinyxml")
+    message (STATUS "${CMLOC}Building with embedded tinyxml")
  INCLUDE_DIRECTORIES(src/tinyxml/)
  SET(SRC_LTINYXML
             src/tinyxml/tinyxml.cpp
