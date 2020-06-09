@@ -153,7 +153,7 @@ public:
 };
 
 
-class windvane_pi : public opencpn_plugin_113
+class windvane_pi : public opencpn_plugin_116
 {
 public:
 
