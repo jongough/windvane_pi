@@ -28,13 +28,11 @@ set(TITLE_NAME "windvane")
 set(PACKAGE_CONTACT "Jon Gough")
 set(PACKAGE "windvane")
 
-project(${PACKAGE})
-
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "16")
+set(VERSION_PATCH "17")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE "08/06/2020")
+set(VERSION_DATE "12/06/2020")
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -82,6 +80,8 @@ endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
+
+project(${PACKAGE})
 
 include("cmake/PluginSetup.cmake")
 
