@@ -1,0 +1,208 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: opencpn\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-03 08:14+1000\n"
+"PO-Revision-Date: 2020-07-02 22:02\n"
+"Last-Translator: \n"
+"Language-Team: Finnish\n"
+"Language: fi_FI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: opencpn\n"
+"X-Crowdin-Project-ID: 49843\n"
+"X-Crowdin-Language: fi\n"
+"X-Crowdin-File: /plugins/windvane_pi/po/windvane_pi.pot\n"
+"X-Crowdin-File-ID: 290\n"
+
+#: include/WVPropertiesDialogDef.h:82
+msgid "Windvane Properties"
+msgstr "Tuuliviiri ominaisuudet"
+
+#: src/WVDialFrame.cpp:43
+msgid "Windvane Auto Pilot"
+msgstr "Tuuliviiri auto pilotti"
+
+#: src/WVDialFrame.cpp:63
+msgid "Sensitivity (secs)"
+msgstr "Herkkyys (sek.)"
+
+#: src/WVDialFrame.cpp:64
+msgid "Angle/XTE ratio"
+msgstr "Kulma/XTE kerroin"
+
+#: src/WVPropertiesDialogDef.cpp:30
+msgid "AutoPilot Update\n"
+"Frequency (secs)"
+msgstr "AutoPilotti\n"
+"päivitysväli (sek.)"
+
+#: src/WVPropertiesDialogDef.cpp:47
+msgid "Angle/XTE ratio upper limit"
+msgstr "Kulma/XTE kerroin yläraja"
+
+#: src/WVPropertiesDialogDef.cpp:64
+msgid "Wind change sensitivity"
+msgstr "Tuulen muutoksen herkkyys"
+
+#: src/WVPropertiesDialogDef.cpp:78
+msgid "General"
+msgstr "Yleinen"
+
+#: src/WVPropertiesDialogDef.cpp:85
+msgid "The windvane adds new output sentences to the standard set. These have the prefix \"WV\". If you have the windvane_pi installed the RMB and APB sentences will be replicated with the \"WV\" prefix.\n"
+"You should filter the normal (normally, ECRMB and ECAPB) sentences out.\n\n"
+"When the windvane is in use the RMB and APB  sentences are modified to allow the autopilot to follow the wind. This means that you will no  longer be following any route, even it it is active. If you dissable the windvane (toolbar icon is not blue) then normal route following will continue."
+msgstr "Tuuliviiri lisää uusia lauseita standardien joukkoon. Näissä on alkuosa \"WV\". Jos windvanene_pi on asennettu RMB ja APB lauseet korvataan vastaavilla, joissa on \"WV\" alkuosa.\n"
+"Normaalit (vakio ECRMC ja ECAPB) lauseet pitää suodattaa pois.\n\n"
+"Kun tuuliviiri on käytössä, niin RMB ja APB lauseet on muotoiltu niin, että autopilotti ohjaa tuulen mukaan. Tämä tarkoittaa sitä, että mitään reittiä ei seurata, vaikka sellainen olisi aktiivisena. Jos otat tuuliviirin pois käytöstä (ikoni työkalurivillä ei ole sininen), niin normaali reitin seuranta jatkuu."
+
+#: src/WVPropertiesDialogDef.cpp:93
+msgid "Help"
+msgstr "Ohje"
+
+#: src/WVPropertiesDialogDef.cpp:103
+msgid "Name:"
+msgstr "Nimi:"
+
+#: src/WVPropertiesDialogDef.cpp:111
+msgid "Version"
+msgstr "Versio"
+
+#: src/WVPropertiesDialogDef.cpp:120
+msgid "Major:"
+msgstr "Pää:"
+
+#: src/WVPropertiesDialogDef.cpp:128
+msgid "Minor:"
+msgstr "Ala:"
+
+#: src/WVPropertiesDialogDef.cpp:136
+msgid "Patch:"
+msgstr "Korjaus:"
+
+#: src/WVPropertiesDialogDef.cpp:144
+msgid "Tweak:"
+msgstr "Viritys:"
+
+#: src/WVPropertiesDialogDef.cpp:155
+msgid "Date:"
+msgstr "Päivämäärä:"
+
+#: src/WVPropertiesDialogDef.cpp:163
+msgid "Other:"
+msgstr "Muu:"
+
+#: src/WVPropertiesDialogDef.cpp:167
+msgid "Please report problems using FlySpray at:\n"
+"https://www.opencpn.org/flyspray/index.php?project=60&do=index&switch=1\n\n"
+"or\n\n"
+"at the OpenCPN forum:\n"
+"http://www.cruisersforum.com/forums/f134\n\n"
+"or\n\n"
+"Raise an issue in GIT at:\n"
+"https://github.com/jongough/windvane_pi/issues"
+msgstr "Ilmoitathan ongelmista käyttämällä FlySpray:tä soittessa:\n"
+"https://www.opencpn.org/flyspray/index.php?project=60&do=index&switch=1\n\n"
+"tai\n\n"
+"OpenCPN foorumissa:\n"
+"http://www.cruisersforum.com/forums/f134\n\n"
+"tai\n\n"
+"Mainitse aiheesta GIT:ssä\n"
+"https://github.com/jongough/windvane_pi/issues\\n"
+
+#: src/WVPropertiesDialogDef.cpp:178
+msgid "About"
+msgstr "Tietoa"
+
+#: src/WVPropertiesDialogDef.cpp:194
+msgid "License"
+msgstr "Lisenssi"
+
+#: src/WVPropertiesDialogDef.cpp:201
+msgid "OK"
+msgstr "OK"
+
+#: src/WVPropertiesDialogDef.cpp:204
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: src/WVicons.cpp:67
+msgid "windvane_pi data location"
+msgstr "windvane_pi tietojen sijainti"
+
+#: src/dial.cpp:525
+msgid "E"
+msgstr "E"
+
+#: src/dial.cpp:525
+msgid "N"
+msgstr "N"
+
+#: src/dial.cpp:525
+msgid "NE"
+msgstr "NE"
+
+#: src/dial.cpp:525
+msgid "NW"
+msgstr "NW"
+
+#: src/dial.cpp:525 src/wind.cpp:262
+msgid "S"
+msgstr "S"
+
+#: src/dial.cpp:525
+msgid "SE"
+msgstr "SE"
+
+#: src/dial.cpp:525
+msgid "SW"
+msgstr "SW"
+
+#: src/dial.cpp:525
+msgid "W"
+msgstr "W"
+
+#: src/instrument.cpp:236
+msgid " true"
+msgstr " tosi"
+
+#: src/instrument.cpp:238
+msgid " mag"
+msgstr " magneettinen"
+
+#: src/wind.cpp:260
+msgid "P"
+msgstr "P"
+
+#: src/wind.cpp:308
+msgid "SWA: "
+msgstr "SWA: "
+
+#: src/wind.cpp:312
+msgid "AWA: "
+msgstr "AWA: "
+
+#: src/windvane_pi.cpp:204 src/windvane_pi.cpp:205 src/windvane_pi.cpp:207
+#: src/windvane_pi.cpp:208 src/windvane_pi.cpp:452
+msgid "Windvane Autopilot"
+msgstr "Tuuliviiri auto pilotti"
+
+#: src/windvane_pi.cpp:353
+msgid "Windvane Autopilot for OpenCPN"
+msgstr "OpenCPN:n tuuliviiri autopilotti"
+
+#: src/windvane_pi.cpp:357
+msgid "Windvane Autopilot for OpenCPN\n\n"
+"Allows aparent wind direction to control autopilot."
+msgstr "OpenCPN:n tuuliviiri autopilotti\n\n"
+"Antaa suhteellisen tuulensuunnan hallita autopilottia."
+
+#: src/windvane_pi.cpp:452
+msgid "There is no wind information available.\n"
+"The Windvane autopilot cannot be started."
+msgstr "Mitään tuulitietoa ei ole saatavilla.\n"
+"Tuuliviiri autopilottia ei voi käynnistää."
+
