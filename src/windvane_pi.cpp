@@ -105,6 +105,8 @@ wxFont *g_pFontSmall;
 
 int              g_NMEAAPBPrecision;
 
+// Added for new lib useage
+wxString         g_TalkerIdText;
 
 
 // the class factories, used to create and destroy instances of the PlugIn
