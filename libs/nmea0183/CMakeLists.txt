@@ -63,6 +63,8 @@ if (NOT wxWidgets_INCLUDE_DIRS)
     SimpleWxConfig()
 endif ()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 add_library(NMEA0183 STATIC ${SRC})
 add_library(ocpn::nmea0183 ALIAS NMEA0183)
 
