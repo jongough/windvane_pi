@@ -109,9 +109,7 @@ void WindvaneInstrument_AppSmoothedWindAngle::Draw(wxGCDC* bdc)
     else
         DrawData(bdc, m_dAngle, _T("\u00B0R"), m_MainValueFormat, DIAL_POSITION_INSIDE);
     
-	//DrawData(bdc, m_ExtraValueApp, m_ExtraValueAppUnit, m_ExtraValueFormat, m_ExtraValueOption1);
-	//DrawData(bdc, m_ExtraValueSmooth, m_ExtraValueSmoothUnit, m_ExtraValueFormat, m_ExtraValueOption2);
-	DrawForeground(bdc);
+    DrawForeground(bdc);
     DrawBug(bdc);
 }
 void WindvaneInstrument_AppSmoothedWindAngle::DrawForeground(wxGCDC* dc)

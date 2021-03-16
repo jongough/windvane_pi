@@ -31,8 +31,8 @@ set(PACKAGE "windvane")
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "21")
-set(VERSION_TWEAK "0")
-set(VERSION_DATE "22/07/2020")
+set(VERSION_TWEAK "2")
+set(VERSION_DATE "15/03/2021")
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -133,20 +133,6 @@ SET(HDRS
 )
 
 SET(OCPNSRC
-        src/nmea0183/apb.cpp
-        src/nmea0183/mwv.cpp
-        src/nmea0183/rmb.cpp
-        src/nmea0183/xte.cpp
-        src/nmea0183/lat.cpp
-        src/nmea0183/latlong.cpp
-        src/nmea0183/long.cpp
-        src/nmea0183/nmea0183.cpp
-        src/nmea0183/expid.cpp
-        src/nmea0183/hexvalue.cpp
-        src/nmea0183/response.cpp
-        src/nmea0183/sentence.cpp
-        src/nmea0183/talkerid.cpp
-        src/nmea0183/vwr.cpp
         ocpnsrc/wxJSON/jsonreader.cpp
         ocpnsrc/wxJSON/jsonval.cpp
         ocpnsrc/wxJSON/jsonwriter.cpp
@@ -156,21 +142,15 @@ SET(OCPNHDRS
         ocpninclude/ocpn_plugin.h
         ocpninclude/TexFont.h
         ocpninclude/wx28compat.h
-        src/nmea0183/apb.hpp
-        src/nmea0183/mwv.hpp
-        src/nmea0183/RMB.HPP
-        src/nmea0183/xte.hpp
-        src/nmea0183/LatLong.hpp
-        src/nmea0183/nmea0183.h
-        src/nmea0183/nmea0183.hpp
-        src/nmea0183/Response.hpp
-        src/nmea0183/Sentence.hpp
-        src/nmea0183/vwr.hpp
         ocpninclude/wx/json_defs.h
         ocpninclude/wx/jsonreader.h
         ocpninclude/wx/jsonval.h
         ocpninclude/wx/jsonwriter.h
         
+)
+SET(EXTSRC
+)
+SET(EXTINCLUDE
 )
 
 OPTION(WINDVANE_USE_SVG "Use SVG graphics" ON)
@@ -178,38 +158,67 @@ IF(WINDVANE_USE_SVG)
     ADD_DEFINITIONS(-DTESTPLUGIN_USE_SVG)
 ENDIF(WINDVANE_USE_SVG)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/mygdal  )
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/nmea0183)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxsvg)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/gdal/include)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/iso8211/include)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/${EXTINCLUDE_DIR})
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxsvg)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
 
+add_subdirectory(libs/gdal)
+add_subdirectory(libs/nmea0183)
+add_subdirectory(libs/tinyxml)
+add_subdirectory(libs/iso8211)
+add_subdirectory(libs/api-16)
 
-IF(UNIX)
- INCLUDE("cmake/FindTinyXML.cmake")
- FIND_PACKAGE(TinyXML QUIET)
-ENDIF(UNIX)
+add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
-IF(TINYXML_FOUND)
-    message (STATUS "${CMLOC}Building with system tinyxml")
- INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
- ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
- TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
-ELSE(TINYXML_FOUND)
-    message (STATUS "${CMLOC}Building with embedded tinyxml")
- INCLUDE_DIRECTORIES(src/tinyxml/)
- SET(SRC_LTINYXML
-            src/tinyxml/tinyxml.cpp
-            src/tinyxml/tinyxmlparser.cpp
-            src/tinyxml/tinyxmlerror.cpp
- )
- ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC} ${SRC_LTINYXML})
-ENDIF(TINYXML_FOUND)
-ADD_DEFINITIONS(-DTIXML_USE_STL)
+#if(UNIX)
+#    include("cmake/FindTinyXML.cmake")
+#    find_package(TinyXML QUIET)
+#endif(UNIX)
+#
+#if(TINYXML_FOUND)
+#    message(STATUS "${CMLOC}Building with system tinyxml")
+#    include_directories(${TINYXML_INCLUDE_DIR})
+#    add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
+#    target_link_libraries(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
+#else(TINYXML_FOUND)
+#    message(STATUS "${CMLOC}Building with embedded tinyxml")
+#    include_directories(extsrc/tinyxml/)
+#    set(SRC_LTINYXML extsrc/tinyxml/tinyxml.cpp extsrc/tinyxml/tinyxmlparser.cpp extsrc/tinyxml/tinyxmlerror.cpp)
+#    add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC} ${SRC_LTINYXML})
+#endif(TINYXML_FOUND)
+#
+#add_definitions(-DTIXML_USE_STL)
+
+#////
+#IF(UNIX)
+# INCLUDE("cmake/FindTinyXML.cmake")
+# FIND_PACKAGE(TinyXML QUIET)
+#ENDIF(UNIX)
+
+#IF(TINYXML_FOUND)
+#    message (STATUS "${CMLOC}Building with system tinyxml")
+# INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
+# ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
+# TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
+#ELSE(TINYXML_FOUND)
+#    message (STATUS "${CMLOC}Building with embedded tinyxml")
+# INCLUDE_DIRECTORIES(src/tinyxml/)
+# SET(SRC_LTINYXML
+#            src/tinyxml/tinyxml.cpp
+#            src/tinyxml/tinyxmlparser.cpp
+#            src/tinyxml/tinyxmlerror.cpp
+# )
+# ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC} ${SRC_LTINYXML})
+#ENDIF(TINYXML_FOUND)
+#ADD_DEFINITIONS(-DTIXML_USE_STL)
 
 ##
 ## ----- Change above to match project requirements ----- ##

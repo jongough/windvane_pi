@@ -808,6 +808,21 @@ void windvane_pi::SetNMEASentence(wxString &sentence)
     }
 }
 
+void windvane_pi::SignalKInput(short PriAWA) {
+
+}
+
+void windvane_pi::SignalKInput(double dAngle, string sAwaUnit) {
+    WINDHISTORY l_WindHistory;
+    l_WindHistory.dAngle = dAngle;
+    l_WindHistory.lTime = time(NULL);
+    m_WindHistory.push_front(l_WindHistory);
+}
+
+void windvane_pi::SignalKInput(double dLat, double dLon) {
+
+}
+
 void windvane_pi::SendAutopilotSentences(int CurrentAngle)
 {
     if(!m_bWVAutopilot) return;
