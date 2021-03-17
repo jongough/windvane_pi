@@ -11,7 +11,7 @@ endif ()
 SET(SRC
     src/LatLong.hpp
     src/latlong.cpp
-#    src/long.cpp
+    src/long.cpp
     src/nmea0183.cpp
     src/nmea0183.hpp
     src/Response.hpp
@@ -23,9 +23,9 @@ SET(SRC
     src/talkerid.cpp
 #    src/RMC.HPP
 #    src/rmc.cpp
-#    src/hexvalue.cpp
-#    src/lat.cpp
-#    src/expid.cpp
+    src/hexvalue.cpp
+    src/lat.cpp
+    src/expid.cpp
 #    src/wpl.hpp
 #    src/wpl.cpp
 #    src/rte.hpp
