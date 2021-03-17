@@ -9,9 +9,9 @@ if (NOT CMAKE_MODULE_PATH)
 endif ()
 
 SET(SRC
-    src/LatLong.hpp
-    src/latlong.cpp
-    src/long.cpp
+#    src/LatLong.hpp
+#    src/latlong.cpp
+#    src/long.cpp
     src/nmea0183.cpp
     src/nmea0183.hpp
     src/Response.hpp
@@ -21,37 +21,37 @@ SET(SRC
     src/Sentence.hpp
     src/sentence.cpp
     src/talkerid.cpp
-    src/RMC.HPP
-    src/rmc.cpp
-    src/hexvalue.cpp
-    src/lat.cpp
-    src/expid.cpp
-    src/wpl.hpp
-    src/wpl.cpp
-    src/rte.hpp
-    src/rte.cpp
-    src/hdt.hpp
-    src/hdt.cpp
-    src/hdg.hpp
-    src/hdg.cpp
+#    src/RMC.HPP
+#    src/rmc.cpp
+#    src/hexvalue.cpp
+#    src/lat.cpp
+#    src/expid.cpp
+#    src/wpl.hpp
+#    src/wpl.cpp
+#    src/rte.hpp
+#    src/rte.cpp
+#    src/hdt.hpp
+#    src/hdt.cpp
+#    src/hdg.hpp
+#    src/hdg.cpp
     src/hdm.hpp
     src/hdm.cpp
-    src/gll.hpp
-    src/gll.cpp
-    src/vtg.hpp
-    src/vtg.cpp
-    src/gga.hpp
-    src/gga.cpp
-    src/gsv.hpp
-    src/gsv.cpp
-    src/GPwpl.cpp
-    src/GPwpl.hpp
+#    src/gll.hpp
+#    src/gll.cpp
+#    src/vtg.hpp
+#    src/vtg.cpp
+#    src/gga.hpp
+#    src/gga.cpp
+#    src/gsv.hpp
+#    src/gsv.cpp
+#    src/GPwpl.cpp
+#    src/GPwpl.hpp
     src/apb.cpp
     src/apb.hpp
     src/xte.cpp
     src/xte.hpp
-    src/mwd.cpp
-    src/mwd.hpp
+#    src/mwd.cpp
+#    src/mwd.hpp
     src/mwv.cpp
     src/mwv.hpp
     src/vwr.cpp
