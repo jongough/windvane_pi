@@ -46,7 +46,7 @@
 
 #include "nmea0183.h"
 
-#include "pluginmanager.h"
+//#include "pluginmanager.h"
 #include <wx/stdpaths.h>
 #include <wx/timer.h>
 #include <wx/event.h>
@@ -78,7 +78,6 @@ static const long long lNaN = 0xfff8000000000000;
 #endif
 
 windvane_pi            *g_windvane_pi;
-PlugInManager           *g_WV_pi_manager;
 WVPropertiesDialogImpl  *g_pWVPropDialog;
 wxString    *g_PrivateDataDir;
 
@@ -130,7 +129,6 @@ windvane_pi::windvane_pi(void *ppimgr)
 {
     // Create the PlugIn icons
     g_ppimgr = ppimgr;
-    g_WV_pi_manager = (PlugInManager *) ppimgr;
     g_windvane_pi = this;
     
     wxString *l_pDir = new wxString(*GetpPrivateApplicationDataLocation());
