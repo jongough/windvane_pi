@@ -172,15 +172,15 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
 
 add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
-add_subdirectory(libs/gdal)
+#add_subdirectory(libs/gdal)
 add_subdirectory(libs/nmea0183)
-add_subdirectory(libs/tinyxml)
-add_subdirectory(libs/iso8211)
+#add_subdirectory(libs/tinyxml)
+#add_subdirectory(libs/iso8211)
 message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
-target_link_libraries(${PACKAGE_NAME} ocpn::gdal)
+#target_link_libraries(${PACKAGE_NAME} ocpn::gdal)
 target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
-target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
-target_link_libraries(${PACKAGE_NAME} ocpn::iso8211)
+#target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
+#target_link_libraries(${PACKAGE_NAME} ocpn::iso8211)
 
 
 #if(UNIX)
