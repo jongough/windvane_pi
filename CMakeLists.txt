@@ -105,6 +105,7 @@ ADD_DEFINITIONS(-DUSE_S57)
 
 SET(SRCS
         src/windvane_pi.cpp
+        src/WVdc.cpp
         src/WVDialFrame.cpp
         src/WVEventHandler.cpp
         src/WVPropertiesDialogDef.cpp
@@ -119,6 +120,7 @@ SET(SRCS
 
 SET(HDRS
         include/windvane_pi.h
+        include/WVdc.h
         include/WVDialFrame.h
         include/WVEventHandler.h
         include/WVPropertiesDialogDef.h
@@ -161,14 +163,14 @@ ENDIF(WINDVANE_USE_SVG)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/gdal/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/iso8211/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude)
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
+#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
+#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/${EXTINCLUDE_DIR})
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxsvg)
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
+#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxsvg)
+#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
 
 add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 

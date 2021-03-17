@@ -28,8 +28,8 @@
  */
 
 
-#ifndef __WVDC_H__
-#define __WVDC_H__
+#ifndef __WVdc_H__
+#define __WVdc_H__
 
 #include <vector>
 
@@ -57,14 +57,14 @@ void DrawGLThickLine( float x1, float y1, float x2, float y2, wxPen pen, bool b_
 
 class wxGLCanvas;
 
-class DECL_EXP WVDC
+class DECL_EXP WVdc
 {
 public:
-     WVDC(wxGLCanvas &canvas);
-     WVDC(wxDC &pdc);
-     WVDC();
+     WVdc(wxGLCanvas &canvas);
+     WVdc(wxDC &pdc);
+     WVdc();
 
-     ~WVDC();
+     ~WVdc();
 
      void SetBackground( const wxBrush &brush );
      void SetPen( const wxPen &pen);
