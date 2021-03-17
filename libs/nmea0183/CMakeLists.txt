@@ -9,8 +9,8 @@ if (NOT CMAKE_MODULE_PATH)
 endif ()
 
 SET(SRC
-#    src/LatLong.hpp
-#    src/latlong.cpp
+    src/LatLong.hpp
+    src/latlong.cpp
 #    src/long.cpp
     src/nmea0183.cpp
     src/nmea0183.hpp
