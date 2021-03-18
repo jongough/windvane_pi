@@ -32,26 +32,29 @@ set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "21")
 set(VERSION_TWEAK "3")
-set(VERSION_DATE "18/03/2021")
+set(VERSION_DATE "18/03/2021") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
 set(TP_COMMENT "  * Release for O5 using CI")
 
-
 set(PARENT "opencpn")
 
 # The next line allows for setting up your own local webserver with git on it for testing purposes, the default is github.com
-set(GIT_REPOSITORY_SERVER "github.com")
+#set(GIT_REPOSITORY_SERVER "github.com")
 
-# Builds repository sufficies
-set(PROD "prod")    #Standard Repos
-set(BETA "beta")    #Standard Repos
-set(ALPHA "alpha")  #Standard Repos
+# Specifies cloudsmith repository sufficies
+set(PROD "prod")    # Standard Repos
+set(BETA "beta")    # Standard Repos
+set(ALPHA "alpha")  # Standard Repos
 
-set(CLOUDSMITH_USER "jon-gough")
 # set this if your cloudsmith repository name does not match your git repository name
-#set(CLOUDSMITH_BASE_REPOSITORY "${GIT_REPOSITORY_NAME}")
+#set(CLOUDSMITH_BASE_REPOSITORY "testplugin_pi")
+set(CLOUDSMITH_BASE_REPOSITORY "windvane")
+# Set the following to use OpenCPN cloudsmith repositories instead of own repositories
+set(CLOUDSMITH_USER "opencpn")
+#set(CLOUDSMITH_USER "jon-gough")
+
 set(XML_INFO_URL "https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:opencpn_user_manual:plugins:sailing:windvane")
 set(XML_SUMMARY "Plugin to provide windvane like autopilot")
 set(XML_DESCRIPTION "Windvane Autopilot is designed to use the wind instruments and autopilot on board the yatch to act like a standard windvane autopilot and allow the yatch to follow the wind.")
@@ -59,6 +62,7 @@ set(XML_DESCRIPTION "Windvane Autopilot is designed to use the wind instruments 
 ##
 ## ----- Modify section above to include all the details for your plugin ----- ##
 ##
+
 ##
 ## ----- Modify section below if there are special requirements for the plugin ----- ##
 ##
@@ -67,10 +71,13 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 set(CMAKE_CXX_STANDARD 11)
 
+# Use local version of GLU library
+set(USE_LOCAL_GLU FALSE)
 # Prefer libGL.so to libOpenGL.so, see CMP0072
 set(OpenGL_GL_PREFERENCE "LEGACY")
 # Don't use local version of GLU library
-set(USE_LOCAL_GLU FALSE)
+#set(USE_LOCAL_GLU FALSE)
+
 option(USE_GL "Enable OpenGL support" OFF)
 message(STATUS "${CMLOC}USE_GL: ${USE_GL}")
 
@@ -80,11 +87,24 @@ endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
+##
+## ----- The statements below are used to setup standard variables that are required by the CMAKE process - do not remove ----- ##
+##
+
 project(${PACKAGE})
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;")
 
-include("cmake/PluginSetup.cmake")
+include("PluginSetup")
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+##
+## ----- The above is used to setup standard variables that are required by the CMAKE process - do not remove ----- ##
+##
+
+##
+## ----- Modify section below if there are special requirements for the plugin ----- ##
+##
+
+set(CMAKE_VERBOSE_MAKEFILE "Activate verbose mode for make files" ON)
 
 option(Plugin_CXX11 "Use c++11" OFF)
 
@@ -92,8 +112,15 @@ option(Plugin_CXX11 "Use c++11" OFF)
 ## ----- Modify section above if there are special requirements for the plugin ----- ##
 ##
 
+##
+## ----- do not change next section - needed to configure build process ----- ##
+##
 
-include("cmake/PluginConfigure.cmake")
+include("PluginConfigure")
+
+##
+## ----- do not change section above - needed to configure build process ----- ##
+##
 
 ##
 ## ----- Change below to match project requirements ----- ##
@@ -231,9 +258,18 @@ target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
 ##
 
 ##
-## ----- do not change - needed to build app ----- ##
+## ----- do not change next section - needed to configure build process ----- ##
 ##
 
-include("cmake/PluginInstall.cmake")
-include("cmake/PluginLocalization.cmake")
-include("cmake/PluginPackage.cmake")
+include("PluginInstall")
+include("PluginLocalization")
+include("PluginPackage")
+
+##
+## ----- do not change section above - needed to configure build process ----- ##
+##
+message(STATUS "${CMLOC}include directories: ")
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+    message(STATUS "${CMLOC}dir='${dir}'")
+endforeach()
