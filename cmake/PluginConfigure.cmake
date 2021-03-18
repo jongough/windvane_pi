@@ -435,6 +435,7 @@ if(NOT QT_ANDROID)
     set(wxWidgets_USE_STATIC OFF)
 
     set(WXWIDGETS_FORCE_VERSION CACHE STRING "Force usage of a specific wxWidgets version.")
+    message(STATUS "${CMLOC}WXWIDGETS_FORCE_VERSION: ${WXWIDGETS_FORCE_VERSION}")
     if(WXWIDGETS_FORCE_VERSION)
         set(wxWidgets_CONFIG_OPTIONS --version=${WXWIDGETS_FORCE_VERSION})
     endif()
