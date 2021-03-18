@@ -4,7 +4,7 @@ version: 2.1
 parameters:
     run_workflow_deploy:
         type: boolean
-        default: true
+        default: false
 
     run_build_armhf_stretch:
         type: boolean
@@ -14,7 +14,7 @@ parameters:
         default: true
     run_build_armhf_bionic_64:
         type: boolean
-        default: true
+        default: false
     run_build_trusty:
         type: boolean
         default: false

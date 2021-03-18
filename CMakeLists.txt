@@ -80,11 +80,6 @@ endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
-set(
-    PLUGIN_WXWIDGETS_FORCE_VERSION
-    CACHE STRING "Force usage of a specific wxWidgets version."
-  )
-
 project(${PACKAGE})
 
 include("cmake/PluginSetup.cmake")
