@@ -26,7 +26,7 @@ set(VERBOSE_NAME "Windvane_Autopilot")
 set(COMMON_NAME "windvane")
 set(TITLE_NAME "windvane")
 set(PACKAGE_CONTACT "Jon Gough")
-set(PACKAGE "windvane")
+set(PACKAGE "windvane_pi")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
