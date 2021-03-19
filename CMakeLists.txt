@@ -173,7 +173,7 @@ SET(OCPNHDRS
         ocpninclude/wx/jsonreader.h
         ocpninclude/wx/jsonval.h
         ocpninclude/wx/jsonwriter.h
-        
+        libs/ocpn-api/ocpn_plugin.h
 )
 SET(EXTSRC
 )
@@ -185,17 +185,15 @@ IF(WINDVANE_USE_SVG)
     ADD_DEFINITIONS(-DTESTPLUGIN_USE_SVG)
 ENDIF(WINDVANE_USE_SVG)
 
+set(EXTINCLUDE_DIR ${EXTINCLUDE_DIR} libs/ocpn-api/)
+
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/gdal/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/iso8211/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude)
-#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
-#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/${EXTINCLUDE_DIR})
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
-#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxsvg)
-#include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
 
 add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
