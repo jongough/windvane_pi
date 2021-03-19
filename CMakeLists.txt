@@ -26,13 +26,13 @@ set(VERBOSE_NAME "Windvane_Autopilot")
 set(COMMON_NAME "windvane")
 set(TITLE_NAME "windvane")
 set(PACKAGE_CONTACT "Jon Gough")
-set(PACKAGE "windvane_pi")
+set(PACKAGE "windvane")
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "21")
-set(VERSION_TWEAK "3")
-set(VERSION_DATE "18/03/2021") # DD/MM/YYYY format
+set(VERSION_TWEAK "4")
+set(VERSION_DATE "19/03/2021") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -92,7 +92,8 @@ message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 ##
 
 project(${PACKAGE})
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;")
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include("PluginSetup")
 
@@ -128,7 +129,6 @@ include("PluginConfigure")
 
 ADD_DEFINITIONS(-DUSE_S57)
 
-
 SET(SRCS
         src/windvane_pi.cpp
         src/WVdc.cpp
@@ -157,7 +157,6 @@ SET(HDRS
         include/dial.h
         include/instrument.h
         include/wind.h
-
 )
 
 SET(OCPNSRC
@@ -200,58 +199,9 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
 
 add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
-#add_subdirectory(libs/gdal)
 add_subdirectory(libs/nmea0183)
-#add_subdirectory(libs/tinyxml)
-#add_subdirectory(libs/iso8211)
 message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
-#target_link_libraries(${PACKAGE_NAME} ocpn::gdal)
 target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
-#target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
-#target_link_libraries(${PACKAGE_NAME} ocpn::iso8211)
-
-
-#if(UNIX)
-#    include("cmake/FindTinyXML.cmake")
-#    find_package(TinyXML QUIET)
-#endif(UNIX)
-#
-#if(TINYXML_FOUND)
-#    message(STATUS "${CMLOC}Building with system tinyxml")
-#    include_directories(${TINYXML_INCLUDE_DIR})
-#    add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
-#    target_link_libraries(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
-#else(TINYXML_FOUND)
-#    message(STATUS "${CMLOC}Building with embedded tinyxml")
-#    include_directories(extsrc/tinyxml/)
-#    set(SRC_LTINYXML extsrc/tinyxml/tinyxml.cpp extsrc/tinyxml/tinyxmlparser.cpp extsrc/tinyxml/tinyxmlerror.cpp)
-#    add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC} ${SRC_LTINYXML})
-#endif(TINYXML_FOUND)
-#
-#add_definitions(-DTIXML_USE_STL)
-
-#////
-#IF(UNIX)
-# INCLUDE("cmake/FindTinyXML.cmake")
-# FIND_PACKAGE(TinyXML QUIET)
-#ENDIF(UNIX)
-
-#IF(TINYXML_FOUND)
-#    message (STATUS "${CMLOC}Building with system tinyxml")
-# INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
-# ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
-# TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
-#ELSE(TINYXML_FOUND)
-#    message (STATUS "${CMLOC}Building with embedded tinyxml")
-# INCLUDE_DIRECTORIES(src/tinyxml/)
-# SET(SRC_LTINYXML
-#            src/tinyxml/tinyxml.cpp
-#            src/tinyxml/tinyxmlparser.cpp
-#            src/tinyxml/tinyxmlerror.cpp
-# )
-# ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC} ${SRC_LTINYXML})
-#ENDIF(TINYXML_FOUND)
-#ADD_DEFINITIONS(-DTIXML_USE_STL)
 
 ##
 ## ----- Change above to match project requirements ----- ##
