@@ -62,6 +62,7 @@
 
 #include "windvane_pi.h"
 #include "WVdc.h"
+#include "WVUtils.h"
 
 #ifdef __WXMSW__
 #define __CALL_CONVENTION __stdcall
