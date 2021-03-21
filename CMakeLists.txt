@@ -17,9 +17,15 @@ if(COMMAND cmake_policy)
         cmake_policy(SET CMP0043 NEW)
     endif(POLICY CMP0043)
     cmake_policy(SET CMP0048 NEW)
+    if(POLICY CMP0076)
+        cmake_policy(SET CMP0076 NEW)
+    endif(POLICY CMP0076)
     if(POLICY CMP0077)
         cmake_policy(SET CMP0077 NEW)
     endif(POLICY CMP0077)
+    if(POLICY CMP0079)
+        cmake_policy(SET CMP0079 NEW)
+    endif(POLICY CMP0079)
 endif(COMMAND cmake_policy)
 
 set(VERBOSE_NAME "Windvane_Autopilot")
@@ -31,8 +37,8 @@ set(PACKAGE "windvane")
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "21")
-set(VERSION_TWEAK "4")
-set(VERSION_DATE "19/03/2021") # DD/MM/YYYY format
+set(VERSION_TWEAK "5")
+set(VERSION_DATE "21/03/2021") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
@@ -122,7 +128,6 @@ include("PluginConfigure")
 ##
 ## ----- do not change section above - needed to configure build process ----- ##
 ##
-
 ##
 ## ----- Change below to match project requirements ----- ##
 ##
@@ -195,7 +200,7 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/${EXTINCLUDE_DIR})
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
 
-add_library(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
+target_sources(${PACKAGE_NAME} PUBLIC ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
 add_subdirectory(libs/nmea0183)
 message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
