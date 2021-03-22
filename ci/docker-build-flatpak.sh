@@ -8,7 +8,7 @@ set -xe
 
 df -h
 cd $TOPDIR
-su -c "dnf install -y sudo cmake gcc-c++ flatpak-builder flatpak make tar"
+su -c "dnf install -y sudo cmake gcc-c++ flatpak-builder flatpak make tar compat-wxGTK3-gtk2-devel"
 
 flatpak remote-add --user --if-not-exists flathub \
     https://flathub.org/repo/flathub.flatpakrepo
