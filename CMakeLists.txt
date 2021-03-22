@@ -17,9 +17,15 @@ if(COMMAND cmake_policy)
         cmake_policy(SET CMP0043 NEW)
     endif(POLICY CMP0043)
     cmake_policy(SET CMP0048 NEW)
+    if(POLICY CMP0076)
+        cmake_policy(SET CMP0076 NEW)
+    endif(POLICY CMP0076)
     if(POLICY CMP0077)
         cmake_policy(SET CMP0077 NEW)
     endif(POLICY CMP0077)
+    if(POLICY CMP0079)
+        cmake_policy(SET CMP0079 NEW)
+    endif(POLICY CMP0079)
 endif(COMMAND cmake_policy)
 
 set(VERBOSE_NAME "Windvane_Autopilot")
@@ -31,27 +37,30 @@ set(PACKAGE "windvane")
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "21")
-set(VERSION_TWEAK "0")
-set(VERSION_DATE "22/07/2020")
+set(VERSION_TWEAK "5")
+set(VERSION_DATE "21/03/2021") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
 set(TP_COMMENT "  * Release for O5 using CI")
 
-
 set(PARENT "opencpn")
 
 # The next line allows for setting up your own local webserver with git on it for testing purposes, the default is github.com
-set(GIT_REPOSITORY_SERVER "github.com")
+#set(GIT_REPOSITORY_SERVER "github.com")
 
-# Builds repository sufficies
-set(PROD "prod")    #Standard Repos
-set(BETA "beta")    #Standard Repos
-set(ALPHA "alpha")  #Standard Repos
+# Specifies cloudsmith repository sufficies
+set(PROD "prod")    # Standard Repos
+set(BETA "beta")    # Standard Repos
+set(ALPHA "alpha")  # Standard Repos
 
-set(CLOUDSMITH_USER "jon-gough")
 # set this if your cloudsmith repository name does not match your git repository name
-#set(CLOUDSMITH_BASE_REPOSITORY "${GIT_REPOSITORY_NAME}")
+#set(CLOUDSMITH_BASE_REPOSITORY "testplugin_pi")
+set(CLOUDSMITH_BASE_REPOSITORY "windvane")
+# Set the following to use OpenCPN cloudsmith repositories instead of own repositories
+set(CLOUDSMITH_USER "opencpn")
+#set(CLOUDSMITH_USER "jon-gough")
+
 set(XML_INFO_URL "https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:opencpn_user_manual:plugins:sailing:windvane")
 set(XML_SUMMARY "Plugin to provide windvane like autopilot")
 set(XML_DESCRIPTION "Windvane Autopilot is designed to use the wind instruments and autopilot on board the yatch to act like a standard windvane autopilot and allow the yatch to follow the wind.")
@@ -59,6 +68,7 @@ set(XML_DESCRIPTION "Windvane Autopilot is designed to use the wind instruments 
 ##
 ## ----- Modify section above to include all the details for your plugin ----- ##
 ##
+
 ##
 ## ----- Modify section below if there are special requirements for the plugin ----- ##
 ##
@@ -67,10 +77,13 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 set(CMAKE_CXX_STANDARD 11)
 
+# Use local version of GLU library
+set(USE_LOCAL_GLU FALSE)
 # Prefer libGL.so to libOpenGL.so, see CMP0072
 set(OpenGL_GL_PREFERENCE "LEGACY")
 # Don't use local version of GLU library
-set(USE_LOCAL_GLU FALSE)
+#set(USE_LOCAL_GLU FALSE)
+
 option(USE_GL "Enable OpenGL support" OFF)
 message(STATUS "${CMLOC}USE_GL: ${USE_GL}")
 
@@ -80,12 +93,25 @@ endif("${CMAKE_BUILD_TYPE}" STREQUAL "")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "" "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
+##
+## ----- The statements below are used to setup standard variables that are required by the CMAKE process - do not remove ----- ##
+##
 
 project(${PACKAGE})
 
-include("cmake/PluginSetup.cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+include("PluginSetup")
+
+##
+## ----- The above is used to setup standard variables that are required by the CMAKE process - do not remove ----- ##
+##
+
+##
+## ----- Modify section below if there are special requirements for the plugin ----- ##
+##
+
+set(CMAKE_VERBOSE_MAKEFILE "Activate verbose mode for make files" ON)
 
 option(Plugin_CXX11 "Use c++11" OFF)
 
@@ -93,8 +119,15 @@ option(Plugin_CXX11 "Use c++11" OFF)
 ## ----- Modify section above if there are special requirements for the plugin ----- ##
 ##
 
+##
+## ----- do not change next section - needed to configure build process ----- ##
+##
 
-include("cmake/PluginConfigure.cmake")
+include("PluginConfigure")
+
+##
+## ----- do not change section above - needed to configure build process ----- ##
+##
 
 ##
 ## ----- Change below to match project requirements ----- ##
@@ -102,9 +135,9 @@ include("cmake/PluginConfigure.cmake")
 
 ADD_DEFINITIONS(-DUSE_S57)
 
-
 SET(SRCS
         src/windvane_pi.cpp
+        src/WVdc.cpp
         src/WVDialFrame.cpp
         src/WVEventHandler.cpp
         src/WVPropertiesDialogDef.cpp
@@ -119,6 +152,7 @@ SET(SRCS
 
 SET(HDRS
         include/windvane_pi.h
+        include/WVdc.h
         include/WVDialFrame.h
         include/WVEventHandler.h
         include/WVPropertiesDialogDef.h
@@ -129,24 +163,9 @@ SET(HDRS
         include/dial.h
         include/instrument.h
         include/wind.h
-
 )
 
 SET(OCPNSRC
-        src/nmea0183/apb.cpp
-        src/nmea0183/mwv.cpp
-        src/nmea0183/rmb.cpp
-        src/nmea0183/xte.cpp
-        src/nmea0183/lat.cpp
-        src/nmea0183/latlong.cpp
-        src/nmea0183/long.cpp
-        src/nmea0183/nmea0183.cpp
-        src/nmea0183/expid.cpp
-        src/nmea0183/hexvalue.cpp
-        src/nmea0183/response.cpp
-        src/nmea0183/sentence.cpp
-        src/nmea0183/talkerid.cpp
-        src/nmea0183/vwr.cpp
         ocpnsrc/wxJSON/jsonreader.cpp
         ocpnsrc/wxJSON/jsonval.cpp
         ocpnsrc/wxJSON/jsonwriter.cpp
@@ -156,21 +175,15 @@ SET(OCPNHDRS
         ocpninclude/ocpn_plugin.h
         ocpninclude/TexFont.h
         ocpninclude/wx28compat.h
-        src/nmea0183/apb.hpp
-        src/nmea0183/mwv.hpp
-        src/nmea0183/RMB.HPP
-        src/nmea0183/xte.hpp
-        src/nmea0183/LatLong.hpp
-        src/nmea0183/nmea0183.h
-        src/nmea0183/nmea0183.hpp
-        src/nmea0183/Response.hpp
-        src/nmea0183/Sentence.hpp
-        src/nmea0183/vwr.hpp
         ocpninclude/wx/json_defs.h
         ocpninclude/wx/jsonreader.h
         ocpninclude/wx/jsonval.h
         ocpninclude/wx/jsonwriter.h
-        
+        libs/ocpn-api/ocpn_plugin.h
+)
+SET(EXTSRC
+)
+SET(EXTINCLUDE
 )
 
 OPTION(WINDVANE_USE_SVG "Use SVG graphics" ON)
@@ -178,47 +191,44 @@ IF(WINDVANE_USE_SVG)
     ADD_DEFINITIONS(-DTESTPLUGIN_USE_SVG)
 ENDIF(WINDVANE_USE_SVG)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/mygdal  )
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src/nmea0183)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxsvg)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ocpninclude/wxSVGXML)
+set(EXTINCLUDE_DIR ${EXTINCLUDE_DIR} libs/ocpn-api/)
 
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/gdal/include)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/iso8211/include)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/${EXTINCLUDE_DIR})
+include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
 
-IF(UNIX)
- INCLUDE("cmake/FindTinyXML.cmake")
- FIND_PACKAGE(TinyXML QUIET)
-ENDIF(UNIX)
+target_sources(${PACKAGE_NAME} PUBLIC ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
-IF(TINYXML_FOUND)
-    message (STATUS "${CMLOC}Building with system tinyxml")
- INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
- ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
- TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
-ELSE(TINYXML_FOUND)
-    message (STATUS "${CMLOC}Building with embedded tinyxml")
- INCLUDE_DIRECTORIES(src/tinyxml/)
- SET(SRC_LTINYXML
-            src/tinyxml/tinyxml.cpp
-            src/tinyxml/tinyxmlparser.cpp
-            src/tinyxml/tinyxmlerror.cpp
- )
- ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC} ${SRC_LTINYXML})
-ENDIF(TINYXML_FOUND)
-ADD_DEFINITIONS(-DTIXML_USE_STL)
+if(NOT OCPN_FLATPAK_CONFIG)
+    # Build environment not available when flatpak is being configured so following statements will not work
+    message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
+
+    add_subdirectory(libs/nmea0183)
+
+    target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
+endif(NOT OCPN_FLATPAK_CONFIG)
 
 ##
 ## ----- Change above to match project requirements ----- ##
 ##
 
 ##
-## ----- do not change - needed to build app ----- ##
+## ----- do not change next section - needed to configure build process ----- ##
 ##
 
-include("cmake/PluginInstall.cmake")
-include("cmake/PluginLocalization.cmake")
-include("cmake/PluginPackage.cmake")
+include("PluginInstall")
+include("PluginLocalization")
+include("PluginPackage")
+
+##
+## ----- do not change section above - needed to configure build process ----- ##
+##
+message(STATUS "${CMLOC}include directories: ")
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+    message(STATUS "${CMLOC}dir='${dir}'")
+endforeach()

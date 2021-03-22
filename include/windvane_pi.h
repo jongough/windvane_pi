@@ -111,7 +111,7 @@ std::cout << x  << std::endl ; } while (0)
 #include "wxWTranslateCatalog.h"
 
 #include "ocpn_plugin.h"
-#include "nmea0183/nmea0183.h"
+#include "nmea0183.h"
 #include <wx/aui/aui.h>
 #include <wx/string.h>
 #include <wx/settings.h>
@@ -143,7 +143,7 @@ struct WINDHISTORY {
     long        lTime;
     double      dAngle;
 };
- 
+
 using namespace std;
 
 class  ODPlugIn_Position_Fix_Ex : public PlugIn_Position_Fix_Ex
@@ -236,7 +236,10 @@ public:
     void    SendAutopilotSentences(int Angle);
     void    UpdateWindvaneDisplay(double Angle);
     void    SetAngle(double Angle);
-    
+    void    SignalKInput(short PriAWA);
+    void    SignalKInput(double dAngle, string sAwaUnit);
+    void    SignalKInput(double dLat, double dLon);
+
     void    SetToolbarTool( void );
 
     wxCursor    *pCursorLeft;

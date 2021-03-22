@@ -27,6 +27,14 @@
 #ifndef WVJSON_H
 #define WVJSON_H
 
+#include <wx/jsonval.h>
+
+#define GEODESIC_RAD2DEG(r) ((r)*(180.0/M_PI))
+#define MS2KNOTS(r) ((r)*(1.9438444924406))
+#define KELVIN2C(r) ((r)-(273.15))
+#define PA2HPA(r) ((r)/(100))
+#define METERS2NM(r) ((r)/(1852))
+
 
 class WVJSON
 {
@@ -38,6 +46,17 @@ class WVJSON
     protected:
         
     private:
+        void ParseSignalK( wxString &msg);
+        void handleSKUpdate(wxJSONValue &update);
+        void updateSKItem(wxJSONValue &item, wxString &sfixtime);
+        double GetJsonDouble(wxJSONValue &value);
+
+        wxString    m_self;
+        short       mPriHeadingM, mPriHeadingT, mPriVar, mPriDateTime, mPriAWA, mPriTWA;
+        short       mPriSTW, mPriWTP, mPriATMP, mPriWDN;
+        double      mVar;
+        double      mLat, mLon;
+
 };
 
 #endif // WVJSON_H
