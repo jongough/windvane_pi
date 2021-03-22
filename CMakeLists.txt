@@ -201,12 +201,14 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/${EXTINCLUDE_DIR})
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/nmea0183/src)
 
-target_sources(${PACKAGE_NAME} PUBLIC ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
+if(NOT OCPN_FLATPAK_CONFIG)
+    # Build environment not available when flatpak is being configured so following statements will not work
+    target_sources(${PACKAGE_NAME} PUBLIC ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
-add_subdirectory(libs/nmea0183)
-message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
-target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
-
+    add_subdirectory(libs/nmea0183)
+    message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
+    target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
+endif(NOT OCPN_FLATPAK_CONFIG)
 ##
 ## ----- Change above to match project requirements ----- ##
 ##
