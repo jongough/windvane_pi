@@ -41,6 +41,7 @@ if(NOT QT_ANDROID)
         set(wxWidgets_CONFIG_OPTIONS --version=${WXWIDGETS_FORCE_VERSION})
     endif()
 
+    set(wxWidgets_USE_LIBS base core xml html)
     message(STATUS "${CMLOC}wxWidgets components: ${wxWidgets_USE_LIBS}")
     find_package(wxWidgets REQUIRED COMPONENTS ${wxWidgets_USE_LIBS})
 
