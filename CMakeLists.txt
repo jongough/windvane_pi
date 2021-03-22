@@ -205,10 +205,13 @@ target_sources(${PACKAGE_NAME} PUBLIC ${SRCS} ${HDRS} ${OCPNSRC} ${EXTSRC})
 
 if(NOT OCPN_FLATPAK_CONFIG)
     # Build environment not available when flatpak is being configured so following statements will not work
-    add_subdirectory(libs/nmea0183)
     message(STATUS "${CMLOC}Adding target link libraries to ${PACKAGE_NAME}")
+
+    add_subdirectory(libs/nmea0183)
+
     target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
 endif(NOT OCPN_FLATPAK_CONFIG)
+
 ##
 ## ----- Change above to match project requirements ----- ##
 ##
