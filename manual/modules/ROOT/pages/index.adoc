@@ -1,17 +1,15 @@
-== Windvane Autopilot
+= Windvane Autopilot
 
 Developer: Jon Gough
 
-=== Links
+== Links
 
 * Sources: https://github.com/jongough/windvane_pi
 * Releases: https://github.com/jongough/windvane_pi/releases
 * Download: https://opencpn.org/OpenCPN/plugins/windvane.html
-* Forum:
-http://www.cruisersforum.com/forums/f134/windvane_pi-192165.html[Windvane
-Thread]
+* Forum: http://www.cruisersforum.com/forums/f134/windvane_pi-192165.html[Windvane Thread]
 
-=== Summary
+== Summary
 
 This plugin is for those that have older style auto pilots that have
 simplistic inputs/outputs and whose yachts are not suitable for normal
@@ -27,9 +25,13 @@ normally generated, but if the plugin is being used then the APB and RMB
 sentences are modified to make the autopilot follow the wind changes.
 This makes the setup of the connections filtering easier.
 
-=== Use
+== Installation
 
-When the plugin is enabled it will show
+* Install and Enable these plugins now: xref:opencpn-plugins:misc:plugin-install.adoc[Instructions] +
+
+== Use
+
+When the plugin is enabled it will show,
 
 image::windvane_toolbar_icon.png[]
 
@@ -53,7 +55,7 @@ direction over.
 
 The dial part of the diagram shows the Smoothed Wind Angle (SWA) as a
 number and graphically as the brown pointer. It shows the current
-Apparant Wind Angle (AWA) as a number and graphically as a blue pointer.
+Apparent Wind Angle (AWA) as a number and graphically as a blue pointer.
 The final item is the yellow 'bug'. This is used to set the desired wind
 angle. When the WV icon is pressed the bug is set to the current wind
 angle. If this angle needs to be changed it can be dragged with the left
@@ -69,7 +71,7 @@ Clicking on the WV icon in the OpenCPN tool bar when the dialog is shown
 will turn off the autopilot and the normal route following messages will
 start to flow to the autopilot.
 
-=== Setup
+== Setup
 
 There are two items that have to be setup to make this work
 
@@ -80,20 +82,18 @@ being sent instead.
 . The default setting to use for the plugin. These are setup in the
 Windvane Preferences.
 
-==== Windvane Preferences
-
-===== General
+=== Windvane Preferences
 
 image::windvane_properties_-_general.png[]
 
-====== AutoPilot Update Frequency (Secs)
+=== AutoPilot Update Frequency (Secs)
 
 This is the default time between sending messages to the autopilot. If
 your autopilot wants them every 5 seconds there is no point in sending
 these every second, it just slows the whole system down. So this setting
 is dependent on the way your autopilot works.
 
-====== Angle/XTE ratio upper limit
+=== Angle/XTE ratio upper limit
 
 This sets the length of the slider in the active Windvane Autopilot
 dialog. This may take a bit of trial and error to determine what works
@@ -104,23 +104,23 @@ direction when they get past a certain, internal limit. They will have
 algorithms that determine how aggressively to keep on a given route.
 This setting allows the plugin to handle the depending on conditions.
 
-====== Wind change sensitivity
+=== Wind change sensitivity
 
-This sets the maximum time over which to smooth the wind directioni.
-This normally needs to be set to a suffient time to allow for wave/swell
+This sets the maximum time over which to smooth the wind direction.
+This normally needs to be set to a sufficient time to allow for wave/swell
 action and boat reaction to wind changes. If the number is too big it
 makes setting the correct value on the Windvane Autopilot dialog more
 difficult as the slider will only need to be moved a very small distance
 to change values.
 
-===== Help
+== Help
 
 image::windvane_properties_-_help.png[]
 
-===== About
+== About
 
 image::windvane_properties_-_about.png[]
 
-===== License
+== License
 
 image::windvane_properties_-_license.png[]
