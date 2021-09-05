@@ -109,7 +109,7 @@ if(UNIX AND NOT APPLE)
     set(PREFIX_PARENTDATA ${PREFIX_DATA}/${PARENT})
     set(PREFIX_PARENTLIB ${PREFIX_LIB}/${PARENT})
     message(STATUS "${CMLOC}PREFIX_PARENTLIB: ${PREFIX_PARENTLIB}")
-    message(STATUS "${CMLOC}Archive")
+    message(STATUS "${CMLOC}Library")
     install(TARGETS ${PACKAGE_NAME} LIBRARY DESTINATION ${PREFIX_PARENTLIB})
 
     if(EXISTS ${PROJECT_SOURCE_DIR}/data)
@@ -134,7 +134,7 @@ if(APPLE)
     file(
         GLOB_RECURSE PACKAGE_DATA_FILES
         LIST_DIRECTORIES true
-        ${CMAKE_SOURCE_DIR}/data/*)
+        ${PROJECT_SOURCE_DIR}/data/*)
 
     foreach(_currentDataFile ${PACKAGE_DATA_FILES})
         message(STATUS "${CMLOC}copying: ${_currentDataFile}")
@@ -145,7 +145,7 @@ if(APPLE)
         file(
             GLOB_RECURSE PACKAGE_DATA_FILES
             LIST_DIRECTORIES true
-            ${CMAKE_SOURCE_DIR}/UserIcons/*)
+            ${PROJECT_SOURCE_DIR}/UserIcons/*)
 
         foreach(_currentDataFile ${PACKAGE_DATA_FILES})
             message(STATUS "${CMLOC}copying: ${_currentDataFile}")
