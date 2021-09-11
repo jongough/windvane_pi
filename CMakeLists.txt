@@ -29,7 +29,7 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 set(VERBOSE_NAME "Windvane_Autopilot")
-set(COMMON_NAME "windvane")
+set(COMMON_NAME "Windvane")
 set(TITLE_NAME "windvane")
 set(PACKAGE_CONTACT "Jon Gough")
 set(PACKAGE "windvane")

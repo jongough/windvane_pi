@@ -346,7 +346,7 @@ int windvane_pi::GetAPIVersionMinor()
 }
 wxString windvane_pi::GetCommonName()
 {
-    return wxS("Windvane");
+    return _T(PLUGIN_COMMON_NAME);
 }
 wxString windvane_pi::GetShortDescription()
 {

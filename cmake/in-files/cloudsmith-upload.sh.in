@@ -232,6 +232,7 @@ if [ ! -z ${LOCAL_DEPLOY+x} ]; then
     if [ -d "/home/circleci/circleci-output" ]; then
         sudo cp build/*.gz ~/circleci-output
         sudo cp build/*.deb ~/circleci-output
+        sudo cp build/*.xml ~/circleci-output
     else
         echo "Directory ~/circleci-output not found"
     fi
