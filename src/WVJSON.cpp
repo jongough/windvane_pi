@@ -208,11 +208,12 @@ void WVJSON::handleSKUpdate(wxJSONValue &update) {
 }
 
 void WVJSON::updateSKItem(wxJSONValue &item, wxString &sfixtime) {
-/*
+
     if(item.HasMember("path")
         && item.HasMember("value")) {
         const wxString &update_path = item["path"].AsString();
         wxJSONValue &value = item["value"];
+
         if(update_path == _T("navigation.headingMagnetic")){
             if (mPriHeadingM >= 1){
                 double hdm = GetJsonDouble(value);
@@ -243,12 +244,6 @@ void WVJSON::updateSKItem(wxJSONValue &item, wxString &sfixtime) {
                 }
             }
         }
-        else if (update_path == _T("navigation.position.longitude")) {
-            mLon = GetJsonDouble(value);
-        }
-        else if (update_path == _T("navigation.position.latitude")) {
-            mLat = GetJsonDouble(value);
-        }
         else if (update_path == _T("environment.wind.angleApparent")) {
             if (mPriAWA >= 1) {
                 double l_awaangle = GetJsonDouble(value);
@@ -274,7 +269,7 @@ void WVJSON::updateSKItem(wxJSONValue &item, wxString &sfixtime) {
         }
 
     }
-*/
+
 }
 
 double WVJSON::GetJsonDouble(wxJSONValue &value) {

@@ -237,7 +237,7 @@ public:
     void    UpdateWindvaneDisplay(double Angle);
     void    SetAngle(double Angle);
     void    SignalKInput(short PriAWA);
-    void    SignalKInput(double dAngle, string sAwaUnit);
+    void    SignalKInput(double dAngle, wxString sAwaUnit);
     void    SignalKInput(double dLat, double dLon);
 
     void    SetToolbarTool( void );
