@@ -812,7 +812,7 @@ void windvane_pi::SignalKInput(short PriAWA) {
 
 }
 
-void windvane_pi::SignalKInput(double dAngle, string sAwaUnit) {
+void windvane_pi::SignalKInput(double dAngle, wxString sAwaUnit) {
     WINDHISTORY l_WindHistory;
     l_WindHistory.dAngle = dAngle;
     l_WindHistory.lTime = time(NULL);
