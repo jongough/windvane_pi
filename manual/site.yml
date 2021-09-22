@@ -1,5 +1,5 @@
 site:
-  title: Windvane Manual
+  title: Windvane
   url:  https://nowhere.net
   start_page: windvane::index.adoc
  
