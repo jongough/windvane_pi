@@ -50,6 +50,7 @@ public:
     void    ChangeScheme(void);
     
     wxBitmap    m_bm_windvane_pi;
+    wxBitmap    m_bm_windvane_properties_pi;
     wxBitmap    m_bm_windvane_toggled_pi;
     wxBitmap    m_bm_windvane_grey_pi;
     wxString    m_s_windvane_pi;
