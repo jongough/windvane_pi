@@ -362,7 +362,7 @@ void windvane_pi::SetDefaults(void)
 }
 wxBitmap *windvane_pi::GetPlugInBitmap()
 {
-    return &m_pWVicons->m_bm_windvane_pi;
+    return &m_pWVicons->m_bm_windvane_properties_pi;
 }
 int windvane_pi::GetToolbarToolCount(void)
 {

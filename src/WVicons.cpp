@@ -67,6 +67,9 @@ void WVicons::initialize_images(void)
     
 
 #ifdef WINDVANE_USE_SVG
+    fn.SetFullName(wxT("windvane_properties.svg"));
+    m_s_windvane_properties_pi = fn.GetFullPath();
+    m_bm_windvane_properties_pi = LoadSVG( fn.GetFullPath() );
     fn.SetFullName(wxT("windvane.svg"));
     m_s_windvane_pi = fn.GetFullPath();
     m_bm_windvane_pi = LoadSVG( fn.GetFullPath() );
