@@ -220,7 +220,6 @@ jobs:
             echo "deb-src http://us.archive.ubuntu.com/ubuntu/ focal-updates main" | sudo tee -a /etc/apt/sources.list
         - run: cat /etc/apt/sources.list
         - run: chmod a+x ci/*.sh
-        - use-apt-proxy
         - run: ci/circleci-build-debian.sh
         - deploy-code
     build-buster:
