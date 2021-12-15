@@ -54,6 +54,7 @@ public:
     wxBitmap    m_bm_windvane_toggled_pi;
     wxBitmap    m_bm_windvane_grey_pi;
     wxString    m_s_windvane_pi;
+    wxString    m_s_windvane_properties_pi;
     wxString    m_s_windvane_toggled_pi;
     wxString    m_s_windvane_grey_pi;
 
@@ -84,5 +85,7 @@ private:
 
     double          m_dScaleFactor;
     PI_ColorScheme  m_ColourScheme;
+    bool            m_failedBitmapLoad;
+
 };
 #endif /* WVICONS_H */
