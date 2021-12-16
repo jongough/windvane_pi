@@ -201,8 +201,8 @@ int windvane_pi::Init(void)
     g_NMEAAPBPrecision = 3;
     
 #ifdef WINDVANE_USE_SVG
-    m_windvane_button_id  = InsertPlugInToolSVG(_("Windvane Autopilot"), m_pWVicons->m_s_windvane_grey_pi, m_pWVicons->m_s_windvane_pi, m_pWVicons->m_s_windvane_toggled_pi, wxITEM_CHECK,
-                                               _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);
+    m_windvane_button_id  = InsertPlugInToolSVG(_("Windvane Autopilot"), m_pWVicons->m_s_windvane_grey_pi, m_pWVicons->m_s_windvane_pi, m_pWVicons->m_s_windvane_toggled_pi,
+                                                wxITEM_CHECK, _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);
 #else
     m_windvane_button_id  = InsertPlugInTool(_("Windvane Autopilot"), &m_pWVicons->m_bm_windvane_grey_pi, &m_pWVicons->m_bm_windvane_pi, wxITEM_CHECK,
                                                _("Windvane Autopilot"), wxS(""), NULL, WINDVANE_POSITION, 0, this);

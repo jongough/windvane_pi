@@ -65,6 +65,7 @@ void WVicons::initialize_images(void)
     wxString s = _("windvane_pi data location");
     wxLogMessage( wxT("%s: %s"), s.c_str(), fn.GetFullPath().c_str());
     
+    m_failedBitmapLoad = false;
 
 #ifdef WINDVANE_USE_SVG
     fn.SetFullName(wxT("windvane_properties.svg"));
@@ -81,11 +82,17 @@ void WVicons::initialize_images(void)
     m_bm_windvane_toggled_pi = LoadSVG( fn.GetFullPath() );
 #else
     fn.SetFullName(wxT("windvane.png"));
+    m_bm_windvane_properties_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    if(!m_bm_windvane_properties_pi->IsOk())  m_failedBitmapLoad = true;
+    fn.SetFullName(wxT("windvane.png"));
     m_bm_windvane_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    if(!m_bm_windvane_pi->IsOk())  m_failedBitmapLoad = true;
     fn.SetFullName(wxT("windvanegrey.png"));
     m_bm_windvane_grey_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    if(!m_bm_windvane_grey_pi->IsOk())  m_failedBitmapLoad = true;
     fn.SetFullName(wxT("windvane-toggled.png"));
     m_bm_windvane_toggled_pi = wxBitmap( fn.GetFullPath(), wxBITMAP_TYPE_PNG );
+    if(!m_bm_windvane_toggled_pi->IsOk())  m_failedBitmapLoad = true;
 #endif
     
     CreateSchemeIcons();
