@@ -177,10 +177,10 @@ void WVJSON::ParseSignalK( wxString &msg)
     if(root.HasMember("context")
         && root["context"].IsString()) {
         auto context = root["context"].AsString();
-    if (context != m_self) {
-        return;
-    }
+        if (context != m_self) {
+            return;
         }
+    }
 
         if(root.HasMember("updates")
             && root["updates"].IsArray()) {
